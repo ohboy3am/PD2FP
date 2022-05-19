@@ -63,7 +63,7 @@ public class PlayScreen implements Screen {
         //初始化gamecam
         gamecam.position.set(gamePort.getWorldWidth() / 2,gamePort.getWorldHeight() / 2,0);
 
-        //4
+        //5
         //初始化world
         world = new World(new Vector2(0,-10),true);
 
