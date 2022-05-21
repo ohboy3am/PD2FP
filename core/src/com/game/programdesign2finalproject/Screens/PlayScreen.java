@@ -5,6 +5,7 @@ import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.PPM
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -19,8 +20,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 
 import com.game.programdesign2finalproject.Scenes.Hud;
+import com.game.programdesign2finalproject.Sounds.SoundManager;
 import com.game.programdesign2finalproject.Sprites.Character;
 import com.game.programdesign2finalproject.Tools.B2WorldCreator;
+import com.game.programdesign2finalproject.Tools.WorldContactListener;
 
 public class PlayScreen implements Screen {
     //遊戲的reference
@@ -43,6 +46,8 @@ public class PlayScreen implements Screen {
 
     //sprites
     private Character player;
+
+    private Music music;
 
     public PlayScreen(ProgramDesign2FinalProject game){
         atlas = new TextureAtlas("Character_and_Enemies.pack");
@@ -75,6 +80,11 @@ public class PlayScreen implements Screen {
         //初始化角色
         player = new Character(world, this);
 
+        world.setContactListener(new WorldContactListener());
+
+        music = SoundManager.getInstance().bgm;
+        music.setLooping(true);
+        music.play();
     }
 
     public TextureAtlas getAtlas(){
@@ -99,11 +109,13 @@ public class PlayScreen implements Screen {
     public void update(float dt){
         //先處裡input
         handleInput(dt);
-
+        //物理模擬中的每一步 (每秒60次)
         world.step(1/60f,6,2);
 
         player.update(dt);
+        hud.update(dt);
 
+        //讓gamecam到player.x的位置
         gamecam.position.x = player.b2body.getPosition().x;
 
         //更新gamecam
