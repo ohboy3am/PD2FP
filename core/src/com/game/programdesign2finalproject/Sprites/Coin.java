@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Scenes.Hud;
+import com.game.programdesign2finalproject.Screens.PlayScreen;
 import com.game.programdesign2finalproject.Sounds.SoundManager;
 
 public class Coin extends InteractiveTileObject{
@@ -20,8 +21,8 @@ public class Coin extends InteractiveTileObject{
     private static TiledMapTileSet tileset;
     private final  int BLANK_COIN = 28;
 
-    public Coin(World world, TiledMap map, Rectangle bounds){
-        super(world, map, bounds);
+    public Coin(PlayScreen screen, Rectangle bounds){
+        super(screen, bounds);
         tileset = map.getTileSets().getTileSet("tileset_gutter");
         fixture.setUserData(this);
         setCategoryFilter(ProgramDesign2FinalProject.COIN_BIT);

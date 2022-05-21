@@ -2,7 +2,6 @@ package com.game.programdesign2finalproject.Sprites;
 
 import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.PPM;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -29,9 +28,9 @@ public class Character extends Sprite {
     private float stateTimer;
     private boolean runnungRight;
 
-    public Character(World world, PlayScreen screen){
+    public Character(PlayScreen screen){
         super(screen.getAtlas().findRegion("little_mario"));
-        this.world = world;
+        this.world = screen.getWorld();
         currentState = State.STANDING;
         previousState = State.STANDING;
         stateTimer = 0;
@@ -116,11 +115,16 @@ public class Character extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / PPM);
         fdef.filter.categoryBits = ProgramDesign2FinalProject.CHARACTER_BIT;
-        fdef.filter.maskBits = ProgramDesign2FinalProject.DEFAULT_BIT | ProgramDesign2FinalProject.COIN_BIT | ProgramDesign2FinalProject.BRICK_BIT;
+        fdef.filter.maskBits = ProgramDesign2FinalProject.GROUND_BIT |
+                ProgramDesign2FinalProject.COIN_BIT |
+                ProgramDesign2FinalProject.BRICK_BIT|
+                ProgramDesign2FinalProject.ENEMY_BIT|
+                ProgramDesign2FinalProject.OBJECT_BIT;
 
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
+
         EdgeShape head = new EdgeShape();
         head.set(new Vector2(-2 / PPM, 6 / PPM), new Vector2(2/ PPM, 6 / PPM));
         fdef.shape = head;

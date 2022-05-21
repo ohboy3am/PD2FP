@@ -11,13 +11,16 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
+import com.game.programdesign2finalproject.Screens.PlayScreen;
 import com.game.programdesign2finalproject.Sprites.Brick;
 import com.game.programdesign2finalproject.Sprites.Coin;
 
 
 public class B2WorldCreator {
-    public B2WorldCreator(World world, TiledMap map){
-
+    public B2WorldCreator(PlayScreen screen){
+        World world = screen.getWorld();
+        TiledMap map = screen.getMap();
         //製造 body 跟 fixture 變數
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -49,6 +52,7 @@ public class B2WorldCreator {
 
             shape.setAsBox((rect.getWidth() / 2) / PPM, (rect.getHeight() / 2) / PPM);
             fdef.shape = shape;
+            fdef.filter.categoryBits = ProgramDesign2FinalProject.OBJECT_BIT;
             body.createFixture(fdef);
         }
 
@@ -56,14 +60,14 @@ public class B2WorldCreator {
         for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            new Coin(world, map, rect);
+            new Coin(screen, rect);
         }
 
         //製造方塊
         for(MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            new Brick(world, map, rect);
+            new Brick(screen, rect);
 
         }
 
