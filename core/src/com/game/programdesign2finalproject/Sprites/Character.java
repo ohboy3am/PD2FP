@@ -119,7 +119,8 @@ public class Character extends Sprite {
                 ProgramDesign2FinalProject.COIN_BIT |
                 ProgramDesign2FinalProject.BRICK_BIT|
                 ProgramDesign2FinalProject.ENEMY_BIT|
-                ProgramDesign2FinalProject.OBJECT_BIT;
+                ProgramDesign2FinalProject.OBJECT_BIT|
+                ProgramDesign2FinalProject.ENEMY_HEAD_BIT;
 
 
         fdef.shape = shape;
