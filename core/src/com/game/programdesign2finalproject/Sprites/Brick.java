@@ -12,11 +12,12 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Scenes.Hud;
+import com.game.programdesign2finalproject.Screens.PlayScreen;
 import com.game.programdesign2finalproject.Sounds.SoundManager;
 
 public class Brick extends InteractiveTileObject{
-    public Brick(World world, TiledMap map, Rectangle bounds){
-        super(world, map, bounds);
+    public Brick(PlayScreen screen, Rectangle bounds){
+        super(screen, bounds);
         fixture.setUserData(this);
         setCategoryFilter(ProgramDesign2FinalProject.BRICK_BIT);
     }
