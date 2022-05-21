@@ -20,8 +20,9 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final short DESTROYED_BIT = 16;
 	public static final short OBJECT_BIT = 32;
 	public static final short ENEMY_BIT = 64;
+	public static final short ENEMY_HEAD_BIT = 128;
 
-	public static final String MUSIC_PATH = "audio/music/mario_music.ogg";
+	public static final String MUSIC_PATH = "audio/music/mario_music.mp3";
 	public static final String SOUND_PATH_COIN = "audio/sounds/coin.wav";
 	public static final String SOUND_PATH_BRICK = "audio/sounds/breakblock.wav";
 	public static final String SOUND_PATH_BUMP = "audio/sounds/bump.wav";
