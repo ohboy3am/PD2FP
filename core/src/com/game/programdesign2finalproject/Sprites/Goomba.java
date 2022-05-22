@@ -4,6 +4,7 @@ import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.PPM
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -46,6 +47,7 @@ public class Goomba extends Enemy{
             world.destroyBody(b2body);
             destroyed = true;
             setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba"), goombaWidth * 2, 0, goombaWidth, goombaHeight));
+            stateTime = 0;
         }
         else if(!destroyed){
             setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
@@ -94,6 +96,12 @@ public class Goomba extends Enemy{
         fdef.restitution = 0.5f;
         fdef.filter.categoryBits = ProgramDesign2FinalProject.ENEMY_HEAD_BIT;
         b2body.createFixture(fdef).setUserData(this);
+    }
+
+    public void draw(Batch batch){
+        if(!destroyed || stateTime < 1){
+            super.draw(batch);
+        }
     }
 
     @Override
