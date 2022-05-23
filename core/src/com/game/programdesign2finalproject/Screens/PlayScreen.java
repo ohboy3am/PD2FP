@@ -22,6 +22,7 @@ import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Scenes.Hud;
 import com.game.programdesign2finalproject.Sounds.SoundManager;
 import com.game.programdesign2finalproject.Sprites.Character;
+import com.game.programdesign2finalproject.Sprites.Enemy;
 import com.game.programdesign2finalproject.Sprites.Goomba;
 import com.game.programdesign2finalproject.Tools.B2WorldCreator;
 import com.game.programdesign2finalproject.Tools.WorldContactListener;
@@ -44,10 +45,10 @@ public class PlayScreen implements Screen {
     //Box2d變數
     private World world;
     private Box2DDebugRenderer b2dr;
+    private  B2WorldCreator creator;
 
     //sprites
     private Character player;
-    private  Goomba goomba;
 
     private Music music;
 
@@ -77,7 +78,7 @@ public class PlayScreen implements Screen {
         //初始化Box2DDebugRenderer
         b2dr = new Box2DDebugRenderer();
         //讓程式可以畫出debug線
-        new B2WorldCreator(this);
+        creator = new B2WorldCreator(this);
 
         //初始化角色
         player = new Character(this);
@@ -88,7 +89,7 @@ public class PlayScreen implements Screen {
         music.setLooping(true);
         music.play();
 
-        goomba = new Goomba(this, .64f, .64f);
+
     }
 
     public TextureAtlas getAtlas(){
@@ -117,7 +118,10 @@ public class PlayScreen implements Screen {
         world.step(1/60f,6,2);
 
         player.update(dt);
-        goomba.update(dt);
+        for (Enemy enemy : creator.getGoombas())
+            enemy.update(dt);
+
+
         hud.update(dt);
 
         //讓gamecam到player.x的位置
@@ -146,7 +150,10 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         player.draw(game.batch);
-        goomba.draw(game.batch);
+        for (Enemy enemy : creator.getGoombas()){
+            enemy.draw(game.batch);
+        }
+
         game.batch.end();
 
         //畫出Hud camera看到的東西

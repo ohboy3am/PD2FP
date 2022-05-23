@@ -29,7 +29,6 @@ public class ProgramDesign2FinalProject extends Game {
 
 	public SpriteBatch batch;
 
-	public static AssetManager manager;
 	
 	@Override
 	public void create () {
