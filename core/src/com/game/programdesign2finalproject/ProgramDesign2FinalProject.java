@@ -11,6 +11,7 @@ import com.game.programdesign2finalproject.Screens.PlayScreen;
 public class ProgramDesign2FinalProject extends Game {
 	public static final int V_WIDTH = 400;
 	public static final int V_HEIGHT = 208;
+	//pixel per meter
 	public static final float PPM = 100;
 
 	public static final short GROUND_BIT = 1;
