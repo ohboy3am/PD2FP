@@ -3,114 +3,114 @@ jotaro_walking.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-jotaro_walking-0
+00
   rotate: false
-  xy: 1, 727
+  xy: 0, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-1
+01
   rotate: false
-  xy: 1, 485
+  xy: 240, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-10
+02
   rotate: false
-  xy: 243, 727
+  xy: 480, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-11
+03
   rotate: false
-  xy: 1, 243
+  xy: 720, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-12
+04
   rotate: false
-  xy: 243, 485
+  xy: 960, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-13
+05
   rotate: false
-  xy: 485, 727
+  xy: 1200, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-14
+06
   rotate: false
-  xy: 1, 1
+  xy: 1440, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-15
+07
   rotate: false
-  xy: 243, 243
+  xy: 1680, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-2
+08
   rotate: false
-  xy: 485, 485
+  xy: 1920, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-3
+09
   rotate: false
-  xy: 727, 727
+  xy: 2160, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-4
+10
   rotate: false
-  xy: 243, 1
+  xy: 2400, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-5
+11
   rotate: false
-  xy: 485, 243
+  xy: 2640, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-6
+12
   rotate: false
-  xy: 727, 485
+  xy: 2880, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-7
+13
   rotate: false
-  xy: 485, 1
+  xy: 3120, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-8
+14
   rotate: false
-  xy: 727, 243
+  xy: 3360, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0
   index: -1
-jotaro_walking-9
+15
   rotate: false
-  xy: 727, 1
+  xy: 3600, 0
   size: 240, 240
   orig: 240, 240
   offset: 0, 0

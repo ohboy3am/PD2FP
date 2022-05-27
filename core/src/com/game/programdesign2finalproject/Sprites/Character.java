@@ -4,6 +4,7 @@ import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.PPM
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -37,9 +38,10 @@ public class Character extends Sprite {
     private boolean characterIsBig;
     public boolean runGrowAnimation;
     private boolean timeToDefineBigMario;
-
+    private TextureAtlas atlas2;
+    private boolean isJotaro = false;
     public Character(PlayScreen screen){
-
+        atlas2 = new TextureAtlas("jotaro_walking.pack");
         this.world = screen.getWorld();
         currentState = State.STANDING;
         previousState = State.STANDING;
@@ -51,14 +53,30 @@ public class Character extends Sprite {
         int characterWidth = 16;
         int bigCharacterHeight = 32;
         int bigCharacterWidth = 16;
-
+        int jotaroHeight = 240;
+        int jotaroWidth = 240;
         for (int i = 2; i < 5; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("Vega_Picture"),i* characterWidth,0, characterWidth, characterHeight));
         characterRun = new Animation(0.1f, frames);
         frames.clear();
 
-        for (int i = 1; i < 4; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),i* bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight));
+        //for (int i = 1; i < 4; i++)
+        //  frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),i* bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight));
+        for(int i=0;i<16;i++) {
+            frames.add(new TextureRegion(atlas2.findRegion("00"), i * jotaroWidth, 0, jotaroWidth, jotaroHeight));
+        }
+        /*for(int i=0;i<4;i++) {
+            frames.add(new TextureRegion(atlas2.findRegion("jotaro_walking-0"),i* jotaroWidth,0, jotaroWidth, jotaroHeight));
+        }
+        for(int i=0;i<4;i++) {
+            frames.add(new TextureRegion(atlas2.findRegion("jotaro_walking-4"),i* jotaroWidth,0, jotaroWidth, jotaroHeight));
+        }
+        for(int i=0;i<4;i++) {
+            frames.add(new TextureRegion(atlas2.findRegion("jotaro_walking-8"),i* jotaroWidth,0, jotaroWidth, jotaroHeight));
+        }
+        for(int i=0;i<4;i++) {
+            frames.add(new TextureRegion(atlas2.findRegion("jotaro_walking-12"),i* jotaroWidth,0, jotaroWidth, jotaroHeight));
+        }*/
         bigCharacterRun = new Animation(0.1f, frames);
         frames.clear();
 
@@ -73,22 +91,23 @@ public class Character extends Sprite {
             frames.add(new TextureRegion(screen.getAtlas().findRegion("Vega_Picture"),0,0, characterWidth, characterHeight));
         characterJump = new Animation(0.1f, frames);
         frames.clear();
-        bigCharacterJump = new TextureRegion(screen.getAtlas().findRegion("big_mario"),  5*bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight);
-
+        //bigCharacterJump = new TextureRegion(screen.getAtlas().findRegion("big_mario"),  5*bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight);
+        bigCharacterJump = new TextureRegion(atlas2.findRegion("11"),  0,0, jotaroWidth, jotaroHeight);
 
 
         characterStand = new TextureRegion(screen.getAtlas().findRegion("Vega_Picture"),  5*characterWidth,0, characterWidth, characterHeight);
 
-        bigCharacterStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"),  0,0, bigCharacterWidth, bigCharacterHeight);
-
+        //bigCharacterStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"),  0,0, bigCharacterWidth, bigCharacterHeight);
+        bigCharacterStand = new TextureRegion(atlas2.findRegion("02"),  0,0, jotaroWidth, jotaroHeight);
         defineCharacter();
         setBounds(1,1, characterWidth / PPM, characterHeight / PPM);
+        //setBounds(1,1, jotaroWidth / PPM, jotaroHeight / PPM);
         setRegion(characterStand);
     }
 
     public void update(float dt){
         if (characterIsBig)
-            setCenter(b2body.getPosition().x, b2body.getPosition().y - 6/PPM);
+            setCenter(b2body.getPosition().x, b2body.getPosition().y + 10/PPM);
         else{
             setCenter(b2body.getPosition().x, b2body.getPosition().y - 6/PPM);
         }
@@ -121,11 +140,11 @@ public class Character extends Sprite {
         }
 
 
-        if((b2body.getLinearVelocity().x < 0 || !runnungRight) && !region.isFlipX()) {
+        if((b2body.getLinearVelocity().x > 0 || !runnungRight) && !region.isFlipX()) {
             region.flip(true, false);
             runnungRight = false;
         }
-        else if((b2body.getLinearVelocity().x > 0 || runnungRight) && region.isFlipX()){
+        else if((b2body.getLinearVelocity().x < 0 || runnungRight) && region.isFlipX()){
                 region.flip(true,false);
                 runnungRight = true;
         }
@@ -153,7 +172,7 @@ public class Character extends Sprite {
         runGrowAnimation = true;
         characterIsBig = true;
         timeToDefineBigMario = true;
-        setBounds(getX(),getY(),getWidth(),getHeight() );
+        setBounds(getX(),getY(),1.2f,1.2f);
         SoundManager.getInstance().soundPowerUp.play();
     }
 
