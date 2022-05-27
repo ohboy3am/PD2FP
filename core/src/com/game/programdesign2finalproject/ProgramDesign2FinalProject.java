@@ -26,7 +26,7 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final short ITEM_BIT = 256;
 	public static final short CHARACTER_HEAD_BIT = 512	;
 
-	public static final String MUSIC_PATH = "audio/music/mario_music.mp3";
+	public static final String MUSIC_PATH = "audio/music/pillarMan.mp3";
 	public static final String SOUND_PATH_COIN = "audio/sounds/coin.wav";
 	public static final String SOUND_PATH_BRICK = "audio/sounds/breakblock.wav";
 	public static final String SOUND_PATH_BUMP = "audio/sounds/bump.wav";
