@@ -15,23 +15,29 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.game.programdesign2finalproject.Sprites.Goomba;
+import com.game.programdesign2finalproject.Sprites.Items.Item;
+import com.game.programdesign2finalproject.Sprites.Items.ItemDef;
+import com.game.programdesign2finalproject.Sprites.Items.Mushroom;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 
 import com.game.programdesign2finalproject.Scenes.Hud;
 import com.game.programdesign2finalproject.Sounds.SoundManager;
 import com.game.programdesign2finalproject.Sprites.Character;
 import com.game.programdesign2finalproject.Sprites.Enemy;
-import com.game.programdesign2finalproject.Sprites.Goomba;
 import com.game.programdesign2finalproject.Tools.B2WorldCreator;
 import com.game.programdesign2finalproject.Tools.WorldContactListener;
+
+import java.util.LinkedList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class PlayScreen implements Screen {
     //遊戲的reference
     private ProgramDesign2FinalProject game;
     private TextureAtlas atlas;
-
 
     private OrthographicCamera gamecam;
     private Viewport gamePort;
@@ -52,8 +58,11 @@ public class PlayScreen implements Screen {
 
     private Music music;
 
+    private Array<Item> items;
+    private LinkedBlockingQueue<ItemDef> itemsToSpawn;
+
     public PlayScreen(ProgramDesign2FinalProject game){
-        atlas = new TextureAtlas("Character_and_Enemies.pack");
+        atlas = new TextureAtlas("NEW_Character_and_Enemies.pack");
 
         this.game = game;
         //遊戲中的視角
@@ -85,10 +94,33 @@ public class PlayScreen implements Screen {
 
         world.setContactListener(new WorldContactListener());
 
+        //設置音樂
         music = SoundManager.getInstance().bgm;
         music.setLooping(true);
-        music.play();
+        //music.play();
 
+        items = new Array<Item>();
+        itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
+
+
+    }
+
+    public void spawnItem(ItemDef idef){
+        itemsToSpawn.add(idef);
+    }
+
+    public void handleSpawningItems() {
+        while (!itemsToSpawn.isEmpty()){
+            ItemDef idef = itemsToSpawn.poll();
+
+
+            if (idef.type == Mushroom.class){
+
+                items.add(new Mushroom(this, idef.position.x, idef.position.y));
+
+            }
+
+        }
 
     }
 
@@ -106,25 +138,51 @@ public class PlayScreen implements Screen {
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
             player.b2body.applyLinearImpulse(new Vector2(0,4f), player.b2body.getWorldCenter(), true);
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2)
-            player.b2body.applyLinearImpulse(new Vector2(0.1f,0), player.b2body.getWorldCenter(), true);
+            player.b2body.applyLinearImpulse(new Vector2(0.07f,0), player.b2body.getWorldCenter(), true);
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)
-        player.b2body.applyLinearImpulse(new Vector2(-0.1f,0), player.b2body.getWorldCenter(), true);
+        player.b2body.applyLinearImpulse(new Vector2(-0.07f,0), player.b2body.getWorldCenter(), true);
     }
 
     public void update(float dt){
         //先處裡input
         handleInput(dt);
+
         //物理模擬中的每一步 (每秒60次)
         world.step(1/60f,6,2);
 
         player.update(dt);
         for (Enemy enemy : creator.getGoombas()){
-            enemy.update(dt);
+
+            if (enemy instanceof Goomba){
+                if (enemy.isVanished()) {
+                    creator.getGoombas().removeValue((Goomba)enemy,true);
+                    continue;
+                }
+            }
+
+                enemy.update(dt);
+
+                if (enemy.isDestroyed()) continue;
+
+                if (enemy.getX() < player.getX() + 224 / PPM)
+                    enemy.b2body.setActive(true);
+
             //224個像素內敵人醒來
-            if (enemy.getX() < player.getX() + 224 / PPM)
-                enemy.b2body.setActive(true);
+
         }
 
+        for (Item item :items){
+
+            if (item.isDestroyed())
+            {
+                items.removeValue(item,true);
+                continue;
+            }
+
+             item.update(dt);
+        }
+
+        handleSpawningItems();
 
 
         hud.update(dt);
@@ -136,6 +194,7 @@ public class PlayScreen implements Screen {
         gamecam.update();
         //讓renderer只畫gamecam看到的東西
         renderer.setView(gamecam);
+
     }
 
     @Override
@@ -157,6 +216,9 @@ public class PlayScreen implements Screen {
         player.draw(game.batch);
         for (Enemy enemy : creator.getGoombas()){
             enemy.draw(game.batch);
+        }
+        for (Item item :items){
+            item.draw(game.batch);
         }
 
         game.batch.end();

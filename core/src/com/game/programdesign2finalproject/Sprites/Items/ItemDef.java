@@ -1,4 +1,4 @@
-package com.game.programdesign2finalproject.Items;
+package com.game.programdesign2finalproject.Sprites.Items;
 
 import com.badlogic.gdx.math.Vector2;
 

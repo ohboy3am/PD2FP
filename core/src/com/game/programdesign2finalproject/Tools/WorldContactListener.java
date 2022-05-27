@@ -6,7 +6,9 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.game.programdesign2finalproject.Sprites.Items.Item;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
+import com.game.programdesign2finalproject.Sprites.Character;
 import com.game.programdesign2finalproject.Sprites.Enemy;
 import com.game.programdesign2finalproject.Sprites.InteractiveTileObject;
 
@@ -19,19 +21,21 @@ public class WorldContactListener implements ContactListener {
 
         int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
-        if("head".equals(fixA.getUserData()) || "head".equals(fixB.getUserData())){
-            Fixture head = "head".equals(fixA.getUserData())? fixA : fixB;
-            Fixture object = fixA ==head ? fixB : fixA;
-
-            if(object.getUserData() != null && (object.getUserData() instanceof InteractiveTileObject) ){
-                ((InteractiveTileObject) object.getUserData()).onHeadHit();
-            }
-
-        }
 
         switch (cDef){
+                //主角頭部撞擊
+            case ProgramDesign2FinalProject.CHARACTER_HEAD_BIT | ProgramDesign2FinalProject.BRICK_BIT:
+            case ProgramDesign2FinalProject.CHARACTER_HEAD_BIT | ProgramDesign2FinalProject.COIN_BIT:
 
-            //主角採到敵人頭上
+                if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.CHARACTER_HEAD_BIT){
+                    ((InteractiveTileObject) fixB.getUserData()).onHeadHit((Character) fixA.getUserData());
+                }
+
+                else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.CHARACTER_HEAD_BIT)
+                    ((InteractiveTileObject) fixA.getUserData()).onHeadHit((Character) fixB.getUserData());
+                break;
+
+                //主角採到敵人頭上
             case ProgramDesign2FinalProject.ENEMY_HEAD_BIT | ProgramDesign2FinalProject.CHARACTER_BIT:
                 if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.ENEMY_HEAD_BIT)
                     ((Enemy)fixA.getUserData()).hitOnHead();
@@ -44,20 +48,38 @@ public class WorldContactListener implements ContactListener {
                 if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.ENEMY_BIT)
                     ((Enemy)fixA.getUserData()).reverseVelocity(true,false);
                 else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.ENEMY_BIT){
-                    Gdx.app.log("goomba","hit wall");
                     ((Enemy)fixB.getUserData()).reverseVelocity(true,false);
                 }
-
                 break;
 
+                //主角撞到敵人
             case ProgramDesign2FinalProject.CHARACTER_BIT | ProgramDesign2FinalProject.ENEMY_BIT:
-                Gdx.app.log("goomba","Kill you");
                 break;
 
                 //敵人撞到敵人
             case ProgramDesign2FinalProject.ENEMY_BIT | ProgramDesign2FinalProject.ENEMY_BIT:
                 ((Enemy)fixA.getUserData()).reverseVelocity(true,false);
                 ((Enemy)fixB.getUserData()).reverseVelocity(true,false);
+                break;
+
+                //道具碰到物件
+            case ProgramDesign2FinalProject.ITEM_BIT | ProgramDesign2FinalProject.OBJECT_BIT:
+                if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.ITEM_BIT)
+                    ((Item)fixA.getUserData()).reverseVelocity(true,false);
+                else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.ITEM_BIT){
+                    ((Item)fixB.getUserData()).reverseVelocity(true,false);
+                }
+                break;
+
+                //主角撞到道具
+            case ProgramDesign2FinalProject.ITEM_BIT | ProgramDesign2FinalProject.CHARACTER_BIT:
+                if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.ITEM_BIT)
+                   ((Item)fixA.getUserData()).use((Character)fixB.getUserData());
+                else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.ITEM_BIT)
+                    ((Item)fixB.getUserData()).use((Character)fixA.getUserData());
+                break;
+
+
             default:
                 break;
         }

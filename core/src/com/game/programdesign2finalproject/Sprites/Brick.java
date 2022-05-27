@@ -23,11 +23,15 @@ public class Brick extends InteractiveTileObject{
     }
 
     @Override
-    public void onHeadHit() {
-        Gdx.app.log("Brick","Collision");
+    public void onHeadHit(Character character) {
+        if(!character.isBig()){
+            SoundManager.getInstance().soundBump.play();
+            return;
+        }
         setCategoryFilter(ProgramDesign2FinalProject.DESTROYED_BIT);
         getCell().setTile(null);
         Hud.addScore(200);
         SoundManager.getInstance().soundBrick.play();
     }
+
 }
