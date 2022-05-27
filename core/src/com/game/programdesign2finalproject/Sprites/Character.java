@@ -15,21 +15,31 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
+import com.game.programdesign2finalproject.Sounds.SoundManager;
 
 public class Character extends Sprite {
-    public enum State{FALLING, JUMPING, STANDING, RUNNING};
+
+    public enum State{FALLING, JUMPING, STANDING, RUNNING, GROWING};
     public State currentState;
     public State previousState;
     public World world;
     public Body b2body;
     private TextureRegion characterStand;
-    private Animation characterRun;
-    private Animation characterJump;
+    private Animation<TextureRegion> characterRun;
+    private Animation<TextureRegion> characterJump;
+    private TextureRegion bigCharacterStand;
+    private TextureRegion bigCharacterJump;
+    private Animation<TextureRegion> bigCharacterRun;
+    private Animation<TextureRegion> growCharacter;
+
     private float stateTimer;
     private boolean runnungRight;
+    private boolean characterIsBig;
+    public boolean runGrowAnimation;
+    private boolean timeToDefineBigMario;
 
     public Character(PlayScreen screen){
-        super(screen.getAtlas().findRegion("little_mario"));
+
         this.world = screen.getWorld();
         currentState = State.STANDING;
         previousState = State.STANDING;
@@ -37,19 +47,39 @@ public class Character extends Sprite {
         runnungRight = true;
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
-        int characterHeight = 16;
+        int characterHeight = 32;
         int characterWidth = 16;
-        for (int i = 1; i < 4; i++)
-            frames.add(new TextureRegion(getTexture(),i* characterWidth,0, characterWidth, characterHeight));
+        int bigCharacterHeight = 32;
+        int bigCharacterWidth = 16;
+
+        for (int i = 2; i < 5; i++)
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("Vega_Picture"),i* characterWidth,0, characterWidth, characterHeight));
         characterRun = new Animation(0.1f, frames);
         frames.clear();
 
-        for (int i = 4;i < 6;i++)
-            frames.add(new TextureRegion(getTexture(),i* characterWidth,0, characterWidth, characterHeight));
+        for (int i = 1; i < 4; i++)
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),i* bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight));
+        bigCharacterRun = new Animation(0.1f, frames);
+        frames.clear();
+
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),15 * bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),0,0, bigCharacterWidth, bigCharacterHeight));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),15 * bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),0,0, bigCharacterWidth, bigCharacterHeight));
+        growCharacter = new Animation(0.2f, frames);
+        frames.clear();
+
+        for (int i = 0;i < 2;i++)
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("Vega_Picture"),0,0, characterWidth, characterHeight));
         characterJump = new Animation(0.1f, frames);
+        frames.clear();
+        bigCharacterJump = new TextureRegion(screen.getAtlas().findRegion("big_mario"),  5*bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight);
 
 
-        characterStand = new TextureRegion(getTexture(), 1,1, characterWidth, characterHeight);
+
+        characterStand = new TextureRegion(screen.getAtlas().findRegion("Vega_Picture"),  5*characterWidth,0, characterWidth, characterHeight);
+
+        bigCharacterStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"),  0,0, bigCharacterWidth, bigCharacterHeight);
 
         defineCharacter();
         setBounds(1,1, characterWidth / PPM, characterHeight / PPM);
@@ -57,8 +87,14 @@ public class Character extends Sprite {
     }
 
     public void update(float dt){
-        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        if (characterIsBig)
+            setCenter(b2body.getPosition().x, b2body.getPosition().y - 6/PPM);
+        else{
+            setCenter(b2body.getPosition().x, b2body.getPosition().y - 6/PPM);
+        }
         setRegion(getFrame(dt));
+        if (timeToDefineBigMario)
+            defineBigCharacter();
     }
 
     public TextureRegion getFrame(float dt){
@@ -66,18 +102,24 @@ public class Character extends Sprite {
 
         TextureRegion region;
         switch (currentState){
+            case GROWING:
+                region = (TextureRegion)growCharacter.getKeyFrame(stateTimer);
+                if (growCharacter.isAnimationFinished(stateTimer))
+                    runGrowAnimation = false;
+                break;
             case JUMPING:
-                region = (TextureRegion) characterJump.getKeyFrame(stateTimer);
+                region = characterIsBig ? (TextureRegion) bigCharacterJump : (TextureRegion) characterJump.getKeyFrame(stateTimer);
                 break;
             case RUNNING:
-                region = (TextureRegion) characterRun.getKeyFrame(stateTimer,true);
+                region = characterIsBig ? (TextureRegion) bigCharacterRun.getKeyFrame(stateTimer,true) : (TextureRegion) characterRun.getKeyFrame(stateTimer,true);
                 break;
             case FALLING:
             case STANDING:
             default:
-                region = characterStand;
+                region = characterIsBig ? bigCharacterStand : characterStand;
                 break;
         }
+
 
         if((b2body.getLinearVelocity().x < 0 || !runnungRight) && !region.isFlipX()) {
             region.flip(true, false);
@@ -95,7 +137,9 @@ public class Character extends Sprite {
 
 
     public State getState(){
-        if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
+        if(runGrowAnimation)
+            return State.GROWING;
+        else if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
             return State.JUMPING;
         else if(b2body.getLinearVelocity().y < 0)
             return State.FALLING;
@@ -105,6 +149,53 @@ public class Character extends Sprite {
             return State.STANDING;
     }
 
+    public void grow(){
+        runGrowAnimation = true;
+        characterIsBig = true;
+        timeToDefineBigMario = true;
+        setBounds(getX(),getY(),getWidth(),getHeight() );
+        SoundManager.getInstance().soundPowerUp.play();
+    }
+
+    public boolean isBig() {
+        return characterIsBig;
+    }
+    public void defineBigCharacter() {
+        Vector2 currentPosition = b2body.getPosition();
+        world.destroyBody(b2body);
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(currentPosition.add(0,10 / PPM));
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        b2body = world.createBody(bdef);
+
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(6 / PPM);
+        fdef.filter.categoryBits = ProgramDesign2FinalProject.CHARACTER_BIT;
+        fdef.filter.maskBits = ProgramDesign2FinalProject.GROUND_BIT |
+                ProgramDesign2FinalProject.COIN_BIT |
+                ProgramDesign2FinalProject.BRICK_BIT|
+                ProgramDesign2FinalProject.ENEMY_BIT|
+                ProgramDesign2FinalProject.OBJECT_BIT|
+                ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
+                ProgramDesign2FinalProject.ITEM_BIT;
+
+
+        fdef.shape = shape;
+        b2body.createFixture(fdef).setUserData(this);
+        shape.setPosition(new Vector2(0,-14/ PPM));
+        b2body.createFixture(fdef).setUserData(this);
+
+        EdgeShape head = new EdgeShape();
+        head.set(new Vector2(-2 / PPM, 8 / PPM), new Vector2(2/ PPM, 8 / PPM));
+        fdef.filter.categoryBits = ProgramDesign2FinalProject.CHARACTER_HEAD_BIT;
+        fdef.shape = head;
+        fdef.isSensor = true;
+
+        b2body.createFixture(fdef).setUserData(this);
+        timeToDefineBigMario = false;
+
+    }
     public void defineCharacter(){
         BodyDef bdef = new BodyDef();
         bdef.position.set(32 / PPM, 32 / PPM);
@@ -120,18 +211,24 @@ public class Character extends Sprite {
                 ProgramDesign2FinalProject.BRICK_BIT|
                 ProgramDesign2FinalProject.ENEMY_BIT|
                 ProgramDesign2FinalProject.OBJECT_BIT|
-                ProgramDesign2FinalProject.ENEMY_HEAD_BIT;
+                ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
+                ProgramDesign2FinalProject.ITEM_BIT;
 
 
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef).setUserData(this);
+        shape.setPosition(new Vector2(0,-14/ PPM));
+        b2body.createFixture(fdef).setUserData(this);
 
         EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2 / PPM, 6 / PPM), new Vector2(2/ PPM, 6 / PPM));
+        head.set(new Vector2(-2 / PPM, 10 / PPM), new Vector2(2/ PPM, 10 / PPM));
+        fdef.filter.categoryBits = ProgramDesign2FinalProject.CHARACTER_HEAD_BIT;
         fdef.shape = head;
         fdef.isSensor = true;
 
-        b2body.createFixture(fdef).setUserData("head");
+        b2body.createFixture(fdef).setUserData(this);
+
 
     }
+
 }

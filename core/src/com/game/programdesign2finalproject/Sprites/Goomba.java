@@ -16,11 +16,8 @@ import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
 
 public class Goomba extends Enemy{
-    private float stateTime;
     private Animation<TextureRegion> walkAnimation;
     private Array<TextureRegion> frames;
-    private boolean setToDestroy;
-    private boolean destroyed;
     private int goombaHeight = 16;
     private int goombaWidth = 16;
 
@@ -35,22 +32,24 @@ public class Goomba extends Enemy{
         walkAnimation = new Animation(0.4f, frames);
         stateTime = 0;
         setBounds(getX(), getY(), goombaWidth / PPM, goombaHeight / PPM);
-        setToDestroy = false;
-        destroyed = false;
+
 
     }
 
     public void update(float dt){
         stateTime += dt;
-        if (setToDestroy && !destroyed){
-            Gdx.app.log("goomba","Collision");
-            world.destroyBody(b2body);
+        if(destroyed && stateTime >=1) {
+            vanished = true;
+        }
+        if(destroyed) return;
+        if (setToDestroy){
             destroyed = true;
-            setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba"), goombaWidth * 2, 0, goombaWidth, goombaHeight));
+            world.destroyBody(b2body);
             stateTime = 0;
         }
-        else if(!destroyed){
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        else {
+            b2body.setLinearVelocity(velocity);
+            setCenter(b2body.getPosition().x , b2body.getPosition().y);
             setRegion(walkAnimation.getKeyFrame(stateTime, true));
         }
 
@@ -81,7 +80,7 @@ public class Goomba extends Enemy{
 
 
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef).setUserData(this);
 
         //Create the Head here:
         PolygonShape head = new PolygonShape();
@@ -99,7 +98,11 @@ public class Goomba extends Enemy{
     }
 
     public void draw(Batch batch){
-        if(!destroyed || stateTime < 1){
+        if (destroyed && stateTime < 1){
+            setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba"), goombaWidth * 2, 0, goombaWidth, goombaHeight+1));
+            super.draw(batch);
+        }
+        if(!destroyed ){
             super.draw(batch);
         }
     }

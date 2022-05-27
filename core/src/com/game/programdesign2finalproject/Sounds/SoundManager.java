@@ -11,6 +11,8 @@ public class SoundManager {
     public Sound soundCoin;
     public Sound soundBrick;
     public Sound soundBump;
+    public Sound soundSpawn;
+    public Sound soundPowerUp;
 
     private static SoundManager singleInstance = null;
 
@@ -19,6 +21,8 @@ public class SoundManager {
         soundCoin = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_COIN));
         soundBrick = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_BRICK));
         soundBump = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_BUMP));
+        soundSpawn = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_SPAWN));
+        soundPowerUp = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_POWERUP));
     }
 
     public static SoundManager getInstance(){

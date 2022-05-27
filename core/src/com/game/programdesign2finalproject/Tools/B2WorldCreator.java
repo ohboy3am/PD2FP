@@ -11,13 +11,16 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
 import com.game.programdesign2finalproject.Sprites.Brick;
 import com.game.programdesign2finalproject.Sprites.Coin;
+import com.game.programdesign2finalproject.Sprites.Goomba;
 
 
 public class B2WorldCreator {
+    private Array<Goomba> goombas;
     public B2WorldCreator(PlayScreen screen){
         World world = screen.getWorld();
         TiledMap map = screen.getMap();
@@ -38,6 +41,7 @@ public class B2WorldCreator {
 
             shape.setAsBox((rect.getWidth() / 2) / PPM, (rect.getHeight() / 2) / PPM);
             fdef.shape = shape;
+            fdef.filter.categoryBits = ProgramDesign2FinalProject.GROUND_BIT;
             body.createFixture(fdef);
         }
 
@@ -71,5 +75,16 @@ public class B2WorldCreator {
 
         }
 
+        //製造goombas
+        goombas = new Array<Goomba>();
+        for(MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)){
+             Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+           goombas.add(new Goomba(screen,rect.getX() / PPM,rect.getY() / PPM) ) ;
+
+        }
+
+    }public Array<Goomba> getGoombas() {
+        return goombas;
     }
 }
