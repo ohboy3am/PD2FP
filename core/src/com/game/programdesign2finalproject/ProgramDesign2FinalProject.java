@@ -15,6 +15,7 @@ public class ProgramDesign2FinalProject extends Game {
 	//pixel per meter
 	public static final float PPM = 100;
 
+	public static final short NOTHING_BIT = 0;
 	public static final short GROUND_BIT = 1;
 	public static final short CHARACTER_BIT = 2;
 	public static final short BRICK_BIT = 4;
@@ -32,6 +33,10 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final String SOUND_PATH_BUMP = "audio/sounds/bump.wav";
 	public static final String SOUND_PATH_SPAWN = "audio/sounds/spawn.wav";
 	public static final String SOUND_PATH_POWERUP = "audio/sounds/powerup.wav";
+	public static final String SOUND_PATH_STOMP = "audio/sounds/stomp.wav";
+	public static final String SOUND_PATH_POWERDOWN = "audio/sounds/powerdown.wav";
+	public static final String SOUND_PATH_WRYYY = "audio/sounds/wryyy.wav";
+	public static final String SOUND_PATH_CHARACTERDIE = "audio/sounds/mariodie.wav";
 
 	public SpriteBatch batch;
 

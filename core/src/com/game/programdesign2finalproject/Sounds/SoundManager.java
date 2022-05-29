@@ -13,6 +13,10 @@ public class SoundManager {
     public Sound soundBump;
     public Sound soundSpawn;
     public Sound soundPowerUp;
+    public Sound soundPowerDown;
+    public Sound soundStomp;
+    public Sound soundWryyy;
+    public Sound soundCharacterDie;
 
     private static SoundManager singleInstance = null;
 
@@ -23,6 +27,10 @@ public class SoundManager {
         soundBump = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_BUMP));
         soundSpawn = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_SPAWN));
         soundPowerUp = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_POWERUP));
+        soundPowerDown = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_POWERDOWN));
+        soundStomp = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_STOMP));
+        soundWryyy = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_WRYYY));
+        soundCharacterDie = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_CHARACTERDIE));
     }
 
     public static SoundManager getInstance(){

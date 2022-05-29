@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
+import com.game.programdesign2finalproject.Sounds.SoundManager;
 
 public class Goomba extends Enemy{
     private Animation<TextureRegion> walkAnimation;
@@ -110,5 +111,6 @@ public class Goomba extends Enemy{
     @Override
     public void hitOnHead() {
         setToDestroy = true;
+        SoundManager.getInstance().soundStomp.play();
     }
 }

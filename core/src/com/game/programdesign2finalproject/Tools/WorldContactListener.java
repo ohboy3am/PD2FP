@@ -26,7 +26,6 @@ public class WorldContactListener implements ContactListener {
                 //主角頭部撞擊
             case ProgramDesign2FinalProject.CHARACTER_HEAD_BIT | ProgramDesign2FinalProject.BRICK_BIT:
             case ProgramDesign2FinalProject.CHARACTER_HEAD_BIT | ProgramDesign2FinalProject.COIN_BIT:
-
                 if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.CHARACTER_HEAD_BIT){
                     ((InteractiveTileObject) fixB.getUserData()).onHeadHit((Character) fixA.getUserData());
                 }
@@ -54,6 +53,12 @@ public class WorldContactListener implements ContactListener {
 
                 //主角撞到敵人
             case ProgramDesign2FinalProject.CHARACTER_BIT | ProgramDesign2FinalProject.ENEMY_BIT:
+                if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.CHARACTER_BIT){
+                    ((Character) fixA.getUserData()).hit();
+                }
+
+                else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.CHARACTER_BIT)
+                    ((Character) fixB.getUserData()).hit();
                 break;
 
                 //敵人撞到敵人

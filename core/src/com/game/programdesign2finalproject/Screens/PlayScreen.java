@@ -2,6 +2,7 @@ package com.game.programdesign2finalproject.Screens;
 
 import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.PPM;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -31,7 +32,6 @@ import com.game.programdesign2finalproject.Sprites.Enemy;
 import com.game.programdesign2finalproject.Tools.B2WorldCreator;
 import com.game.programdesign2finalproject.Tools.WorldContactListener;
 
-import java.util.LinkedList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class PlayScreen implements Screen {
@@ -97,7 +97,7 @@ public class PlayScreen implements Screen {
         //設置音樂
         music = SoundManager.getInstance().bgm;
         music.setLooping(true);
-        //music.play();
+       // music.play();
 
         items = new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
@@ -134,6 +134,7 @@ public class PlayScreen implements Screen {
     }
 
     public void handleInput(float dt){
+        if(player.currentState == Character.State.DEAD) return;
         //角色移動
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
             player.b2body.applyLinearImpulse(new Vector2(0,4f), player.b2body.getWorldCenter(), true);
@@ -188,6 +189,7 @@ public class PlayScreen implements Screen {
         hud.update(dt);
 
         //讓gamecam到player.x的位置
+        if (player.currentState != Character.State.DEAD)
         gamecam.position.x = player.b2body.getPosition().x;
 
         //更新gamecam
@@ -226,6 +228,19 @@ public class PlayScreen implements Screen {
         //畫出Hud camera看到的東西
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+
+        if (gameOver()){
+            game.setScreen(new GameOverScreen(game));
+            dispose();
+        }
+    }
+
+    public boolean gameOver(){
+        if (player.currentState == Character.State.DEAD && player.getStateTimer() > 3){
+            return true;
+        }
+
+        else return false;
     }
 
     @Override
