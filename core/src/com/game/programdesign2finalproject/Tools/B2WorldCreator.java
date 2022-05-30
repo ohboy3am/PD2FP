@@ -16,11 +16,12 @@ import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
 import com.game.programdesign2finalproject.Sprites.Brick;
 import com.game.programdesign2finalproject.Sprites.Coin;
+import com.game.programdesign2finalproject.Sprites.Enemy;
 import com.game.programdesign2finalproject.Sprites.Goomba;
 
 
 public class B2WorldCreator {
-    private Array<Goomba> goombas;
+    private Array<Enemy> goombas;
     public B2WorldCreator(PlayScreen screen){
         World world = screen.getWorld();
         TiledMap map = screen.getMap();
@@ -76,7 +77,7 @@ public class B2WorldCreator {
         }
 
         //製造goombas
-        goombas = new Array<Goomba>();
+        goombas = new Array<Enemy>();
         for(MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)){
              Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
@@ -84,7 +85,7 @@ public class B2WorldCreator {
 
         }
 
-    }public Array<Goomba> getGoombas() {
+    }public Array<Enemy> getGoombas() {
         return goombas;
     }
 }

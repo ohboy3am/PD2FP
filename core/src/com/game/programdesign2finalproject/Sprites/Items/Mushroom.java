@@ -9,7 +9,9 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
+import com.game.programdesign2finalproject.Scenes.Hud;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
+import com.game.programdesign2finalproject.Sounds.SoundManager;
 import com.game.programdesign2finalproject.Sprites.Character;
 
 public class Mushroom extends Item {
@@ -42,7 +44,10 @@ public class Mushroom extends Item {
 
     @Override
     public void use(Character character) {
+        if (!character.isBig())
         character.grow();
+        SoundManager.getInstance().soundPowerUp.play();
+        Hud.addScore(100);
         destroy();
     }
 
