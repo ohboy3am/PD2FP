@@ -2,6 +2,7 @@ package com.game.programdesign2finalproject.Sprites;
 
 import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.PPM;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.utils.Array;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
 import com.game.programdesign2finalproject.Sounds.SoundManager;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Character extends Sprite {
 
@@ -28,6 +30,7 @@ public class Character extends Sprite {
     public State previousState;
     public World world;
     public Body b2body;
+
     private TextureRegion characterStand;
     private Animation<TextureRegion> characterRun;
     private Animation<TextureRegion> characterJump;
@@ -77,23 +80,9 @@ public class Character extends Sprite {
         characterRun = new Animation(0.1f, frames);
         frames.clear();
 
-        //for (int i = 1; i < 4; i++)
-        //  frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),i* bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight));
         for(int i=0;i<16;i++) {
             frames.add(new TextureRegion(atlas2.findRegion("00"), i * jotaroWidth, 0, jotaroWidth, jotaroHeight));
         }
-        /*for(int i=0;i<4;i++) {
-            frames.add(new TextureRegion(atlas2.findRegion("jotaro_walking-0"),i* jotaroWidth,0, jotaroWidth, jotaroHeight));
-        }
-        for(int i=0;i<4;i++) {
-            frames.add(new TextureRegion(atlas2.findRegion("jotaro_walking-4"),i* jotaroWidth,0, jotaroWidth, jotaroHeight));
-        }
-        for(int i=0;i<4;i++) {
-            frames.add(new TextureRegion(atlas2.findRegion("jotaro_walking-8"),i* jotaroWidth,0, jotaroWidth, jotaroHeight));
-        }
-        for(int i=0;i<4;i++) {
-            frames.add(new TextureRegion(atlas2.findRegion("jotaro_walking-12"),i* jotaroWidth,0, jotaroWidth, jotaroHeight));
-        }*/
         bigCharacterRun = new Animation(0.1f, frames);
         frames.clear();
 
