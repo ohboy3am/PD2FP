@@ -3,6 +3,7 @@ package com.game.programdesign2finalproject.Sprites;
 import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.PPM;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -22,7 +23,7 @@ import com.game.programdesign2finalproject.Sounds.SoundManager;
 
 public class Character extends Sprite {
 
-    public enum State{FALLING, JUMPING, STANDING, RUNNING, GROWING, DEAD};
+    public enum State{FALLING, JUMPING, STANDING, RUNNING, GROWING, DEAD}
     public State currentState;
     public State previousState;
     public World world;
@@ -37,22 +38,32 @@ public class Character extends Sprite {
     private TextureRegion characterDead;
 
     private float stateTimer;
-    private boolean runnungRight;
+    private float hitTime;
+    private boolean runningRight;
     private boolean characterIsBig;
     public boolean runGrowAnimation;
     private boolean timeToDefineBigCharacter;
     private TextureAtlas atlas2;
     private boolean timeToRedefineCharacter;
     private boolean characterIsDead;
+    private PlayScreen screen;
+    public int jumpTime;
+    private float fireTime;
+
+    private Array<FireBall> fireBalls;
 
 
     public Character(PlayScreen screen){
+        this.screen = screen;
         atlas2 = new TextureAtlas("jotaro_walking.pack");
         this.world = screen.getWorld();
         currentState = State.STANDING;
         previousState = State.STANDING;
         stateTimer = 0;
-        runnungRight = true;
+        hitTime = 0;
+        runningRight = false;
+        jumpTime = 0;
+        fireTime = 0;
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         int characterHeight = 32;
@@ -112,20 +123,47 @@ public class Character extends Sprite {
         setBounds(1,1, characterWidth / PPM, characterHeight / PPM);
         //setBounds(1,1, jotaroWidth / PPM, jotaroHeight / PPM);
         setRegion(characterStand);
+
+        fireBalls = new Array<FireBall>();
     }
 
     public void update(float dt){
-        if (characterIsBig)
-            setCenter(b2body.getPosition().x, b2body.getPosition().y + 10/PPM);
+        if (characterIsBig){
+            setCenter(b2body.getPosition().x, b2body.getPosition().y - 2 /PPM);
+        }
+
         else{
             setCenter(b2body.getPosition().x, b2body.getPosition().y - 6/PPM);
         }
+
         setRegion(getFrame(dt));
+
         if (timeToDefineBigCharacter)
             defineBigCharacter();
+
         if (timeToRedefineCharacter){
             redefineCharacter();
         }
+
+        if (b2body.getPosition().y < -48/PPM && !characterIsDead){
+            die();
+        }
+
+        hitTime += dt;
+        fireTime += dt;
+
+        Array<FireBall> fireBallFound = new Array<FireBall>();
+        for(FireBall  ball : fireBalls) {
+            if(ball.isDestroyed()){
+                fireBallFound.add(ball);
+                continue;
+            }
+            if (!ball.isDestroyed())
+            ball.update(dt);
+
+        }
+        fireBalls.removeAll(fireBallFound,true);
+
     }
 
     public TextureRegion getFrame(float dt){
@@ -155,16 +193,21 @@ public class Character extends Sprite {
         }
 
 
-        if((b2body.getLinearVelocity().x > 0 || !runnungRight) && !region.isFlipX()) {
+        if((b2body.getLinearVelocity().x > 0 || !runningRight) && !region.isFlipX()) {
             region.flip(true, false);
-            runnungRight = false;
+            runningRight = false;
         }
-        else if((b2body.getLinearVelocity().x < 0 || runnungRight) && region.isFlipX()){
+        else if((b2body.getLinearVelocity().x < 0 || runningRight) && region.isFlipX()){
                 region.flip(true,false);
-                runnungRight = true;
+                runningRight = true;
         }
 
-            stateTimer = (currentState == previousState)? stateTimer + dt :0;
+            if (currentState == previousState){
+                stateTimer += dt;
+            }
+            else {
+                stateTimer = 0;
+            }
             previousState = currentState;
             return region;
         }
@@ -190,7 +233,6 @@ public class Character extends Sprite {
         characterIsBig = true;
         timeToDefineBigCharacter = true;
         setBounds(getX(),getY(),1.2f,1.2f);
-        SoundManager.getInstance().soundPowerUp.play();
     }
 
     public boolean isBig() {
@@ -211,17 +253,33 @@ public class Character extends Sprite {
             timeToRedefineCharacter = true;
             setBounds(getX(),getY(),16/PPM,32/PPM);
             SoundManager.getInstance().soundPowerDown.play();
+            hitTime = 0;
         }
         else {
-            SoundManager.getInstance().bgm.stop();
-            SoundManager.getInstance().soundCharacterDie.play();
-            characterIsDead = true;
-            Filter filter = new Filter();
-            filter.maskBits = ProgramDesign2FinalProject.NOTHING_BIT;
-            for (Fixture fixture : b2body.getFixtureList())
-                fixture.setFilterData(filter);
-            b2body.applyLinearImpulse(new Vector2(0,4f), b2body.getWorldCenter(), true);
+            if (hitTime > 0.5)
+                die();
         }
+    }
+
+    public void die(){
+        SoundManager.getInstance().bgm.stop();
+        SoundManager.getInstance().soundCharacterDie.play();
+        characterIsDead = true;
+        Filter filter = new Filter();
+        filter.maskBits = ProgramDesign2FinalProject.NOTHING_BIT;
+        for (Fixture fixture : b2body.getFixtureList())
+            fixture.setFilterData(filter);
+        b2body.applyLinearImpulse(new Vector2(0,4f), b2body.getWorldCenter(), true);
+    }
+
+    public void fire(){
+
+        if (fireTime > 1){
+            fireBalls.add(new FireBall(screen, b2body.getPosition().x, b2body.getPosition().y, !runningRight));
+            fireTime = 0;
+        }
+
+
     }
 
     public void redefineCharacter(){
@@ -231,7 +289,6 @@ public class Character extends Sprite {
         bdef.position.set(position);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
-
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / PPM);
@@ -286,9 +343,11 @@ public class Character extends Sprite {
         b2body.createFixture(fdef).setUserData(this);
         shape.setPosition(new Vector2(0,-14/ PPM));
         b2body.createFixture(fdef).setUserData(this);
+        shape.setPosition(new Vector2(0,-26/ PPM));
+        b2body.createFixture(fdef).setUserData(this);
 
         EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2 / PPM, 8 / PPM), new Vector2(2/ PPM, 8 / PPM));
+        head.set(new Vector2(-2 / PPM, 22 / PPM), new Vector2(2/ PPM, 22 / PPM));
         fdef.filter.categoryBits = ProgramDesign2FinalProject.CHARACTER_HEAD_BIT;
         fdef.shape = head;
         fdef.isSensor = true;
@@ -331,5 +390,16 @@ public class Character extends Sprite {
 
 
     }
+
+
+    public void draw(Batch batch){
+        super.draw(batch);
+        for(FireBall ball : fireBalls){
+            if (ball.isDestroyed()) continue;
+            ball.draw(batch);
+        }
+
+    }
+
 
 }

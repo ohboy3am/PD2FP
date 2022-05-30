@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.game.programdesign2finalproject.Sprites.FireBall;
 import com.game.programdesign2finalproject.Sprites.Goomba;
 import com.game.programdesign2finalproject.Sprites.Items.Item;
 import com.game.programdesign2finalproject.Sprites.Items.ItemDef;
@@ -136,12 +137,22 @@ public class PlayScreen implements Screen {
     public void handleInput(float dt){
         if(player.currentState == Character.State.DEAD) return;
         //角色移動
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
-            player.b2body.applyLinearImpulse(new Vector2(0,4f), player.b2body.getWorldCenter(), true);
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2)
+        if (player.jumpTime <3){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.W)){
+                player.b2body.applyLinearImpulse(new Vector2(0,3f), player.b2body.getWorldCenter(), true);
+                player.jumpTime+=1;
+            }
+        }
+
+
+        if(Gdx.input.isKeyPressed(Input.Keys.D) && player.b2body.getLinearVelocity().x <= 2)
             player.b2body.applyLinearImpulse(new Vector2(0.1f,0), player.b2body.getWorldCenter(), true);
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)
+        if(Gdx.input.isKeyPressed(Input.Keys.A) && player.b2body.getLinearVelocity().x >= -2)
         player.b2body.applyLinearImpulse(new Vector2(-0.1f,0), player.b2body.getWorldCenter(), true);
+        if (Gdx.input.justTouched()){
+            player.fire();
+        }
+
     }
 
     public void update(float dt){
@@ -152,11 +163,13 @@ public class PlayScreen implements Screen {
         world.step(1/60f,6,2);
 
         player.update(dt);
+
+        Array<Enemy> enemyFound = new Array<Enemy>();
         for (Enemy enemy : creator.getGoombas()){
 
             if (enemy instanceof Goomba){
                 if (enemy.isVanished()) {
-                    creator.getGoombas().removeValue((Goomba)enemy,true);
+                    enemyFound.add(enemy);
                     continue;
                 }
             }
@@ -171,17 +184,20 @@ public class PlayScreen implements Screen {
             //224個像素內敵人醒來
 
         }
+        creator.getGoombas().removeAll(enemyFound, true);
 
+        Array<Item> itemFound = new Array<Item>();
         for (Item item :items){
 
             if (item.isDestroyed())
             {
-                items.removeValue(item,true);
+                itemFound.add(item);
                 continue;
             }
 
              item.update(dt);
         }
+        items.removeAll(itemFound, true);
 
         handleSpawningItems();
 
@@ -217,9 +233,11 @@ public class PlayScreen implements Screen {
         game.batch.begin();
         player.draw(game.batch);
         for (Enemy enemy : creator.getGoombas()){
+            if (enemy.isDestroyed()) continue;
             enemy.draw(game.batch);
         }
         for (Item item :items){
+            if (item.isDestroyed()) continue;
             item.draw(game.batch);
         }
 

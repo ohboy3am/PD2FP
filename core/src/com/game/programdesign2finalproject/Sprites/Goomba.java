@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
+import com.game.programdesign2finalproject.Scenes.Hud;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
 import com.game.programdesign2finalproject.Sounds.SoundManager;
 
@@ -70,14 +71,15 @@ public class Goomba extends Enemy{
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(6 / PPM);
+        shape.setRadius(5 / PPM);
         fdef.filter.categoryBits = ProgramDesign2FinalProject.ENEMY_BIT;
         fdef.filter.maskBits = ProgramDesign2FinalProject.GROUND_BIT |
                 ProgramDesign2FinalProject.COIN_BIT |
                 ProgramDesign2FinalProject.BRICK_BIT|
                 ProgramDesign2FinalProject.OBJECT_BIT|
                 ProgramDesign2FinalProject.ENEMY_BIT|
-                ProgramDesign2FinalProject.CHARACTER_BIT;
+                ProgramDesign2FinalProject.CHARACTER_BIT|
+                ProgramDesign2FinalProject.FIREBALL_BIT;
 
 
         fdef.shape = shape;
@@ -86,8 +88,8 @@ public class Goomba extends Enemy{
         //Create the Head here:
         PolygonShape head = new PolygonShape();
         Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-5,8).scl(1/PPM);
-        vertice[1] = new Vector2(5,8).scl(1/PPM);
+        vertice[0] = new Vector2(-5,9).scl(1/PPM);
+        vertice[1] = new Vector2(5,9).scl(1/PPM);
         vertice[2] = new Vector2(-3,3).scl(1/PPM);
         vertice[3] = new Vector2(3,3).scl(1/PPM);
         head.set(vertice);
@@ -111,6 +113,7 @@ public class Goomba extends Enemy{
     @Override
     public void hitOnHead() {
         setToDestroy = true;
+        Hud.addScore(100);
         SoundManager.getInstance().soundStomp.play();
     }
 }
