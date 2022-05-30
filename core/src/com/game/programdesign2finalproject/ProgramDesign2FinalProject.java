@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.game.programdesign2finalproject.Screens.Menu;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
 
 public class ProgramDesign2FinalProject extends Game {
@@ -45,9 +46,9 @@ public class ProgramDesign2FinalProject extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+		setScreen(new Menu(this));
 
-
-		setScreen(new PlayScreen(this));
+		//setScreen(new PlayScreen(this));
 	}
 
 	@Override

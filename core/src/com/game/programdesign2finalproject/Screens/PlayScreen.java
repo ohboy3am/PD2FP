@@ -19,7 +19,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.game.programdesign2finalproject.Sprites.FireBall;
+
+import com.game.programdesign2finalproject.Scenes.Dialog;
+
 import com.game.programdesign2finalproject.Sprites.Goomba;
 import com.game.programdesign2finalproject.Sprites.Items.Item;
 import com.game.programdesign2finalproject.Sprites.Items.ItemDef;
@@ -39,10 +41,10 @@ public class PlayScreen implements Screen {
     //遊戲的reference
     private ProgramDesign2FinalProject game;
     private TextureAtlas atlas;
-
     private OrthographicCamera gamecam;
     private Viewport gamePort;
     private Hud hud;
+    public Dialog dialog;
 
     //地圖變數
     private TmxMapLoader mapLoader;
@@ -63,8 +65,8 @@ public class PlayScreen implements Screen {
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
     public PlayScreen(ProgramDesign2FinalProject game){
-        atlas = new TextureAtlas("NEW_Character_and_Enemies.pack");
 
+        atlas = new TextureAtlas("NEW_Character_and_Enemies.pack");
         this.game = game;
         //遊戲中的視角
         gamecam = new OrthographicCamera();
@@ -72,6 +74,7 @@ public class PlayScreen implements Screen {
         gamePort = new FitViewport(ProgramDesign2FinalProject.V_WIDTH / PPM,ProgramDesign2FinalProject.V_HEIGHT / PPM,gamecam);
         //HUD顯示 分數 時間 等級
         hud = new Hud(game.batch);
+        dialog = new Dialog();
 
         //加載地圖以及設定如何繪製地圖
         mapLoader = new TmxMapLoader();
@@ -219,7 +222,6 @@ public class PlayScreen implements Screen {
     public void render(float delta) {
         //分隔update logic 跟render
         update(delta);
-
         //清理螢幕
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -246,7 +248,7 @@ public class PlayScreen implements Screen {
         //畫出Hud camera看到的東西
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-
+        dialog.draw();
         if (gameOver()){
             game.setScreen(new GameOverScreen(game));
             dispose();
@@ -257,10 +259,8 @@ public class PlayScreen implements Screen {
         if (player.currentState == Character.State.DEAD && player.getStateTimer() > 3){
             return true;
         }
-
         else return false;
     }
-
     @Override
     public void resize(int width, int height) {
         //更新gamePort
@@ -295,6 +295,5 @@ public class PlayScreen implements Screen {
         renderer.dispose();
         world.dispose();
         b2dr.dispose();
-
     }
 }
