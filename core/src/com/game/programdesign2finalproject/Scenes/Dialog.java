@@ -3,6 +3,8 @@ package com.game.programdesign2finalproject.Scenes;
 import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.V_HEIGHT;
 import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.V_WIDTH;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,22 +22,20 @@ public class Dialog implements Disposable{
     public Texture npchead;
     private SpriteBatch b;
     public Stage stage;
-    public Viewport viewport;
     private boolean showDialog = false;
+    private boolean show = false;
     public Dialog() {
-
     }
     public void draw() {
-        if(!showDialog) return;
-        viewport = new FitViewport(ProgramDesign2FinalProject.V_WIDTH/2, ProgramDesign2FinalProject.V_HEIGHT/2, new OrthographicCamera());
+        if(! showDialog ) return;
         npchead = new Texture("main_character_dialog.png");
         b = new SpriteBatch();
         b.begin();
         b.draw(npchead, 0, 0,V_WIDTH,V_HEIGHT);
         b.end();
     }
-    public void setDialog(boolean dialogshow) {
-        showDialog = dialogshow;
+    public void setDialog(boolean dialogShow) {
+        showDialog = dialogShow;
     }
     @Override
     public void dispose() {
