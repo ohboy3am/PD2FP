@@ -31,7 +31,7 @@ public class Dialog implements Disposable{
         npchead = new Texture("main_character_dialog.png");
         b = new SpriteBatch();
         b.begin();
-        b.draw(npchead, 0, 0,V_WIDTH,V_HEIGHT);
+        b.draw(npchead, 0, 0);
         b.end();
     }
     public void setDialog(boolean dialogshow) {
