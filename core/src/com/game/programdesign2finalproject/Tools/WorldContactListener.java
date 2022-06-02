@@ -1,12 +1,14 @@
 package com.game.programdesign2finalproject.Tools;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.game.programdesign2finalproject.Sprites.Dio;
 import com.game.programdesign2finalproject.Sprites.FireBall;
 import com.game.programdesign2finalproject.Sprites.Items.Item;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
@@ -100,12 +102,12 @@ public class WorldContactListener implements ContactListener {
                 }
                 break;
 
-                //主角撞到道具
-            case ProgramDesign2FinalProject.ITEM_BIT | ProgramDesign2FinalProject.CHARACTER_BIT:
-                if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.ITEM_BIT)
-                   ((Item)fixA.getUserData()).use((Character)fixB.getUserData());
-                else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.ITEM_BIT)
-                    ((Item)fixB.getUserData()).use((Character)fixA.getUserData());
+                //主角跟NPC接觸
+            case ProgramDesign2FinalProject.NPC_BIT | ProgramDesign2FinalProject.CHARACTER_BIT:
+                if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.NPC_BIT)
+                    ((Dio)fixA.getUserData()).touch();
+                else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.NPC_BIT)
+                    ((Dio)fixB.getUserData()).touch();
                 break;
 
             case ProgramDesign2FinalProject.FIREBALL_BIT | ProgramDesign2FinalProject.OBJECT_BIT:
@@ -114,6 +116,13 @@ public class WorldContactListener implements ContactListener {
                 else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.FIREBALL_BIT)
                     ((FireBall)fixB.getUserData()).setToDestroy();
                 break;
+
+            case ProgramDesign2FinalProject.ITEM_BIT | ProgramDesign2FinalProject.CHARACTER_BIT:
+                if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.ITEM_BIT)
+                    ((Item)fixA.getUserData()).use((Character)fixB.getUserData());
+                else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.ITEM_BIT)
+                    ((Item)fixB.getUserData()).use((Character)fixA.getUserData());
+                break;
             default:
                 break;
         }
@@ -121,6 +130,8 @@ public class WorldContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
+
+
 
     }
 
