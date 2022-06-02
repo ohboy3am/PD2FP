@@ -40,6 +40,7 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final String SOUND_PATH_POWERDOWN = "audio/sounds/powerdown.wav";
 	public static final String SOUND_PATH_WRYYY = "audio/sounds/wryyy.wav";
 	public static final String SOUND_PATH_CHARACTERDIE = "audio/sounds/mariodie.wav";
+	public static final String SOUND_PATH_YAKYU = "audio/sounds/yakyu.wav";
 
 	public SpriteBatch batch;
 

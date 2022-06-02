@@ -6,34 +6,33 @@ import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.V_W
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.Game;
-import com.game.programdesign2finalproject.Screens.PlayScreen;
 
 public class Menu implements Screen {
     private ProgramDesign2FinalProject game;
+    int i=0;
     public Texture background;
+    public Texture black;
     private SpriteBatch batch;
     private Viewport gamePort;
-    private PlayScreen playscreen;
+    private OrthographicCamera gamecam;
+    private boolean changeScreenCountDown = false;
+    private float clearCount = 0;
     public Menu(ProgramDesign2FinalProject game) {
         this.game = game;
-        gamePort = new FitViewport(ProgramDesign2FinalProject.V_WIDTH / PPM,ProgramDesign2FinalProject.V_HEIGHT / PPM);
-        background = new Texture("menu_adjust.png");
+        gamecam = new OrthographicCamera();
+        gamePort = new FitViewport(400,208,gamecam);
+        gamecam.position.set(gamePort.getWorldWidth() / 2,gamePort.getWorldHeight() / 2,0);
+        background = new Texture("start_menu.png");
+        black = new Texture("full_black.jpg");
         batch = new SpriteBatch();
-    }
-    public void update(float dt) {
-        handleInput();
-    }
-    public void handleInput() {
-        if(Gdx.input.justTouched()) {
-            game.setScreen(new PlayScreen(game));
-            dispose();
-        }
     }
 
     @Override
@@ -43,12 +42,23 @@ public class Menu implements Screen {
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(1,1,1,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if(Gdx.input.justTouched()) {
-            game.setScreen(new PlayScreen(game));
+            changeScreenCountDown = true;
+        }
+        if(clearCount >= 3) {
+            game.setScreen(new StartConversation(game));
             dispose();
         }
+        if(changeScreenCountDown == true) {
+            clearCount += delta;
+        }
         batch.begin();
-        batch.draw(background, 0, 0,V_WIDTH,V_HEIGHT);
+        //batch.setColor(1,1,1,1-clearCount);
+        batch.draw(background, 0, 0,650,300);
+        batch.setColor(1,1,1,1-clearCount / 2);
+        //batch.draw(black, 0, 0,650,300);
         batch.end();
     }
 
@@ -71,7 +81,6 @@ public class Menu implements Screen {
     public void hide() {
 
     }
-
     @Override
     public void dispose() {
         background.dispose();
