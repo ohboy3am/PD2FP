@@ -288,7 +288,8 @@ public class Character extends Sprite {
                 ProgramDesign2FinalProject.ENEMY_BIT|
                 ProgramDesign2FinalProject.OBJECT_BIT|
                 ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
-                ProgramDesign2FinalProject.ITEM_BIT;
+                ProgramDesign2FinalProject.ITEM_BIT|
+                ProgramDesign2FinalProject.NPC_BIT;
 
 
         fdef.shape = shape;
@@ -325,7 +326,8 @@ public class Character extends Sprite {
                 ProgramDesign2FinalProject.ENEMY_BIT|
                 ProgramDesign2FinalProject.OBJECT_BIT|
                 ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
-                ProgramDesign2FinalProject.ITEM_BIT;
+                ProgramDesign2FinalProject.ITEM_BIT|
+                ProgramDesign2FinalProject.NPC_BIT;
 
 
         fdef.shape = shape;
