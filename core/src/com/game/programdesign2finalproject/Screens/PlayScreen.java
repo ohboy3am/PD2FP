@@ -65,6 +65,7 @@ public class PlayScreen implements Screen {
 
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
+    private boolean IsPaused = false;
 
     public PlayScreen(ProgramDesign2FinalProject game){
 
@@ -104,7 +105,7 @@ public class PlayScreen implements Screen {
         //設置音樂
         music = SoundManager.getInstance().bgm;
         music.setLooping(true);
-       // music.play();
+        //music.play();
 
         items = new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
@@ -163,6 +164,7 @@ public class PlayScreen implements Screen {
 
     public void update(float dt){
         //先處裡input
+        if(IsPaused == true) return;
         handleInput(dt);
 
         //物理模擬中的每一步 (每秒60次)
@@ -223,6 +225,15 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        //世界!!! 時間停止!!!
+        if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            if(IsPaused == false) {
+                IsPaused = true;
+                SoundManager.getInstance().soundStopTime.play();
+            }else {
+                IsPaused = false;
+            }
+        }
         //分隔update logic 跟render
         update(delta);
         //清理螢幕
