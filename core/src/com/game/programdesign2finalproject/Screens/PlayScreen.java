@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import com.game.programdesign2finalproject.Scenes.Dialog;
 
+import com.game.programdesign2finalproject.Sprites.Dio;
 import com.game.programdesign2finalproject.Sprites.Goomba;
 import com.game.programdesign2finalproject.Sprites.Items.Item;
 import com.game.programdesign2finalproject.Sprites.Items.ItemDef;
@@ -58,6 +59,7 @@ public class PlayScreen implements Screen {
 
     //sprites
     private Character player;
+    private Dio dio;
 
     private Music music;
 
@@ -96,6 +98,7 @@ public class PlayScreen implements Screen {
 
         //初始化角色
         player = new Character(this);
+        dio = new Dio(this);
 
         world.setContactListener(new WorldContactListener());
 
@@ -142,15 +145,16 @@ public class PlayScreen implements Screen {
         if(player.currentState == Character.State.DEAD) return;
         //角色移動
         if (player.jumpTime <3){
-            if(Gdx.input.isKeyJustPressed(Input.Keys.W)){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.UP)){
                 player.b2body.applyLinearImpulse(new Vector2(0,3f), player.b2body.getWorldCenter(), true);
                 player.jumpTime+=1;
             }
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.D) && player.b2body.getLinearVelocity().x <= 2)
+
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2)
             player.b2body.applyLinearImpulse(new Vector2(0.1f,0), player.b2body.getWorldCenter(), true);
-        if(Gdx.input.isKeyPressed(Input.Keys.A) && player.b2body.getLinearVelocity().x >= -2)
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)
         player.b2body.applyLinearImpulse(new Vector2(-0.1f,0), player.b2body.getWorldCenter(), true);
         if (Gdx.input.justTouched()){
             player.fire();
@@ -252,6 +256,8 @@ public class PlayScreen implements Screen {
             if (item.isDestroyed()) continue;
             item.draw(game.batch);
         }
+
+        dio.draw(game.batch);
 
         game.batch.end();
 

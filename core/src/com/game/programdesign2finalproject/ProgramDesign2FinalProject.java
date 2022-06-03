@@ -28,6 +28,7 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final short ITEM_BIT = 256;
 	public static final short CHARACTER_HEAD_BIT = 512	;
 	public static final short FIREBALL_BIT = 1024;
+	public static final short NPC_BIT = 2048;
 
 	public static final String MUSIC_PATH = "audio/music/pillarMan.mp3";
 	public static final String SOUND_PATH_COIN = "audio/sounds/coin.wav";

@@ -33,7 +33,7 @@ public class Brick extends InteractiveTileObject{
             SoundManager.getInstance().soundBump.play();
             return;
         }
-        screen.dialog.setDialog(true);
+        //screen.dialog.setDialog(true);
         setCategoryFilter(ProgramDesign2FinalProject.DESTROYED_BIT);
         getCell().setTile(null);
         Hud.addScore(200);
