@@ -17,7 +17,7 @@ public class SoundManager {
     public Sound soundStomp;
     public Sound soundWryyy;
     public Sound soundCharacterDie;
-    public Sound soundYakyu;
+    public Sound soundStopTime;
 
     private static SoundManager singleInstance = null;
 
@@ -32,7 +32,7 @@ public class SoundManager {
         soundStomp = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_STOMP));
         soundWryyy = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_WRYYY));
         soundCharacterDie = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_CHARACTERDIE));
-        soundYakyu = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_YAKYU));
+        soundStopTime = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_TheWorld));
     }
 
     public static SoundManager getInstance(){
