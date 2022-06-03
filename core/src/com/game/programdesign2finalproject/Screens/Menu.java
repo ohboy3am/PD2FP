@@ -57,7 +57,7 @@ public class Menu implements Screen {
         batch.begin();
         //batch.setColor(1,1,1,1-clearCount);
         batch.draw(background, 0, 0,650,300);
-        batch.setColor(1,1,1,1-clearCount / 2);
+        batch.setColor(1,1,1,1 - clearCount / 2);
         //batch.draw(black, 0, 0,650,300);
         batch.end();
     }
