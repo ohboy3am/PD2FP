@@ -45,6 +45,7 @@ public class Dio extends Sprite {
         setRegion(dioStand);
 
     }
+
     public void defineDio(){
         BodyDef bdef = new BodyDef();
         bdef.position.set( 2, 40 / PPM);
