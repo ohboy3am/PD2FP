@@ -6,6 +6,9 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Disposable;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 
+
+import java.util.Scanner;
+
 public class SoundManager {
     public Music bgm;
     public Sound soundCoin;

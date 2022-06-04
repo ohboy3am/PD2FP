@@ -51,8 +51,8 @@ public class StartConversation implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        batch.draw(whitebox, 0, 0,400,80);
-        batch.draw(mainCharacter, 30, 70,100,100);
+        batch.draw(whitebox, 0, 0,600,120);
+        batch.draw(mainCharacter, 30, 90,200,200);
         batch.end();
         stage.draw();
         if(Gdx.input.justTouched()) {
@@ -73,7 +73,10 @@ public class StartConversation implements Screen {
                 table.add(yakyusenpai).expandX().padRight(0);
                 table.add(yakyusenpai).expandX();
 
+
+
                 stage.addActor(table);
+
                 break;
             case 1:
                 table.removeActor(yakyusenpai);
@@ -83,6 +86,7 @@ public class StartConversation implements Screen {
                 table.add(yakyusenpai).expandX();
 
                 stage.addActor(table);
+
                 break;
             case 2:
                 table.removeActor(yakyusenpai);
@@ -92,6 +96,7 @@ public class StartConversation implements Screen {
                 table.add(yakyusenpai).expandX();
 
                 stage.addActor(table);
+
                 break;
         }
     }
