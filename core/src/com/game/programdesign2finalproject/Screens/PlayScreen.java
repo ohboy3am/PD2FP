@@ -81,7 +81,7 @@ public class PlayScreen implements Screen {
 
         //加載地圖以及設定如何繪製地圖
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("level1.tmx");
+        map = mapLoader.load("map1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map,1 / PPM);
 
         //初始化gamecam
@@ -105,7 +105,9 @@ public class PlayScreen implements Screen {
         //設置音樂
         music = SoundManager.getInstance().bgm;
         music.setLooping(true);
-        //music.play();
+        music.play();
+        music.setVolume(0.20f);
+
 
         items = new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
@@ -144,9 +146,9 @@ public class PlayScreen implements Screen {
     public void handleInput(float dt){
         if(player.currentState == Character.State.DEAD) return;
         //角色移動
-        if (player.jumpTime <3){
+        if (player.jumpTime <1){
             if(Gdx.input.isKeyJustPressed(Input.Keys.UP)){
-                player.b2body.applyLinearImpulse(new Vector2(0,3f), player.b2body.getWorldCenter(), true);
+                player.b2body.applyLinearImpulse(new Vector2(0,4.5f), player.b2body.getWorldCenter(), true);
                 player.jumpTime+=1;
             }
         }
@@ -186,10 +188,10 @@ public class PlayScreen implements Screen {
 
                 if (enemy.isDestroyed()) continue;
 
-                if (enemy.getX() < player.getX() + 224 / PPM)
+                if (enemy.getX() < player.getX() + 300 / PPM)
                     enemy.b2body.setActive(true);
 
-            //224個像素內敵人醒來
+            //300個像素內敵人醒來
 
         }
         creator.getGoombas().removeAll(enemyFound, true);

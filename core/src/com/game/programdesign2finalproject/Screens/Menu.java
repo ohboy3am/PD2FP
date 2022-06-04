@@ -28,9 +28,9 @@ public class Menu implements Screen {
     public Menu(ProgramDesign2FinalProject game) {
         this.game = game;
         gamecam = new OrthographicCamera();
-        gamePort = new FitViewport(400,208,gamecam);
+        gamePort = new FitViewport(800,450,gamecam);
         gamecam.position.set(gamePort.getWorldWidth() / 2,gamePort.getWorldHeight() / 2,0);
-        background = new Texture("start_menu.png");
+        background = new Texture("start.png");
         black = new Texture("full_black.jpg");
         batch = new SpriteBatch();
     }
@@ -56,8 +56,13 @@ public class Menu implements Screen {
         }
         batch.begin();
         //batch.setColor(1,1,1,1-clearCount);
+<<<<<<< HEAD
         batch.draw(background, 0, 0,650,300);
         batch.setColor(1,1,1,1 - clearCount / 2);
+=======
+        batch.draw(background, 0, 0,660,470);
+        batch.setColor(1,1,1,1-clearCount / 2);
+>>>>>>> d4b1d46 (6/5 dots map update)
         //batch.draw(black, 0, 0,650,300);
         batch.end();
     }
