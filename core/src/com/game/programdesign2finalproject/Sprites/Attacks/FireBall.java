@@ -1,4 +1,4 @@
-package com.game.programdesign2finalproject.Sprites;
+package com.game.programdesign2finalproject.Sprites.Attacks;
 
 import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.PPM;
 
@@ -40,7 +40,7 @@ public class FireBall extends Sprite {
         fireAnimation = new Animation<TextureRegion>(0.2f, frames);
         frames.clear();
         setRegion(fireAnimation.getKeyFrame(0));
-        setBounds(x, y, 12 / PPM, 12 / PPM);
+        setBounds(x, y, 30 / PPM, 30 / PPM);
         defineFireBall();
     }
 
@@ -53,7 +53,7 @@ public class FireBall extends Sprite {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(6 / PPM);
+        shape.setRadius(18 / PPM);
         fdef.filter.categoryBits = ProgramDesign2FinalProject.FIREBALL_BIT;
         fdef.filter.maskBits = ProgramDesign2FinalProject.GROUND_BIT |
                 ProgramDesign2FinalProject.COIN_BIT |
@@ -79,8 +79,8 @@ public class FireBall extends Sprite {
         }
         if(b2body.getLinearVelocity().y > 2f)
             b2body.setLinearVelocity(b2body.getLinearVelocity().x, 2f);
-        if((fireRight && b2body.getLinearVelocity().x < 0) || (!fireRight && b2body.getLinearVelocity().x > 0))
-            setToDestroy();
+       // if((fireRight && b2body.getLinearVelocity().x < 0) || (!fireRight && b2body.getLinearVelocity().x > 0))
+            //setToDestroy();
     }
 
     public void draw(Batch batch){
