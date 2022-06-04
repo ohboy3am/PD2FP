@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import com.game.programdesign2finalproject.Scenes.Dialog;
 
+import com.game.programdesign2finalproject.Sprites.Boss0;
 import com.game.programdesign2finalproject.Sprites.Dio;
 import com.game.programdesign2finalproject.Sprites.Goomba;
 import com.game.programdesign2finalproject.Sprites.Items.Item;
@@ -60,6 +61,7 @@ public class PlayScreen implements Screen {
     //sprites
     private Character player;
     private Dio dio;
+    private Boss0 boss0;
 
     private Music music;
 
@@ -99,13 +101,14 @@ public class PlayScreen implements Screen {
         //初始化角色
         player = new Character(this);
         dio = new Dio(this);
+        boss0 = new Boss0(this,4,0, player);
 
         world.setContactListener(new WorldContactListener());
 
         //設置音樂
         music = SoundManager.getInstance().bgm;
         music.setLooping(true);
-        music.play();
+        //music.play();
         music.setVolume(0.20f);
 
 
@@ -146,9 +149,10 @@ public class PlayScreen implements Screen {
     public void handleInput(float dt){
         if(player.currentState == Character.State.DEAD) return;
         //角色移動
-        if (player.jumpTime <1){
+        if (player.jumpTime <3){
             if(Gdx.input.isKeyJustPressed(Input.Keys.UP)){
-                player.b2body.applyLinearImpulse(new Vector2(0,4.5f), player.b2body.getWorldCenter(), true);
+
+                player.b2body.setLinearVelocity(player.b2body.getLinearVelocity().x,3.f);
                 player.jumpTime+=1;
             }
         }
@@ -174,27 +178,28 @@ public class PlayScreen implements Screen {
 
         player.update(dt);
 
-        Array<Enemy> enemyFound = new Array<Enemy>();
-        for (Enemy enemy : creator.getGoombas()){
+        //Array<Enemy> enemyFound = new Array<Enemy>();
+        //for (Enemy enemy : creator.getGoombas()){
+//
+        //    if (enemy instanceof Goomba){
+         //       if (enemy.isVanished()) {
+          //          enemyFound.add(enemy);
+        //           continue;
+          //      }
+          //  }
 
-            if (enemy instanceof Goomba){
-                if (enemy.isVanished()) {
-                    enemyFound.add(enemy);
-                    continue;
-                }
-            }
+          //      enemy.update(dt);
 
-                enemy.update(dt);
+          //      if (enemy.isDestroyed()) continue;
 
-                if (enemy.isDestroyed()) continue;
+               // if (enemy.getX() < player.getX() + 300 / PPM)
+                 //   enemy.b2body.setActive(true);
 
-                if (enemy.getX() < player.getX() + 300 / PPM)
-                    enemy.b2body.setActive(true);
 
             //300個像素內敵人醒來
 
-        }
-        creator.getGoombas().removeAll(enemyFound, true);
+        //}
+        //creator.getGoombas().removeAll(enemyFound, true);
 
         Array<Item> itemFound = new Array<Item>();
         for (Item item :items){
@@ -211,6 +216,7 @@ public class PlayScreen implements Screen {
 
         handleSpawningItems();
 
+        boss0.update(dt);
 
         hud.update(dt);
 
@@ -250,16 +256,17 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         player.draw(game.batch);
-        for (Enemy enemy : creator.getGoombas()){
-            if (enemy.isDestroyed()) continue;
-            enemy.draw(game.batch);
-        }
-        for (Item item :items){
-            if (item.isDestroyed()) continue;
-            item.draw(game.batch);
-        }
+        //for (Enemy enemy : creator.getGoombas()){
+        //    if (enemy.isDestroyed()) continue;
+        //    enemy.draw(game.batch);
+        //}
+        //for (Item item :items){
+        //    if (item.isDestroyed()) continue;
+        //    item.draw(game.batch);
+        //}
 
         dio.draw(game.batch);
+        boss0.draw(game.batch);
 
         game.batch.end();
 

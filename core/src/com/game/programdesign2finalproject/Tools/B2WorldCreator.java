@@ -85,7 +85,9 @@ public class B2WorldCreator {
 
         }
 
-    }public Array<Enemy> getGoombas() {
+    }
+
+    public Array<Enemy> getGoombas() {
         return goombas;
     }
 }

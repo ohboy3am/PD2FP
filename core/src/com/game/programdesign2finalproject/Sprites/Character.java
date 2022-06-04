@@ -21,7 +21,8 @@ import com.badlogic.gdx.utils.Array;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
 import com.game.programdesign2finalproject.Sounds.SoundManager;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import com.game.programdesign2finalproject.Sprites.Attacks.FireBall;
 
 public class Character extends Sprite {
 
@@ -33,7 +34,7 @@ public class Character extends Sprite {
 
     private TextureRegion characterStand;
     private Animation<TextureRegion> characterRun;
-    private Animation<TextureRegion> characterJump;
+    private TextureRegion characterJump;
     private TextureRegion bigCharacterStand;
     private TextureRegion bigCharacterJump;
     private Animation<TextureRegion> bigCharacterRun;
@@ -75,8 +76,13 @@ public class Character extends Sprite {
         int bigCharacterWidth = 16;
         int jotaroHeight = 240;
         int jotaroWidth = 240;
-        for (int i = 2; i < 5; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("Vega_Picture"),i* characterWidth,0, characterWidth, characterHeight));
+        //for (int i = 2; i < 5; i++)
+            //frames.add(new TextureRegion(screen.getAtlas().findRegion("Vega_Picture"),i* characterWidth,0, characterWidth, characterHeight));
+        frames.add(new TextureRegion( new Texture("running_animation/3.PNG")));
+        frames.add(new TextureRegion( new Texture("running_animation/3.PNG")));
+        frames.add(new TextureRegion( new Texture("running_animation/4.PNG")));
+        frames.add(new TextureRegion( new Texture("running_animation/5.PNG")));
+        frames.add(new TextureRegion( new Texture("running_animation/5.PNG")));
         characterRun = new Animation(0.1f, frames);
         frames.clear();
 
@@ -93,15 +99,14 @@ public class Character extends Sprite {
         growCharacter = new Animation(0.2f, frames);
         frames.clear();
 
-        for (int i = 0;i < 2;i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("Vega_Picture"),0,0, characterWidth, characterHeight));
-        characterJump = new Animation(0.1f, frames);
+
+        characterJump = new TextureRegion( new Texture("running_animation/2.PNG"));
         frames.clear();
         //bigCharacterJump = new TextureRegion(screen.getAtlas().findRegion("big_mario"),  5*bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight);
         bigCharacterJump = new TextureRegion(atlas2.findRegion("11"),  0,0, jotaroWidth, jotaroHeight);
 
 
-        characterStand = new TextureRegion(screen.getAtlas().findRegion("Vega_Picture"),  5*characterWidth,0, characterWidth, characterHeight);
+        characterStand = new TextureRegion( new Texture("running_animation/1.PNG"));
 
         //bigCharacterStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"),  0,0, bigCharacterWidth, bigCharacterHeight);
         bigCharacterStand = new TextureRegion(atlas2.findRegion("02"),  0,0, jotaroWidth, jotaroHeight);
@@ -142,7 +147,7 @@ public class Character extends Sprite {
         fireTime += dt;
 
         Array<FireBall> fireBallFound = new Array<FireBall>();
-        for(FireBall  ball : fireBalls) {
+        for(FireBall ball : fireBalls) {
             if(ball.isDestroyed()){
                 fireBallFound.add(ball);
                 continue;
@@ -169,12 +174,14 @@ public class Character extends Sprite {
                     runGrowAnimation = false;
                 break;
             case JUMPING:
-                region = characterIsBig ? (TextureRegion) bigCharacterJump : (TextureRegion) characterJump.getKeyFrame(stateTimer);
+                region = characterIsBig ? (TextureRegion) bigCharacterJump : (TextureRegion) characterJump;
                 break;
             case RUNNING:
                 region = characterIsBig ? (TextureRegion) bigCharacterRun.getKeyFrame(stateTimer,true) : (TextureRegion) characterRun.getKeyFrame(stateTimer,true);
                 break;
             case FALLING:
+                region = (TextureRegion) characterJump;
+                break;
             case STANDING:
             default:
                 region = characterIsBig ? bigCharacterStand : characterStand;
@@ -182,11 +189,11 @@ public class Character extends Sprite {
         }
 
 
-        if((b2body.getLinearVelocity().x > 0 || !runningRight) && !region.isFlipX()) {
+        if((b2body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {
             region.flip(true, false);
             runningRight = false;
         }
-        else if((b2body.getLinearVelocity().x < 0 || runningRight) && region.isFlipX()){
+        else if((b2body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()){
                 region.flip(true,false);
                 runningRight = true;
         }
@@ -264,7 +271,7 @@ public class Character extends Sprite {
     public void fire(){
 
         if (fireTime > 1){
-            fireBalls.add(new FireBall(screen, b2body.getPosition().x, b2body.getPosition().y, !runningRight));
+            fireBalls.add(new FireBall(screen, b2body.getPosition().x, b2body.getPosition().y, runningRight));
             fireTime = 0;
         }
 
@@ -293,6 +300,7 @@ public class Character extends Sprite {
 
 
         fdef.shape = shape;
+        fdef.friction = 0.5f;
         b2body.createFixture(fdef).setUserData(this);
         shape.setPosition(new Vector2(0,-14/ PPM));
         b2body.createFixture(fdef).setUserData(this);
@@ -331,6 +339,7 @@ public class Character extends Sprite {
 
 
         fdef.shape = shape;
+        fdef.friction = 0.5f;
         b2body.createFixture(fdef).setUserData(this);
         shape.setPosition(new Vector2(0,-14/ PPM));
         b2body.createFixture(fdef).setUserData(this);
@@ -368,6 +377,7 @@ public class Character extends Sprite {
 
 
         fdef.shape = shape;
+        fdef.friction = 0.5f;
         b2body.createFixture(fdef).setUserData(this);
         shape.setPosition(new Vector2(0,-14/ PPM));
         b2body.createFixture(fdef).setUserData(this);

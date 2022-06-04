@@ -55,7 +55,6 @@ public class Menu implements Screen {
             clearCount += delta;
         }
         batch.begin();
-
         batch.draw(background, 0, 0,660,470);
         batch.setColor(1,1,1,1-clearCount / 2);
         batch.end();
