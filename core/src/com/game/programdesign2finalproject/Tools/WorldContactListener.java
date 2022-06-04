@@ -1,15 +1,13 @@
 package com.game.programdesign2finalproject.Tools;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.game.programdesign2finalproject.Sprites.Dio;
-import com.game.programdesign2finalproject.Sprites.FireBall;
+import com.game.programdesign2finalproject.Sprites.Attacks.FireBall;
 import com.game.programdesign2finalproject.Sprites.Items.Item;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Sprites.Character;
@@ -105,9 +103,9 @@ public class WorldContactListener implements ContactListener {
                 //主角跟NPC接觸
             case ProgramDesign2FinalProject.NPC_BIT | ProgramDesign2FinalProject.CHARACTER_BIT:
                 if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.NPC_BIT)
-                    ((Dio)fixA.getUserData()).touch();
+                    ((Dio)fixA.getUserData()).touch(Gdx.input.justTouched());
                 else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.NPC_BIT)
-                    ((Dio)fixB.getUserData()).touch();
+                    ((Dio)fixB.getUserData()).touch(Gdx.input.justTouched());
                 break;
 
             case ProgramDesign2FinalProject.FIREBALL_BIT | ProgramDesign2FinalProject.OBJECT_BIT:
