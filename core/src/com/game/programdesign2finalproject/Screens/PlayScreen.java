@@ -70,7 +70,6 @@ public class PlayScreen implements Screen {
     public boolean IsPaused = false;
 
     public PlayScreen(ProgramDesign2FinalProject game){
-
         atlas = new TextureAtlas("NEW_Character_and_Enemies.pack");
         this.game = game;
         //遊戲中的視角
@@ -84,6 +83,7 @@ public class PlayScreen implements Screen {
         //加載地圖以及設定如何繪製地圖
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("map1-1.tmx");
+
         renderer = new OrthogonalTiledMapRenderer(map,1 / PPM);
 
         //初始化gamecam
@@ -278,16 +278,12 @@ public class PlayScreen implements Screen {
             game.setScreen(new GameOverScreen(game));
             dispose();
         }
-
     }
 
     public boolean gameOver(){
         if (player.currentState == Character.State.DEAD && player.getStateTimer() > 3){
             return true;
         }else return false;
-    }
-    public void changeScreen() {
-        game.setScreen(new GameClearScreen(game));
     }
     @Override
     public void resize(int width, int height) {
