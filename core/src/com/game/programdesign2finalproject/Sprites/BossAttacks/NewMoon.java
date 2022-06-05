@@ -86,7 +86,7 @@ public class NewMoon extends Boss0Attack{
         if (destroyed) return;
         stateTime += dt;
         setRegion( boss0AttackAnimation.getKeyFrame(stateTime,true));
-        setCenter(b2body.getPosition().x , b2body.getPosition().y );
+        setCenter(b2body.getPosition().x +12/PPM, b2body.getPosition().y+12/PPM );
         if((stateTime > 3 || toDestroy) ) {
             world.destroyBody(b2body);
             destroyed = true;
