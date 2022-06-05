@@ -290,8 +290,9 @@ public class PlayScreen implements Screen {
 
         }
 
-        if (generatingBoss)
+        if (generatingBoss) {
             boss0.draw(game.batch);
+        }
 
         game.batch.end();
 

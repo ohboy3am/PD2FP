@@ -33,6 +33,7 @@ public class Hud implements Disposable {
     private Label levelLabel;
     private Label sectionLabel;
     private Label characterLabel;
+    private Label BossHp;
 
     public Hud(SpriteBatch sb){
         worldTimer = 300;
@@ -48,6 +49,7 @@ public class Hud implements Disposable {
 
         countdownLabel = new Label(String.format("%03d",worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         scoreLabel = new Label(String.format("%06d",score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        BossHp = new Label(String.format("%02d",worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("TIME", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         levelLabel = new Label("1-1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         sectionLabel = new Label("SECTION", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -60,6 +62,8 @@ public class Hud implements Disposable {
         table.add(scoreLabel).expandX();
         table.add(levelLabel).expandX();
         table.add(countdownLabel).expandX();
+        table.row();
+        table.add(BossHp).expandX();
 
         stage.addActor(table);
 
