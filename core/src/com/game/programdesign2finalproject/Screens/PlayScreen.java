@@ -83,7 +83,7 @@ public class PlayScreen implements Screen {
 
         //加載地圖以及設定如何繪製地圖
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("map1.tmx");
+        map = mapLoader.load("map1-1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map,1 / PPM);
 
         //初始化gamecam
@@ -108,8 +108,8 @@ public class PlayScreen implements Screen {
         //設置音樂
         music = SoundManager.getInstance().bgm;
         music.setLooping(true);
-        //music.play();
-        music.setVolume(0.20f);
+        music.play();
+        music.setVolume(0.1f);
 
 
         items = new Array<Item>();
