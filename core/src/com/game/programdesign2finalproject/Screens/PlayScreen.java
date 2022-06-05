@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import com.game.programdesign2finalproject.Scenes.Dialog;
 
+import com.game.programdesign2finalproject.Sprites.Boss0;
 import com.game.programdesign2finalproject.Sprites.Dio;
 import com.game.programdesign2finalproject.Sprites.Goomba;
 import com.game.programdesign2finalproject.Sprites.Items.Item;
@@ -60,6 +61,7 @@ public class PlayScreen implements Screen {
     //sprites
     private Character player;
     private Dio dio;
+    private Boss0 boss0;
 
     private Music music;
 
@@ -81,7 +83,7 @@ public class PlayScreen implements Screen {
 
         //加載地圖以及設定如何繪製地圖
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("level1.tmx");
+        map = mapLoader.load("map1-1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map,1 / PPM);
 
         //初始化gamecam
@@ -99,13 +101,16 @@ public class PlayScreen implements Screen {
         //初始化角色
         player = new Character(this);
         dio = new Dio(this);
+        boss0 = new Boss0(this,4,0, player);
 
         world.setContactListener(new WorldContactListener());
 
         //設置音樂
         music = SoundManager.getInstance().bgm;
         music.setLooping(true);
-        //music.play();
+        music.play();
+        music.setVolume(0.1f);
+
 
         items = new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
@@ -146,7 +151,8 @@ public class PlayScreen implements Screen {
         //角色移動
         if (player.jumpTime <3){
             if(Gdx.input.isKeyJustPressed(Input.Keys.UP)){
-                player.b2body.applyLinearImpulse(new Vector2(0,3f), player.b2body.getWorldCenter(), true);
+
+                player.b2body.setLinearVelocity(player.b2body.getLinearVelocity().x,3.f);
                 player.jumpTime+=1;
             }
         }
@@ -176,9 +182,9 @@ public class PlayScreen implements Screen {
         for (Enemy enemy : creator.getGoombas()){
 
             if (enemy instanceof Goomba){
-                if (enemy.isVanished()) {
+               if (enemy.isVanished()) {
                     enemyFound.add(enemy);
-                    continue;
+                   continue;
                 }
             }
 
@@ -186,10 +192,10 @@ public class PlayScreen implements Screen {
 
                 if (enemy.isDestroyed()) continue;
 
-                if (enemy.getX() < player.getX() + 224 / PPM)
+                if (enemy.getX() < player.getX() + 300 / PPM)
                     enemy.b2body.setActive(true);
 
-            //224個像素內敵人醒來
+        //300個像素內敵人醒來
 
         }
         creator.getGoombas().removeAll(enemyFound, true);
@@ -209,6 +215,7 @@ public class PlayScreen implements Screen {
 
         handleSpawningItems();
 
+        boss0.update(dt);
 
         hud.update(dt);
 
@@ -229,8 +236,10 @@ public class PlayScreen implements Screen {
         if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             if(IsPaused == false) {
                 IsPaused = true;
-                SoundManager.getInstance().soundStopTime.play();
+                music.pause();
+                SoundManager.getInstance().soundStopTime.setVolume(SoundManager.getInstance().soundStopTime.play(),0.5f);
             }else {
+                music.play();
                 IsPaused = false;
             }
         }
@@ -239,7 +248,6 @@ public class PlayScreen implements Screen {
         //清理螢幕
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         //繪製地圖
         renderer.render();
         //畫出debug線
@@ -258,6 +266,7 @@ public class PlayScreen implements Screen {
         }
 
         dio.draw(game.batch);
+        boss0.draw(game.batch);
 
         game.batch.end();
 
@@ -269,12 +278,16 @@ public class PlayScreen implements Screen {
             game.setScreen(new GameOverScreen(game));
             dispose();
         }
+
     }
 
     public boolean gameOver(){
         if (player.currentState == Character.State.DEAD && player.getStateTimer() > 3){
             return true;
         }else return false;
+    }
+    public void changeScreen() {
+        game.setScreen(new GameClearScreen(game));
     }
     @Override
     public void resize(int width, int height) {

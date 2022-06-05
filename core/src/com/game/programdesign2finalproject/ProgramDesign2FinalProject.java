@@ -11,10 +11,10 @@ import com.game.programdesign2finalproject.Screens.Menu;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
 
 public class ProgramDesign2FinalProject extends Game {
-	public static final int V_WIDTH = 400;
-	public static final int V_HEIGHT = 208;
+	public static final int V_WIDTH = 600;
+	public static final int V_HEIGHT = 304;  // dots changed value
 	//pixel per meter
-	public static final float PPM = 100;
+	public static final float PPM =100;
 
 	public static final short NOTHING_BIT = 0;
 	public static final short GROUND_BIT = 1;
@@ -30,7 +30,9 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final short FIREBALL_BIT = 1024;
 	public static final short NPC_BIT = 2048;
 
-	public static final String MUSIC_PATH = "audio/music/pillarMan.mp3";
+	public static final String MUSIC_PATH = "Jolly - Bulikirály.mp3";
+	public static final String MUSIC_PATH_1 = "Chopin_Sonata_Doppio_movimento.mp3";
+	public static final String MUSIC_PATH_2 = "puyo.mp3";
 	public static final String SOUND_PATH_COIN = "audio/sounds/coin.wav";
 	public static final String SOUND_PATH_BRICK = "audio/sounds/breakblock.wav";
 	public static final String SOUND_PATH_BUMP = "audio/sounds/bump.wav";
@@ -39,7 +41,7 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final String SOUND_PATH_STOMP = "audio/sounds/stomp.wav";
 	public static final String SOUND_PATH_POWERDOWN = "audio/sounds/powerdown.wav";
 	public static final String SOUND_PATH_WRYYY = "audio/sounds/wryyy.wav";
-	public static final String SOUND_PATH_CHARACTERDIE = "audio/sounds/mariodie.wav";
+	public static final String SOUND_PATH_CHARACTERDIE = "audio/sounds/wasted.wav";
 	public static final String SOUND_PATH_TheWorld = "audio/sounds/TheWorld.wav";
 
 	public SpriteBatch batch;

@@ -45,6 +45,7 @@ public class Dio extends Sprite {
         setRegion(dioStand);
 
     }
+
     public void defineDio(){
         BodyDef bdef = new BodyDef();
         bdef.position.set( 2, 40 / PPM);
@@ -64,19 +65,12 @@ public class Dio extends Sprite {
         shape.setPosition(new Vector2(0,-14/ PPM));
         b2body.createFixture(fdef).setUserData(this);
 
-        EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2 / PPM, 10 / PPM), new Vector2(2/ PPM, 10 / PPM));
-        fdef.filter.categoryBits = ProgramDesign2FinalProject.NPC_BIT;
-        fdef.shape = head;
-        fdef.isSensor = true;
-
-        b2body.createFixture(fdef).setUserData(this);
 
 
     }
 
-    public void touch(){
-        screen.dialog.setDialog(true);
+    public void touch(boolean bool){
+        screen.dialog.setDialog(bool);
     }
 
     public void draw(Batch batch){

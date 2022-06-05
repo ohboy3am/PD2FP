@@ -30,7 +30,8 @@ public class Dialog implements Disposable{
         }
     }
     public void setDialog(boolean dialogShow) {
-        showDialog = dialogShow;
+        if(dialogShow)
+        showDialog = true;
     }
     @Override
     public void dispose() {
