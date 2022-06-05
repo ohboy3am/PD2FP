@@ -59,7 +59,7 @@ public class NewMoon extends Boss0Attack{
         PolygonShape shape = getPolygon((PolygonMapObject) newMoon.getLayers().get(1).getObjects().get(0));
         fdef.filter.categoryBits = ProgramDesign2FinalProject.BOSS_ATTACK_BIT;
         fdef.filter.maskBits = ProgramDesign2FinalProject.CHARACTER_BIT;
-
+        fdef.isSensor = true;
         fdef.shape = shape;
         fdef.friction = 0;
         b2body.setLinearVelocity(velocity);
