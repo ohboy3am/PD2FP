@@ -48,7 +48,7 @@ public class Dio extends Sprite {
 
     public void defineDio(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set( 2, 40 / PPM);
+        bdef.position.set( 3, 120 / PPM);
         bdef.type = BodyDef.BodyType.StaticBody;
         b2body = world.createBody(bdef);
 
@@ -65,7 +65,7 @@ public class Dio extends Sprite {
         shape.setPosition(new Vector2(0,-14/ PPM));
         b2body.createFixture(fdef).setUserData(this);
 
-
+        shape.dispose();
 
     }
 

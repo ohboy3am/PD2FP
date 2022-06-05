@@ -162,6 +162,7 @@ public class Character extends Sprite {
 
     }
 
+
     public TextureRegion getFrame(float dt){
         currentState = getState();
 
@@ -391,6 +392,7 @@ public class Character extends Sprite {
         fdef.isSensor = true;
 
         b2body.createFixture(fdef).setUserData(this);
+        shape.dispose();
 
 
     }
