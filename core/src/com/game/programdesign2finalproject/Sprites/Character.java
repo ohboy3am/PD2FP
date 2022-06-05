@@ -138,11 +138,13 @@ public class Character extends Sprite {
         if (timeToRedefineCharacter){
             redefineCharacter();
         }
-
         if (b2body.getPosition().y < -48/PPM && !characterIsDead){
             die();
         }
-
+        //System.out.printf("%f\n",b2body.getPosition().x);
+        if(b2body.getPosition().x > 56) {
+            screen.changeScreen();
+        }
         hitTime += dt;
         fireTime += dt;
 
@@ -259,7 +261,7 @@ public class Character extends Sprite {
 
     public void die(){
         SoundManager.getInstance().bgm.stop();
-        SoundManager.getInstance().soundCharacterDie.play();
+        SoundManager.getInstance().soundCharacterDie.setVolume(SoundManager.getInstance().soundCharacterDie.play(),0.2f);
         characterIsDead = true;
         Filter filter = new Filter();
         filter.maskBits = ProgramDesign2FinalProject.NOTHING_BIT;

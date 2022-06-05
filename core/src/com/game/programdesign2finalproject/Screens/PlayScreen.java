@@ -43,8 +43,8 @@ public class PlayScreen implements Screen {
     //遊戲的reference
     private ProgramDesign2FinalProject game;
     private TextureAtlas atlas;
-    private OrthographicCamera gamecam;
-    private Viewport gamePort;
+    public OrthographicCamera gamecam;
+    public Viewport gamePort;
     private Hud hud;
     public Dialog dialog;
 
@@ -67,7 +67,7 @@ public class PlayScreen implements Screen {
 
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
-    private boolean IsPaused = false;
+    public boolean IsPaused = false;
 
     public PlayScreen(ProgramDesign2FinalProject game){
 
@@ -178,28 +178,27 @@ public class PlayScreen implements Screen {
 
         player.update(dt);
 
-        //Array<Enemy> enemyFound = new Array<Enemy>();
-        //for (Enemy enemy : creator.getGoombas()){
-//
-        //    if (enemy instanceof Goomba){
-         //       if (enemy.isVanished()) {
-          //          enemyFound.add(enemy);
-        //           continue;
-          //      }
-          //  }
+        Array<Enemy> enemyFound = new Array<Enemy>();
+        for (Enemy enemy : creator.getGoombas()){
 
-          //      enemy.update(dt);
+            if (enemy instanceof Goomba){
+               if (enemy.isVanished()) {
+                    enemyFound.add(enemy);
+                   continue;
+                }
+            }
 
-          //      if (enemy.isDestroyed()) continue;
+                enemy.update(dt);
 
-               // if (enemy.getX() < player.getX() + 300 / PPM)
-                 //   enemy.b2body.setActive(true);
+                if (enemy.isDestroyed()) continue;
 
+                if (enemy.getX() < player.getX() + 300 / PPM)
+                    enemy.b2body.setActive(true);
 
-            //300個像素內敵人醒來
+        //300個像素內敵人醒來
 
-        //}
-        //creator.getGoombas().removeAll(enemyFound, true);
+        }
+        creator.getGoombas().removeAll(enemyFound, true);
 
         Array<Item> itemFound = new Array<Item>();
         for (Item item :items){
@@ -237,8 +236,10 @@ public class PlayScreen implements Screen {
         if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             if(IsPaused == false) {
                 IsPaused = true;
-                SoundManager.getInstance().soundStopTime.play();
+                music.pause();
+                SoundManager.getInstance().soundStopTime.setVolume(SoundManager.getInstance().soundStopTime.play(),0.5f);
             }else {
+                music.play();
                 IsPaused = false;
             }
         }
@@ -247,7 +248,6 @@ public class PlayScreen implements Screen {
         //清理螢幕
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         //繪製地圖
         renderer.render();
         //畫出debug線
@@ -256,14 +256,14 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         player.draw(game.batch);
-        //for (Enemy enemy : creator.getGoombas()){
-        //    if (enemy.isDestroyed()) continue;
-        //    enemy.draw(game.batch);
-        //}
-        //for (Item item :items){
-        //    if (item.isDestroyed()) continue;
-        //    item.draw(game.batch);
-        //}
+        for (Enemy enemy : creator.getGoombas()){
+            if (enemy.isDestroyed()) continue;
+            enemy.draw(game.batch);
+        }
+        for (Item item :items){
+            if (item.isDestroyed()) continue;
+            item.draw(game.batch);
+        }
 
         dio.draw(game.batch);
         boss0.draw(game.batch);
@@ -273,18 +273,21 @@ public class PlayScreen implements Screen {
         //畫出Hud camera看到的東西
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-        dialog.draw();
+        dialog.draw(this);
         if (gameOver()){
             game.setScreen(new GameOverScreen(game));
             dispose();
         }
+
     }
 
     public boolean gameOver(){
         if (player.currentState == Character.State.DEAD && player.getStateTimer() > 3){
             return true;
-        }
-        else return false;
+        }else return false;
+    }
+    public void changeScreen() {
+        game.setScreen(new GameClearScreen(game));
     }
     @Override
     public void resize(int width, int height) {
