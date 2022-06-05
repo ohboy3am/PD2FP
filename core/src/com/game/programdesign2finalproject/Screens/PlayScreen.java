@@ -62,10 +62,15 @@ public class PlayScreen implements Screen {
     private Boss0 boss0;
 
     private Music music;
-    private Music BossMusic;
+    private Music bossMusic;
 
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
+
+    public boolean isGeneratingBoss() {
+        return generatingBoss;
+    }
+
     private boolean generatingBoss = false;
     public boolean IsPaused = false;
     private boolean PlayBossMusic = false;
@@ -112,8 +117,8 @@ public class PlayScreen implements Screen {
         music.setLooping(true);
         music.play();
         music.setVolume(0.1f);
-        BossMusic = SoundManager.getInstance().soundBoss;
-        BossMusic.setLooping(true);
+        bossMusic = SoundManager.getInstance().soundBoss;
+        bossMusic.setLooping(true);
 
 
         items = new Array<Item>();
@@ -283,8 +288,8 @@ public class PlayScreen implements Screen {
              if(PlayBossMusic == false) {
                  music.stop();
                 PlayBossMusic = true;
-                BossMusic.play();
-                BossMusic.setVolume(0.1f);
+                bossMusic.play();
+                bossMusic.setVolume(0.1f);
                 boss0 = new Boss0(this,4,0, player);
             }
 
@@ -301,8 +306,16 @@ public class PlayScreen implements Screen {
         hud.stage.draw();
         dialog.draw(this);
         if (gameOver()){
-            game.setScreen(new GameOverScreen(game));
+            music.stop();
+            bossMusic.stop();
+            game.setScreen(new GameOverScreen(game,generatingBoss));
             dispose();
+        }
+    }
+
+    public void goToBoss(){
+        if (player != null) {
+            player.transport();
         }
     }
 

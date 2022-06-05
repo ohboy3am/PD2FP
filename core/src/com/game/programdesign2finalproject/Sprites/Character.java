@@ -55,7 +55,13 @@ public class Character extends Sprite {
     private float fireTime;
     private boolean fightBoss = false;
     private Array<FireBall> fireBalls;
+    private Vector2 bossRoomPosition= new Vector2(61,1);
+
+
     private int hp;
+    public int getHp() {
+        return hp;
+    }
 
 
     public Character(PlayScreen screen){
@@ -70,7 +76,7 @@ public class Character extends Sprite {
         jumpTime = 0;
         fireTime = 0;
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        hp = 3;
+        hp = 6;
 
         int characterHeight = 32;
         int characterWidth = 16;
@@ -123,6 +129,10 @@ public class Character extends Sprite {
         fireBalls = new Array<FireBall>();
     }
 
+    public void transport(){
+        b2body.setTransform(bossRoomPosition,0);
+    }
+
     public void update(float dt){
         if (characterIsBig){
             setCenter(b2body.getPosition().x, b2body.getPosition().y - 2 /PPM);
@@ -145,9 +155,10 @@ public class Character extends Sprite {
         }
         //56是地圖邊界
         if(b2body.getPosition().x > 2 && fightBoss == false) {
-            b2body.setTransform(61,1, 0);
+            transport();
             fightBoss = true;
             screen.BossGenerate();
+
         }
         hitTime += dt;
         fireTime += dt;
