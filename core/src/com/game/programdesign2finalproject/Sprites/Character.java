@@ -358,7 +358,7 @@ public class Character extends Sprite {
     }
     public void defineCharacter(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(64 / PPM, 192 / PPM);
+        bdef.position.set(55 / PPM, 165 / PPM); //dots changed
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 

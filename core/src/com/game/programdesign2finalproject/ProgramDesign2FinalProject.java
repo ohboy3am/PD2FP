@@ -12,9 +12,9 @@ import com.game.programdesign2finalproject.Screens.PlayScreen;
 
 public class ProgramDesign2FinalProject extends Game {
 	public static final int V_WIDTH = 600;
-	public static final int V_HEIGHT = 340;
+	public static final int V_HEIGHT = 304;  // dots changed value
 	//pixel per meter
-	public static final float PPM =80;
+	public static final float PPM =100;
 
 	public static final short NOTHING_BIT = 0;
 	public static final short GROUND_BIT = 1;
