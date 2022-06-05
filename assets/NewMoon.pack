@@ -1,0 +1,26 @@
+
+NewMoon.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bossAttack1-1
+  rotate: false
+  xy: 0, 0
+  size: 82, 64
+  orig: 82, 64
+  offset: 0, 0
+  index: -1
+bossAttack1-2
+  rotate: false
+  xy: 82, 0
+  size: 82, 64
+  orig: 82, 64
+  offset: 0, 0
+  index: -1
+bossAttack1-3
+  rotate: false
+  xy: 164, 0
+  size: 82, 64
+  orig: 82, 64
+  offset: 0, 0
+  index: -1

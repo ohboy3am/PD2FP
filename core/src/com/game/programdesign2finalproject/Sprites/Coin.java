@@ -28,7 +28,6 @@ public class Coin extends InteractiveTileObject{
     @Override
     public void onHeadHit(Character character) {
 
-
         if (getCell().getTile().getId() == BLANK_COIN){
             SoundManager.getInstance().soundBump.play();
         }
@@ -39,6 +38,7 @@ public class Coin extends InteractiveTileObject{
             getCell().setTile(tileset.getTile(BLANK_COIN));
             Hud.addScore(100);
         }
+
 
 
     }

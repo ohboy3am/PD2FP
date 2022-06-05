@@ -15,18 +15,25 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
+import com.game.programdesign2finalproject.Sprites.Attacks.FireBall;
+import com.game.programdesign2finalproject.Sprites.BossAttacks.NewMoon;
 
 public class Boss0 extends Boss{
 
+    public enum State{ATTACK1, ATTACK2, MOVING1, MOVING2, DEAD}
     private TextureRegion bossStand;
     private  Character player;
+    private float stateTime;
+    private float firstAttackTime;
+    private Array<NewMoon> newMoons;
 
     public Boss0(PlayScreen screen, float x, float y, Character player){
         super(screen, x, y, player);
         this.player = player;
         this.screen = screen;
         this.world = screen.getWorld();
-
+        firstAttackTime = 0;
+        newMoons = new Array<NewMoon>();
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         int dioHeight = 80;
@@ -38,12 +45,32 @@ public class Boss0 extends Boss{
 
     }
 
+    public void firstAttack(){
 
+
+        if (firstAttackTime > 1){
+                newMoons.add(new NewMoon(screen, this,player));
+                firstAttackTime = 0;
+            }
+
+
+
+
+    }
+
+    public void secondAttack(){
+
+    }
 
     public void draw(Batch batch){
         super.draw(batch);
+        for(NewMoon moon : newMoons){
+            if (moon.isDestroyed()) continue;
+            moon.draw(batch);
+        }
 
     }
+
 
     @Override
     protected void defineBoss() {
@@ -72,13 +99,30 @@ public class Boss0 extends Boss{
         fdef.isSensor = true;
 
         b2body.createFixture(fdef).setUserData(this);
+        shape.dispose();
     }
 
     @Override
     public void update(float dt) {
+        firstAttackTime += dt;
         velocity.set(player.b2body.getPosition().x-b2body.getPosition().x,player.b2body.getPosition().y-b2body.getPosition().y);
         b2body.setLinearVelocity(velocity);
         setCenter(b2body.getPosition().x , b2body.getPosition().y+12/PPM);
 
+        if (firstAttackTime > 1){
+            firstAttack();
+        }
+
+        Array<NewMoon> newMoonFound = new Array<NewMoon>();
+        for(NewMoon moon : newMoons) {
+            if(moon.isDestroyed()){
+                newMoonFound.add(moon);
+                continue;
+            }
+            if (!moon.isDestroyed())
+                moon.update(dt);
+
+        }
+        newMoons.removeAll(newMoonFound,true);
     }
 }

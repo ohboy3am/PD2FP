@@ -69,6 +69,8 @@ public class PlayScreen implements Screen {
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
     public boolean IsPaused = false;
 
+
+
     public PlayScreen(ProgramDesign2FinalProject game){
 
         atlas = new TextureAtlas("NEW_Character_and_Enemies.pack");
@@ -116,6 +118,9 @@ public class PlayScreen implements Screen {
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
 
 
+    }
+    public OrthographicCamera getGamecam() {
+        return gamecam;
     }
 
     public void spawnItem(ItemDef idef){
@@ -181,8 +186,9 @@ public class PlayScreen implements Screen {
         Array<Enemy> enemyFound = new Array<Enemy>();
         for (Enemy enemy : creator.getGoombas()){
 
+
             if (enemy instanceof Goomba){
-               if (enemy.isVanished()) {
+                if (enemy.isVanished()) {
                     enemyFound.add(enemy);
                    continue;
                 }
@@ -191,6 +197,9 @@ public class PlayScreen implements Screen {
                 enemy.update(dt);
 
                 if (enemy.isDestroyed()) continue;
+
+                if (enemy.getX() < player.getX() + 300 / PPM)
+                    enemy.b2body.setActive(true);
 
                 if (enemy.getX() < player.getX() + 300 / PPM)
                     enemy.b2body.setActive(true);

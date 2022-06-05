@@ -1,14 +1,11 @@
 package com.game.programdesign2finalproject;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.game.programdesign2finalproject.Screens.Menu;
-import com.game.programdesign2finalproject.Screens.PlayScreen;
+
 
 public class ProgramDesign2FinalProject extends Game {
 	public static final int V_WIDTH = 600;
@@ -29,6 +26,9 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final short CHARACTER_HEAD_BIT = 512	;
 	public static final short FIREBALL_BIT = 1024;
 	public static final short NPC_BIT = 2048;
+
+
+
 
 	public static final String MUSIC_PATH = "Jolly - Bulikirály.mp3";
 	public static final String MUSIC_PATH_1 = "Chopin_Sonata_Doppio_movimento.mp3";
