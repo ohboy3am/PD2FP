@@ -42,8 +42,8 @@ public class PlayScreen implements Screen {
     //遊戲的reference
     private ProgramDesign2FinalProject game;
     private TextureAtlas atlas;
-    private OrthographicCamera gamecam;
-    private Viewport gamePort;
+    public OrthographicCamera gamecam;
+    public Viewport gamePort;
     private Hud hud;
     public Dialog dialog;
 
@@ -65,7 +65,7 @@ public class PlayScreen implements Screen {
 
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
-    private boolean IsPaused = false;
+    public boolean IsPaused = false;
 
     public PlayScreen(ProgramDesign2FinalProject game){
 
@@ -264,7 +264,7 @@ public class PlayScreen implements Screen {
         //畫出Hud camera看到的東西
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-        dialog.draw();
+        dialog.draw(this);
         if (gameOver()){
             game.setScreen(new GameOverScreen(game));
             dispose();
@@ -274,8 +274,7 @@ public class PlayScreen implements Screen {
     public boolean gameOver(){
         if (player.currentState == Character.State.DEAD && player.getStateTimer() > 3){
             return true;
-        }
-        else return false;
+        }else return false;
     }
     @Override
     public void resize(int width, int height) {
