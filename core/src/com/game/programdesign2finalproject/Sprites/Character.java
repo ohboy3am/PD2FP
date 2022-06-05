@@ -53,7 +53,7 @@ public class Character extends Sprite {
     private PlayScreen screen;
     public int jumpTime;
     private float fireTime;
-
+    private boolean fightBoss = false;
     private Array<FireBall> fireBalls;
 
 
@@ -142,8 +142,9 @@ public class Character extends Sprite {
             die();
         }
         //System.out.printf("%f\n",b2body.getPosition().x);
-        if(b2body.getPosition().x > 56) {
-            screen.changeScreen();
+        if(b2body.getPosition().x > 56 && fightBoss == false) {
+            b2body.setTransform(61,1, 0);
+            fightBoss = true;
         }
         hitTime += dt;
         fireTime += dt;
