@@ -64,10 +64,13 @@ public class PlayScreen implements Screen {
     private Boss0 boss0;
 
     private Music music;
+    private Music BossMusic;
 
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
+    private boolean generatingBoss = false;
     public boolean IsPaused = false;
+    //private boolean PlayBossMusic = false;
 
 
 
@@ -112,6 +115,8 @@ public class PlayScreen implements Screen {
         music.setLooping(true);
         music.play();
         music.setVolume(0.1f);
+        //BossMusic = SoundManager.getInstance().soundOneWingedAngel;
+        //BossMusic.setLooping(true);
 
 
         items = new Array<Item>();
@@ -275,7 +280,14 @@ public class PlayScreen implements Screen {
         }
 
         dio.draw(game.batch);
-        boss0.draw(game.batch);
+        if(generatingBoss == true) {
+            boss0.draw(game.batch);
+            /*if(PlayBossMusic == false) {
+                PlayBossMusic = true;
+                BossMusic.play();
+                BossMusic.setVolume(0.1f);
+            }*/
+        }
 
         game.batch.end();
 
@@ -305,6 +317,9 @@ public class PlayScreen implements Screen {
     }
     public World getWorld(){
         return world;
+    }
+    public void BossGenerate() {
+        generatingBoss = true;
     }
 
     @Override
