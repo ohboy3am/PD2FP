@@ -15,7 +15,9 @@ public abstract class Boss extends Sprite {
     protected boolean toDestroy;
     protected boolean destroyed;
     protected int hp;
-
+    public int getHp() {
+        return hp;
+    }
 
     protected boolean vanished;
 

@@ -20,9 +20,11 @@ public class GameOverScreen implements Screen {
     private Viewport viewport;
     private Stage stage;
     private Game game;
+    private boolean boss;
 
-    public GameOverScreen(Game game){
+    public GameOverScreen(Game game,boolean boss){
         this.game =game;
+        this.boss = boss;
         viewport = new FitViewport(ProgramDesign2FinalProject.V_WIDTH, ProgramDesign2FinalProject.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((ProgramDesign2FinalProject)game).batch);
 
@@ -50,7 +52,10 @@ public class GameOverScreen implements Screen {
     @Override
     public void render(float delta) {
         if (Gdx.input.justTouched()){
-            game.setScreen(new PlayScreen((ProgramDesign2FinalProject)game));
+            PlayScreen screen = new PlayScreen((ProgramDesign2FinalProject)game);
+            if (boss)
+                screen.goToBoss();
+            game.setScreen(screen);
             dispose();
         }
         Gdx.gl.glClearColor(0,0,0,1);
