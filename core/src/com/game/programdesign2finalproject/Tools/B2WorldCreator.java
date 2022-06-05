@@ -57,7 +57,7 @@ public class B2WorldCreator {
 
             shape.setAsBox((rect.getWidth() / 2) / PPM, (rect.getHeight() / 2) / PPM);
             fdef.shape = shape;
-            fdef.filter.categoryBits = ProgramDesign2FinalProject.OBJECT_BIT;
+            fdef.filter.categoryBits = ProgramDesign2FinalProject.GROUND_BIT;
             body.createFixture(fdef);
         }
 

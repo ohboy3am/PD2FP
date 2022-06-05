@@ -1,13 +1,14 @@
 package com.game.programdesign2finalproject.Tools;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.game.programdesign2finalproject.Sprites.Dio;
+import com.game.programdesign2finalproject.Sounds.SoundManager;
 import com.game.programdesign2finalproject.Sprites.Attacks.FireBall;
+import com.game.programdesign2finalproject.Sprites.Boss;
+import com.game.programdesign2finalproject.Sprites.Boss0;
 import com.game.programdesign2finalproject.Sprites.Items.Item;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Sprites.Character;
@@ -100,14 +101,6 @@ public class WorldContactListener implements ContactListener {
                 }
                 break;
 
-                //主角跟NPC接觸
-            case ProgramDesign2FinalProject.NPC_BIT | ProgramDesign2FinalProject.CHARACTER_BIT:
-                if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.NPC_BIT)
-                    ((Dio)fixA.getUserData()).touch(Gdx.input.justTouched());
-                else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.NPC_BIT)
-                    ((Dio)fixB.getUserData()).touch(Gdx.input.justTouched());
-                break;
-
             case ProgramDesign2FinalProject.FIREBALL_BIT | ProgramDesign2FinalProject.OBJECT_BIT:
                 if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.FIREBALL_BIT)
                     ((FireBall)fixA.getUserData()).setToDestroy();
@@ -120,6 +113,22 @@ public class WorldContactListener implements ContactListener {
                     ((Item)fixA.getUserData()).use((Character)fixB.getUserData());
                 else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.ITEM_BIT)
                     ((Item)fixB.getUserData()).use((Character)fixA.getUserData());
+                break;
+
+            //火球打到BOSS
+            case ProgramDesign2FinalProject.FIREBALL_BIT | ProgramDesign2FinalProject.BOSS_BIT:
+                if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.BOSS_BIT)
+                    ((Boss)fixA.getUserData()).hit();
+                else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.BOSS_BIT)
+                    ((Boss)fixB.getUserData()).hit();
+                break;
+
+            //主角被boss打到
+            case ProgramDesign2FinalProject.BOSS_ATTACK_BIT | ProgramDesign2FinalProject.CHARACTER_BIT:
+                if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.CHARACTER_BIT)
+                    ((Character)fixA.getUserData()).hit();
+                else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.CHARACTER_BIT)
+                    ((Character)fixB.getUserData()).hit();
                 break;
             default:
                 break;

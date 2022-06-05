@@ -76,7 +76,6 @@ public class Goomba extends Enemy{
         fdef.filter.maskBits = ProgramDesign2FinalProject.GROUND_BIT |
                 ProgramDesign2FinalProject.COIN_BIT |
                 ProgramDesign2FinalProject.BRICK_BIT|
-                ProgramDesign2FinalProject.OBJECT_BIT|
                 ProgramDesign2FinalProject.ENEMY_BIT|
                 ProgramDesign2FinalProject.CHARACTER_BIT|
                 ProgramDesign2FinalProject.FIREBALL_BIT;

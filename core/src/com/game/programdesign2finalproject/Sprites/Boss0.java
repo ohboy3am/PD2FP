@@ -6,16 +6,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
-import com.game.programdesign2finalproject.Sprites.Attacks.FireBall;
+import com.game.programdesign2finalproject.Sounds.SoundManager;
 import com.game.programdesign2finalproject.Sprites.BossAttacks.NewMoon;
 
 public class Boss0 extends Boss{
@@ -35,6 +34,7 @@ public class Boss0 extends Boss{
         firstAttackTime = 0;
         newMoons = new Array<NewMoon>();
         Array<TextureRegion> frames = new Array<TextureRegion>();
+        hp = 20;
 
         int dioHeight = 80;
         int dioWidth = 60;
@@ -63,6 +63,7 @@ public class Boss0 extends Boss{
     }
 
     public void draw(Batch batch){
+        if (destroyed)return;
         super.draw(batch);
         for(NewMoon moon : newMoons){
             if (moon.isDestroyed()) continue;
@@ -82,8 +83,9 @@ public class Boss0 extends Boss{
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / PPM);
-        fdef.filter.categoryBits = ProgramDesign2FinalProject.NOTHING_BIT;
-        fdef.filter.maskBits = ProgramDesign2FinalProject.CHARACTER_BIT;
+        fdef.filter.categoryBits = ProgramDesign2FinalProject.BOSS_BIT;
+        fdef.filter.maskBits = ProgramDesign2FinalProject.CHARACTER_BIT|
+        ProgramDesign2FinalProject.FIREBALL_BIT;
 
 
         fdef.shape = shape;
@@ -92,18 +94,30 @@ public class Boss0 extends Boss{
         shape.setPosition(new Vector2(0,-14/ PPM));
         b2body.createFixture(fdef).setUserData(this);
 
-        EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2 / PPM, 10 / PPM), new Vector2(2/ PPM, 10 / PPM));
-        fdef.filter.categoryBits = ProgramDesign2FinalProject.NOTHING_BIT;
-        fdef.shape = head;
-        fdef.isSensor = true;
-
-        b2body.createFixture(fdef).setUserData(this);
         shape.dispose();
     }
 
     @Override
+    public void hit() {
+        SoundManager.getInstance().soundStomp.play();
+        hp--;
+    }
+
+
+    public void die(){
+        SoundManager.getInstance().soundWryyy.setVolume(SoundManager.getInstance().soundWryyy.play(),0.5f);
+        toDestroy = true;
+        Filter filter = new Filter();
+        filter.maskBits = ProgramDesign2FinalProject.NOTHING_BIT;
+        for (Fixture fixture : b2body.getFixtureList())
+            fixture.setFilterData(filter);
+        b2body.applyLinearImpulse(new Vector2(0,4f), b2body.getWorldCenter(), true);
+    }
+
+    @Override
     public void update(float dt) {
+        super.update(dt);
+        if (destroyed)return;
         firstAttackTime += dt;
         velocity.set(player.b2body.getPosition().x-b2body.getPosition().x,player.b2body.getPosition().y-b2body.getPosition().y);
         b2body.setLinearVelocity(velocity);
@@ -124,5 +138,9 @@ public class Boss0 extends Boss{
 
         }
         newMoons.removeAll(newMoonFound,true);
+
+        if (hp<=0){
+            die();
+        }
     }
 }

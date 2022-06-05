@@ -33,7 +33,6 @@ public class Mushroom extends Item {
         shape.setRadius(6 / ProgramDesign2FinalProject.PPM);
         fdef.filter.categoryBits = ProgramDesign2FinalProject.ITEM_BIT;
         fdef.filter.maskBits = ProgramDesign2FinalProject.CHARACTER_BIT |
-                ProgramDesign2FinalProject.OBJECT_BIT |
                 ProgramDesign2FinalProject.GROUND_BIT |
                 ProgramDesign2FinalProject.COIN_BIT |
                 ProgramDesign2FinalProject.BRICK_BIT;

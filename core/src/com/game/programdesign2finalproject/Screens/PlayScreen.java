@@ -23,7 +23,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.programdesign2finalproject.Scenes.Dialog;
 
 import com.game.programdesign2finalproject.Sprites.Boss0;
-import com.game.programdesign2finalproject.Sprites.Dio;
 import com.game.programdesign2finalproject.Sprites.Goomba;
 import com.game.programdesign2finalproject.Sprites.Items.Item;
 import com.game.programdesign2finalproject.Sprites.Items.ItemDef;
@@ -60,7 +59,6 @@ public class PlayScreen implements Screen {
 
     //sprites
     private Character player;
-    private Dio dio;
     private Boss0 boss0;
 
     private Music music;
@@ -70,7 +68,7 @@ public class PlayScreen implements Screen {
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
     private boolean generatingBoss = false;
     public boolean IsPaused = false;
-    //private boolean PlayBossMusic = false;
+    private boolean PlayBossMusic = false;
 
 
 
@@ -105,8 +103,7 @@ public class PlayScreen implements Screen {
 
         //初始化角色
         player = new Character(this);
-        dio = new Dio(this);
-        boss0 = new Boss0(this,4,0, player);
+
 
         world.setContactListener(new WorldContactListener());
 
@@ -115,8 +112,8 @@ public class PlayScreen implements Screen {
         music.setLooping(true);
         music.play();
         music.setVolume(0.1f);
-        //BossMusic = SoundManager.getInstance().soundOneWingedAngel;
-        //BossMusic.setLooping(true);
+        BossMusic = SoundManager.getInstance().soundBoss;
+        BossMusic.setLooping(true);
 
 
         items = new Array<Item>();
@@ -229,6 +226,7 @@ public class PlayScreen implements Screen {
 
         handleSpawningItems();
 
+        if (PlayBossMusic)
         boss0.update(dt);
 
         hud.update(dt);
@@ -279,15 +277,21 @@ public class PlayScreen implements Screen {
             item.draw(game.batch);
         }
 
-        dio.draw(game.batch);
-        if(generatingBoss == true) {
-            boss0.draw(game.batch);
-            /*if(PlayBossMusic == false) {
+
+        if(generatingBoss && !PlayBossMusic) {
+
+             if(PlayBossMusic == false) {
+                 music.stop();
                 PlayBossMusic = true;
                 BossMusic.play();
                 BossMusic.setVolume(0.1f);
-            }*/
+                boss0 = new Boss0(this,4,0, player);
+            }
+
         }
+
+        if (generatingBoss)
+            boss0.draw(game.batch);
 
         game.batch.end();
 

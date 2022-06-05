@@ -57,14 +57,13 @@ public class NewMoon extends Boss0Attack{
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = getPolygon((PolygonMapObject) newMoon.getLayers().get(1).getObjects().get(0));
-        fdef.filter.categoryBits = ProgramDesign2FinalProject.NOTHING_BIT;
+        fdef.filter.categoryBits = ProgramDesign2FinalProject.BOSS_ATTACK_BIT;
         fdef.filter.maskBits = ProgramDesign2FinalProject.CHARACTER_BIT;
 
         fdef.shape = shape;
-        fdef.restitution = 1;
         fdef.friction = 0;
-        b2body.createFixture(fdef).setUserData(this);
         b2body.setLinearVelocity(velocity);
+        b2body.createFixture(fdef).setUserData(this);
         shape.dispose();
     }
 

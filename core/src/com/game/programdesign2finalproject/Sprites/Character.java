@@ -55,6 +55,7 @@ public class Character extends Sprite {
     private float fireTime;
     private boolean fightBoss = false;
     private Array<FireBall> fireBalls;
+    private int hp;
 
 
     public Character(PlayScreen screen){
@@ -69,6 +70,7 @@ public class Character extends Sprite {
         jumpTime = 0;
         fireTime = 0;
         Array<TextureRegion> frames = new Array<TextureRegion>();
+        hp = 3;
 
         int characterHeight = 32;
         int characterWidth = 16;
@@ -142,13 +144,18 @@ public class Character extends Sprite {
             die();
         }
         //56是地圖邊界
-        if(b2body.getPosition().x > 56 && fightBoss == false) {
+        if(b2body.getPosition().x > 2 && fightBoss == false) {
             b2body.setTransform(61,1, 0);
             fightBoss = true;
             screen.BossGenerate();
         }
         hitTime += dt;
         fireTime += dt;
+
+        if (hp<=0)
+        {
+            die();
+        }
 
         Array<FireBall> fireBallFound = new Array<FireBall>();
         for(FireBall ball : fireBalls) {
@@ -249,6 +256,7 @@ public class Character extends Sprite {
     }
 
     public void hit(){
+        SoundManager.getInstance().soundStomp.play();
         if (characterIsBig){
             characterIsBig = false;
             timeToRedefineCharacter = true;
@@ -258,7 +266,7 @@ public class Character extends Sprite {
         }
         else {
             if (hitTime > 0.5)
-                die();
+                hp--;
         }
     }
 
@@ -294,14 +302,7 @@ public class Character extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / PPM);
         fdef.filter.categoryBits = ProgramDesign2FinalProject.CHARACTER_BIT;
-        fdef.filter.maskBits = ProgramDesign2FinalProject.GROUND_BIT |
-                ProgramDesign2FinalProject.COIN_BIT |
-                ProgramDesign2FinalProject.BRICK_BIT|
-                ProgramDesign2FinalProject.ENEMY_BIT|
-                ProgramDesign2FinalProject.OBJECT_BIT|
-                ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
-                ProgramDesign2FinalProject.ITEM_BIT|
-                ProgramDesign2FinalProject.NPC_BIT;
+        fdef.filter.maskBits = mask();
 
 
         fdef.shape = shape;
@@ -333,14 +334,7 @@ public class Character extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / PPM);
         fdef.filter.categoryBits = ProgramDesign2FinalProject.CHARACTER_BIT;
-        fdef.filter.maskBits = ProgramDesign2FinalProject.GROUND_BIT |
-                ProgramDesign2FinalProject.COIN_BIT |
-                ProgramDesign2FinalProject.BRICK_BIT|
-                ProgramDesign2FinalProject.ENEMY_BIT|
-                ProgramDesign2FinalProject.OBJECT_BIT|
-                ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
-                ProgramDesign2FinalProject.ITEM_BIT|
-                ProgramDesign2FinalProject.NPC_BIT;
+        fdef.filter.maskBits = mask();
 
 
         fdef.shape = shape;
@@ -371,14 +365,7 @@ public class Character extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / PPM);
         fdef.filter.categoryBits = ProgramDesign2FinalProject.CHARACTER_BIT;
-        fdef.filter.maskBits = ProgramDesign2FinalProject.GROUND_BIT |
-                ProgramDesign2FinalProject.COIN_BIT |
-                ProgramDesign2FinalProject.BRICK_BIT|
-                ProgramDesign2FinalProject.ENEMY_BIT|
-                ProgramDesign2FinalProject.OBJECT_BIT|
-                ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
-                ProgramDesign2FinalProject.ITEM_BIT|
-                ProgramDesign2FinalProject.NPC_BIT;
+        fdef.filter.maskBits = mask();
 
 
         fdef.shape = shape;
@@ -407,6 +394,16 @@ public class Character extends Sprite {
             ball.draw(batch);
         }
 
+    }
+
+    public short mask(){
+        return ProgramDesign2FinalProject.GROUND_BIT |
+                ProgramDesign2FinalProject.COIN_BIT |
+                ProgramDesign2FinalProject.BRICK_BIT|
+                ProgramDesign2FinalProject.ENEMY_BIT|
+                ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
+                ProgramDesign2FinalProject.ITEM_BIT|
+                ProgramDesign2FinalProject.BOSS_ATTACK_BIT;
     }
 
 

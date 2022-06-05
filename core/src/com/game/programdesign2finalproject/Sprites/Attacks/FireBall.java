@@ -71,7 +71,7 @@ public class FireBall extends Sprite {
     public void defineFireBall(){
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
-        bdef.type = BodyDef.BodyType.KinematicBody;
+        bdef.type = BodyDef.BodyType.DynamicBody;
         if(!world.isLocked())
             b2body = world.createBody(bdef);
 
@@ -84,7 +84,7 @@ public class FireBall extends Sprite {
                 ProgramDesign2FinalProject.COIN_BIT |
                 ProgramDesign2FinalProject.BRICK_BIT |
                 ProgramDesign2FinalProject.ENEMY_BIT |
-                ProgramDesign2FinalProject.OBJECT_BIT;
+                ProgramDesign2FinalProject.BOSS_BIT;
 
         fdef.shape = shape;
         fdef.restitution = 1;

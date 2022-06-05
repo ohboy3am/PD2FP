@@ -25,15 +25,15 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final short ITEM_BIT = 256;
 	public static final short CHARACTER_HEAD_BIT = 512	;
 	public static final short FIREBALL_BIT = 1024;
-	public static final short NPC_BIT = 2048;
-
+	public static final short BOSS_BIT = 2048;
+	public static final short BOSS_ATTACK_BIT = 4096;
 
 
 
 	public static final String MUSIC_PATH = "Jolly - Bulikirály.mp3";
 	public static final String MUSIC_PATH_1 = "Chopin_Sonata_Doppio_movimento.mp3";
 	public static final String MUSIC_PATH_2 = "puyo.mp3";
-	public static final String MUSIC_PATH_SEPHIROTH = "ryu.mp3";
+	public static final String MUSIC_PATH_SEPHIROTH = "angel.ogg";
 	public static final String SOUND_PATH_COIN = "audio/sounds/coin.wav";
 	public static final String SOUND_PATH_BRICK = "audio/sounds/breakblock.wav";
 	public static final String SOUND_PATH_BUMP = "audio/sounds/bump.wav";
