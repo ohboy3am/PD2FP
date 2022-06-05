@@ -33,6 +33,7 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final String MUSIC_PATH = "Jolly - Bulikirály.mp3";
 	public static final String MUSIC_PATH_1 = "Chopin_Sonata_Doppio_movimento.mp3";
 	public static final String MUSIC_PATH_2 = "puyo.mp3";
+	public static final String MUSIC_PATH_SEPHIROTH = "ryu.mp3";
 	public static final String SOUND_PATH_COIN = "audio/sounds/coin.wav";
 	public static final String SOUND_PATH_BRICK = "audio/sounds/breakblock.wav";
 	public static final String SOUND_PATH_BUMP = "audio/sounds/bump.wav";
@@ -50,7 +51,7 @@ public class ProgramDesign2FinalProject extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		setScreen(new PlayScreen(this));
+		setScreen(new Menu(this));
 
 		//setScreen(new PlayScreen(this));
 	}

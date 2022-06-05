@@ -141,10 +141,11 @@ public class Character extends Sprite {
         if (b2body.getPosition().y < -48/PPM && !characterIsDead){
             die();
         }
-        //System.out.printf("%f\n",b2body.getPosition().x);
+        //56是地圖邊界
         if(b2body.getPosition().x > 56 && fightBoss == false) {
             b2body.setTransform(61,1, 0);
             fightBoss = true;
+            screen.BossGenerate();
         }
         hitTime += dt;
         fireTime += dt;
