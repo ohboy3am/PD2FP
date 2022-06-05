@@ -44,6 +44,7 @@ public class Mushroom extends Item {
 
     @Override
     public void use(Character character) {
+        character.heal();
         if (!character.isBig())
         character.grow();
         SoundManager.getInstance().soundPowerUp.play();

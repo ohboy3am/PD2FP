@@ -168,6 +168,10 @@ public class Character extends Sprite {
             die();
         }
 
+        if (screen.getHud().isTimeUp() && !isDead()) {
+            die();
+        }
+
         Array<FireBall> fireBallFound = new Array<FireBall>();
         for(FireBall ball : fireBalls) {
             if(ball.isDestroyed()){
@@ -415,6 +419,10 @@ public class Character extends Sprite {
                 ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
                 ProgramDesign2FinalProject.ITEM_BIT|
                 ProgramDesign2FinalProject.BOSS_ATTACK_BIT;
+    }
+
+    public void heal(){
+        hp++;
     }
 
 

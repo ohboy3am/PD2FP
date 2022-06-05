@@ -285,13 +285,12 @@ public class PlayScreen implements Screen {
 
         if(generatingBoss && !PlayBossMusic) {
 
-             if(PlayBossMusic == false) {
-                 music.stop();
-                PlayBossMusic = true;
-                bossMusic.play();
-                bossMusic.setVolume(0.1f);
-                boss0 = new Boss0(this,4,0, player);
-            }
+            music.stop();
+            PlayBossMusic = true;
+            bossMusic.play();
+            bossMusic.setVolume(0.1f);
+            boss0 = new Boss0(this,4,0, player);
+            hud.worldTimer = 180;
 
         }
 
@@ -360,5 +359,9 @@ public class PlayScreen implements Screen {
         renderer.dispose();
         world.dispose();
         b2dr.dispose();
+    }
+
+    public Hud getHud() {
+        return hud;
     }
 }
