@@ -93,6 +93,7 @@ public class PlayScreen implements Screen {
     public boolean IsPaused = false;
     private boolean PlayBossMusic = false;
     private float GameClearCoundDown = 0;
+    private int jumpLimit = 1;
 
 
     public PlayScreen(ProgramDesign2FinalProject game){
@@ -176,7 +177,7 @@ public class PlayScreen implements Screen {
     public void handleInput(float dt){
         if(player.currentState == Character.State.DEAD) return;
         //角色移動
-        if (player.jumpTime <3){
+        if (player.jumpTime <jumpLimit){
             if(Gdx.input.isKeyJustPressed(Input.Keys.UP)){
 
                 player.b2body.setLinearVelocity(player.b2body.getLinearVelocity().x,3.f);
@@ -366,6 +367,7 @@ public class PlayScreen implements Screen {
     }
     public void BossGenerate() {
         generatingBoss = true;
+        jumpLimit = 3;
     }
     public void easeOut() {
         bossMusic.setVolume(0.1f*(4-GameClearCoundDown)/5);
