@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
+import com.game.programdesign2finalproject.Sounds.SoundManager;
 import com.game.programdesign2finalproject.Sprites.Boss0;
 import com.game.programdesign2finalproject.Sprites.Character;
 
@@ -99,7 +100,10 @@ public class TrackingBomb extends Boss0Attack{
             stateTime = 0;
             explode = true;
         }
-        if(explodeTime>0.7){
+        if (explode&&explodeTime == 0){
+            SoundManager.getInstance().soundPowerUp.setVolume(SoundManager.getInstance().soundExplosion.play(),1f);
+        }
+        if(explodeTime>0.7|| boss.isDestroyed()){
             world.destroyBody(b2body);
             destroyed = true;
         }

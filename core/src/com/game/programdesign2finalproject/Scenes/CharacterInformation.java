@@ -89,7 +89,7 @@ public class CharacterInformation implements Disposable {
         // doge头像
         tHead = new Texture(Gdx.files.internal("bahamuthead.png"));
         spriteDoge = new Sprite(new TextureRegion(tHead, 0, 0, 244, 242));
-        spriteDoge.setBounds(20, 20, 100, 100);
+        spriteDoge.setBounds(10, 10, 100, 100);
 
         //把彩条图转为可截取的TextureRegion，默认为从右向左截取；
         region = new TextureRegion(textureFu, 0, 0, hpWidth, hpHeight);
@@ -174,7 +174,7 @@ public class CharacterInformation implements Disposable {
         spriteDoge.draw(batch);
 
         // 数字血量
-        font.draw(batch, (int) bossHP*100 + " / 2000", 150, 40);
+        font.draw(batch, (int) bossHP*100 + " / 2000", 110, 40);
         font.draw(batch, "HP", 80, 40);
 
         batch.end();

@@ -180,7 +180,7 @@ public class PlayScreen implements Screen {
         if (player.jumpTime <jumpLimit){
             if(Gdx.input.isKeyJustPressed(Input.Keys.UP)){
 
-                player.b2body.setLinearVelocity(player.b2body.getLinearVelocity().x,3.f);
+                player.b2body.setLinearVelocity(player.b2body.getLinearVelocity().x,4.f);
                 player.jumpTime+=1;
             }
         }

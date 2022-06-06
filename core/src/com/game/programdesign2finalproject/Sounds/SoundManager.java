@@ -1,6 +1,6 @@
 package com.game.programdesign2finalproject.Sounds;
 
-import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.SOUND_PATH_DRAGON;
+
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -26,6 +26,11 @@ public class SoundManager {
     public Sound soundCharacterDie;
     public Sound soundStopTime;
     public Sound soundDragonYell;
+    public Sound soundBossEnter;
+    public Sound soundExplosion;
+    public Sound[] soundShout = new Sound[4];
+    public Sound soundDragonDie;
+    public Sound soundNewMoon;
 
 
     private static SoundManager singleInstance = null;
@@ -45,7 +50,18 @@ public class SoundManager {
         soundWryyy = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_WRYYY));
         soundCharacterDie = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_CHARACTERDIE));
         soundStopTime = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_TheWorld));
-        soundDragonYell = Gdx.audio.newSound(Gdx.files.internal(SOUND_PATH_DRAGON));
+        soundDragonYell = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_DRAGON));
+        soundBossEnter = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_BOSSENTER));
+        soundExplosion = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_EXPLSION));
+        soundShout[0] =  Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_SHOUT01));
+        soundShout[1] =  Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_SHOUT02));
+        soundShout[2] =  Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_SHOUT03));
+        soundShout[3] =  Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_SHOUT04));
+        soundDragonDie = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_DRAGONDIE));
+        soundNewMoon = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_NEWMOON));
+
+
+
 
 
 

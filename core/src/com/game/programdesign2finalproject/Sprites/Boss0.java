@@ -45,7 +45,7 @@ public class Boss0 extends Boss{
         stateTime = 0;
         attacks = new Array<Boss0Attack>();
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        hp = 20;
+        hp = 1;
         runningRight = false;
 
         int bossWidth = 180;
@@ -110,6 +110,7 @@ public class Boss0 extends Boss{
         b2body.createFixture(fdef).setUserData(this);
 
         shape.dispose();
+        SoundManager.getInstance().soundPowerUp.setVolume(SoundManager.getInstance().soundBossEnter.play(),15f);
     }
 
     @Override
@@ -120,7 +121,7 @@ public class Boss0 extends Boss{
 
 
     public void die(){
-        SoundManager.getInstance().soundWryyy.setVolume(SoundManager.getInstance().soundWryyy.play(),0.1f);
+        SoundManager.getInstance().soundDragonDie.setVolume(SoundManager.getInstance().soundDragonDie.play(),10f);
         toDestroy = true;
         Filter filter = new Filter();
         filter.maskBits = ProgramDesign2FinalProject.NOTHING_BIT;
@@ -134,13 +135,13 @@ public class Boss0 extends Boss{
         super.update(dt);
         if (destroyed)return;
         stateTime += dt;
-        firstAttackTime += dt;
-        secondAttackTime +=dt;
+        firstAttackTime += (dt+(Math.random()/60));
+        secondAttackTime +=(dt+(Math.random()/60));
         velocity.set(player.b2body.getPosition().x-b2body.getPosition().x,player.b2body.getPosition().y-b2body.getPosition().y);
         b2body.setLinearVelocity(velocity);
 
 
-        if (firstAttackTime > 1){
+        if (firstAttackTime > 1.5){
             firstAttack();
         }
 
@@ -148,16 +149,16 @@ public class Boss0 extends Boss{
             SoundManager.getInstance().soundPowerUp.setVolume(SoundManager.getInstance().soundDragonYell.play(),10f);
             hp += 5;
             phase2 = true;
-            b2body.setActive(false);
-            stateTime = 0;
         }
 
         if (!b2body.isActive() && stateTime > 2){
             b2body.setActive(true);
         }
 
-        if (secondAttackTime > 5 && phase2){
+        if (secondAttackTime > 7.5 && phase2){
             secondAttack();
+            b2body.setActive(false);
+            stateTime = 0;
         }
 
         if((b2body.getLinearVelocity().x < 0 || !runningRight) && !bossFly.getKeyFrame(stateTime,true).isFlipX()) {

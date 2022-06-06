@@ -46,7 +46,14 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final String SOUND_PATH_CHARACTERDIE = "audio/sounds/wasted.wav";
 	public static final String SOUND_PATH_TheWorld = "audio/sounds/TheWorld.wav";
 	public static final String SOUND_PATH_DRAGON = "dragonYell.wav";
-
+	public static final String SOUND_PATH_BOSSENTER = "bossenter.wav";
+	public static final String SOUND_PATH_EXPLSION = "explosion.wav";
+	public static final String SOUND_PATH_SHOUT01 = "shout01.wav";
+	public static final String SOUND_PATH_SHOUT02 = "shout02.wav";
+	public static final String SOUND_PATH_SHOUT03 = "shout03.wav";
+	public static final String SOUND_PATH_SHOUT04 = "shout04.wav";
+	public static final String SOUND_PATH_DRAGONDIE = "dragondie.wav";
+	public static final String SOUND_PATH_NEWMOON = "newmoon.wav";
 	public SpriteBatch batch;
 
 	

@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
+import com.game.programdesign2finalproject.Sounds.SoundManager;
 import com.game.programdesign2finalproject.Sprites.Boss0;
 import com.game.programdesign2finalproject.Sprites.Character;
 
@@ -75,6 +76,8 @@ public class NewMoon extends Boss0Attack{
         b2body.setLinearVelocity(velocity);
         b2body.createFixture(fdef).setUserData(this);
         shape.dispose();
+        if (boss.b2body.getPosition().x>56&&!player.isDead())
+        SoundManager.getInstance().soundPowerUp.setVolume(SoundManager.getInstance().soundNewMoon.play(),0.3f);
     }
 
     private PolygonShape getPolygon(PolygonMapObject polygonObject) {
@@ -102,7 +105,7 @@ public class NewMoon extends Boss0Attack{
         else
             setCenter(b2body.getPosition().x - 12/PPM , b2body.getPosition().y- 12/PPM);
         b2body.setLinearVelocity(velocity);
-        if((stateTime > 3 || toDestroy) ) {
+        if(stateTime > 3 || toDestroy || boss.isDestroyed()) {
             world.destroyBody(b2body);
             destroyed = true;
         }
