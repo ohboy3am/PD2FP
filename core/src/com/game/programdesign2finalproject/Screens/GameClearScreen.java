@@ -54,6 +54,10 @@ public class GameClearScreen implements Screen{
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
+        if(Gdx.input.justTouched()) {
+            music.stop();
+            game.setScreen(new Menu((ProgramDesign2FinalProject) game));
+        }
     }
 
     @Override
