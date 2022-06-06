@@ -91,6 +91,7 @@ public class Boss0 extends Boss{
 
     @Override
     protected void defineBoss() {
+
         BodyDef bdef = new BodyDef();
         bdef.position.set( 4, 40 / PPM);
         bdef.type = BodyDef.BodyType.KinematicBody;
@@ -144,9 +145,15 @@ public class Boss0 extends Boss{
         }
 
         if (hp<10 && !phase2){
-            SoundManager.getInstance().soundWryyy.setVolume(SoundManager.getInstance().soundWryyy.play(),0.1f);
+            SoundManager.getInstance().soundPowerUp.setVolume(SoundManager.getInstance().soundDragonYell.play(),10f);
             hp += 5;
             phase2 = true;
+            b2body.setActive(false);
+            stateTime = 0;
+        }
+
+        if (!b2body.isActive() && stateTime > 2){
+            b2body.setActive(true);
         }
 
         if (secondAttackTime > 5 && phase2){
