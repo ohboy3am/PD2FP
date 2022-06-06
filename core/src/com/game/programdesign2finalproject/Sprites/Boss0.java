@@ -78,6 +78,7 @@ public class Boss0 extends Boss{
 
     public void secondAttack(){
         if (secondAttackTime > 1){
+            SoundManager.getInstance().soundPowerUp.setVolume(SoundManager.getInstance().soundDragonYell.play(),10f);
             attacks.add(new TrackingBomb(screen, this,player));
             secondAttackTime = 0;
         }
@@ -158,7 +159,7 @@ public class Boss0 extends Boss{
         }
 
         if (hp<10 && !phase2){
-            SoundManager.getInstance().soundPowerUp.setVolume(SoundManager.getInstance().soundDragonYell.play(),10f);
+
             hp += 5;
             phase2 = true;
         }

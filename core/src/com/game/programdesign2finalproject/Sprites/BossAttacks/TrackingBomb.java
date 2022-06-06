@@ -96,12 +96,12 @@ public class TrackingBomb extends Boss0Attack{
             velocity.setLength(1.5f);
         }
         b2body.setLinearVelocity(velocity);
-        if((stateTime > 3 || toDestroy) ) {
+        if((stateTime > 2.5 || toDestroy) ) {
             stateTime = 0;
             explode = true;
         }
         if (explode&&explodeTime == 0){
-            SoundManager.getInstance().soundPowerUp.setVolume(SoundManager.getInstance().soundExplosion.play(),0.7f);
+            SoundManager.getInstance().soundPowerUp.setVolume(SoundManager.getInstance().soundExplosion.play(),0.5f);
         }
         if(explodeTime>0.7|| boss.isDestroyed()){
             world.destroyBody(b2body);
