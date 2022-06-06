@@ -101,7 +101,7 @@ public class TrackingBomb extends Boss0Attack{
             explode = true;
         }
         if (explode&&explodeTime == 0){
-            SoundManager.getInstance().soundPowerUp.setVolume(SoundManager.getInstance().soundExplosion.play(),1f);
+            SoundManager.getInstance().soundPowerUp.setVolume(SoundManager.getInstance().soundExplosion.play(),0.7f);
         }
         if(explodeTime>0.7|| boss.isDestroyed()){
             world.destroyBody(b2body);

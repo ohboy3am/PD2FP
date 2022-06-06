@@ -150,6 +150,8 @@ public class Boss0 extends Boss{
 
         if (firstAttackTime > 1.5){
             firstAttack();
+            if (phase2)
+                firstAttack();
         }
 
         if (hp<10 && !phase2){
