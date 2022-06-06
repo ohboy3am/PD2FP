@@ -10,11 +10,14 @@ import com.badlogic.gdx.utils.Disposable;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
 
 public class Dialog implements Disposable{
+
+
     public Texture npchead;
     private SpriteBatch b;
     public Stage stage;
     private boolean showDialog = false;
     public PlayScreen screen;
+
     public Dialog() {
         npchead = new Texture("DIO_icon.png");
         b = new SpriteBatch();

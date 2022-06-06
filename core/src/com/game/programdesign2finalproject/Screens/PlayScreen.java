@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import com.game.programdesign2finalproject.Scenes.CharacterInformation;
 import com.game.programdesign2finalproject.Scenes.Dialog;
 
 import com.game.programdesign2finalproject.Sprites.Boss0;
@@ -44,6 +45,7 @@ public class PlayScreen implements Screen {
     public OrthographicCamera gamecam;
     public Viewport gamePort;
     private Hud hud;
+    private CharacterInformation characterInformation;
     public Dialog dialog;
 
     //地圖變數
@@ -56,8 +58,17 @@ public class PlayScreen implements Screen {
     private Box2DDebugRenderer b2dr;
     private  B2WorldCreator creator;
 
+    public Character getPlayer() {
+        return player;
+    }
+
     //sprites
     private Character player;
+
+    public Boss0 getBoss0() {
+        return boss0;
+    }
+
     private Boss0 boss0;
 
     private Music music;
@@ -68,6 +79,14 @@ public class PlayScreen implements Screen {
 
     public boolean isGeneratingBoss() {
         return generatingBoss;
+    }
+
+
+
+    public boolean bossExsit = false;
+
+    public boolean isBossExsit() {
+        return bossExsit;
     }
 
     private boolean generatingBoss = false;
@@ -85,6 +104,7 @@ public class PlayScreen implements Screen {
         //HUD顯示 分數 時間 等級
         hud = new Hud(game.batch);
         dialog = new Dialog();
+        characterInformation = new CharacterInformation(game.batch, this);
 
         //加載地圖以及設定如何繪製地圖
         mapLoader = new TmxMapLoader();
@@ -184,6 +204,8 @@ public class PlayScreen implements Screen {
         world.step(1/60f,6,2);
 
         player.update(dt);
+
+        characterInformation.update(dt);
 
         Array<Enemy> enemyFound = new Array<Enemy>();
         for (Enemy enemy : creator.getGoombas()){
@@ -294,6 +316,7 @@ public class PlayScreen implements Screen {
             bossMusic.play();
             bossMusic.setVolume(0.1f);
             boss0 = new Boss0(this,4,0, player);
+            bossExsit = true;
             hud.worldTimer = 180;
 
         }
@@ -314,6 +337,8 @@ public class PlayScreen implements Screen {
             game.setScreen(new GameOverScreen(game,generatingBoss));
             dispose();
         }
+        characterInformation.stage.draw();
+        characterInformation.draw(this);
     }
 
     public void goToBoss(){

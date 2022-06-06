@@ -152,7 +152,7 @@ public class Character extends Sprite {
             die();
         }
         //56是地圖邊界
-        if(b2body.getPosition().x > 56 && fightBoss == false) {
+        if(b2body.getPosition().x > 2 && fightBoss == false) {
             transport();
             fightBoss = true;
             screen.BossGenerate();
@@ -271,6 +271,7 @@ public class Character extends Sprite {
 
     public void hit(){
         SoundManager.getInstance().soundStomp.setVolume(SoundManager.getInstance().soundStomp.play(),0.5f);
+        b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
         if (characterIsBig&&hitTime > 0.5){
             characterIsBig = false;
             timeToRedefineCharacter = true;
