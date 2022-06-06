@@ -3,6 +3,8 @@ package com.game.programdesign2finalproject.Sprites.Items;
 import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.PPM;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -17,8 +19,9 @@ import com.game.programdesign2finalproject.Sprites.Character;
 public class Mushroom extends Item {
     public Mushroom(PlayScreen screen, float x, float y) {
         super(screen, x, y);
-        setRegion(screen.getAtlas().findRegion("mushroom"), 0, 0, 16, 16);
+        setRegion(new TextureRegion( new Texture("mushroom.PNG"),0,0,16,16));
         velocity = new Vector2(0.7f, 0);
+
     }
 
     @Override

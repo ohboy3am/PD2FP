@@ -28,6 +28,7 @@ public class NewMoon extends Boss0Attack{
     private int newMoonWidth = 82;
     private int newMoonHeight = 64;
     private float stateTime ;
+    protected Animation<TextureRegion> boss0AttackAnimation;
 
     public NewMoon(PlayScreen screen, Boss0 boss, Character player) {
         super(screen, boss, player);
@@ -58,7 +59,8 @@ public class NewMoon extends Boss0Attack{
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = getPolygon((PolygonMapObject) newMoon.getLayers().get(1).getObjects().get(0));
         fdef.filter.categoryBits = ProgramDesign2FinalProject.BOSS_ATTACK_BIT;
-        fdef.filter.maskBits = ProgramDesign2FinalProject.CHARACTER_BIT;
+        fdef.filter.maskBits = ProgramDesign2FinalProject.CHARACTER_BIT|
+                ProgramDesign2FinalProject.FIREBALL_BIT;
         fdef.isSensor = true;
         fdef.shape = shape;
         fdef.friction = 0;
@@ -83,16 +85,18 @@ public class NewMoon extends Boss0Attack{
     }
 
     public void update(float dt){
+        super.update(dt);
         if (destroyed) return;
         stateTime += dt;
         setRegion( boss0AttackAnimation.getKeyFrame(stateTime,true));
         setCenter(b2body.getPosition().x +12/PPM, b2body.getPosition().y+12/PPM );
+        b2body.setLinearVelocity(velocity);
         if((stateTime > 3 || toDestroy) ) {
             world.destroyBody(b2body);
             destroyed = true;
         }
 
-        // b2body.setLinearVelocity(velocity);
+
 
 
         // if((fireRight && b2body.getLinearVelocity().x < 0) || (!fireRight && b2body.getLinearVelocity().x > 0))

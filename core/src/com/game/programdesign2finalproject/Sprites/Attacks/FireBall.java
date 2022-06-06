@@ -3,6 +3,7 @@ package com.game.programdesign2finalproject.Sprites.Attacks;
 import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.PPM;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -59,7 +60,7 @@ public class FireBall extends Sprite {
         velocity = new Vector2( mouseInWorld3D.x - x , mouseInWorld3D.y - y).setLength(4.f);
         frames = new Array<TextureRegion>();
         for(int i = 0; i < 4; i++){
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("fireball"), i * 8, 0, 8, 8));
+            frames.add(new TextureRegion( new Texture("fireball.PNG"),8*i,0,8,8));
         }
         fireAnimation = new Animation<TextureRegion>(0.2f, frames);
         frames.clear();
@@ -84,7 +85,8 @@ public class FireBall extends Sprite {
                 ProgramDesign2FinalProject.COIN_BIT |
                 ProgramDesign2FinalProject.BRICK_BIT |
                 ProgramDesign2FinalProject.ENEMY_BIT |
-                ProgramDesign2FinalProject.BOSS_BIT;
+                ProgramDesign2FinalProject.BOSS_BIT|
+                ProgramDesign2FinalProject.BOSS_ATTACK_BIT;
 
         fdef.shape = shape;
         fdef.restitution = 1;
