@@ -286,13 +286,15 @@ public class Character extends Sprite {
 
     public void die(){
         SoundManager.getInstance().bgm.stop();
+        SoundManager.getInstance().soundBoss.stop();
         SoundManager.getInstance().soundCharacterDie.setVolume(SoundManager.getInstance().soundCharacterDie.play(),0.2f);
         characterIsDead = true;
         Filter filter = new Filter();
         filter.maskBits = ProgramDesign2FinalProject.NOTHING_BIT;
         for (Fixture fixture : b2body.getFixtureList())
             fixture.setFilterData(filter);
-        b2body.applyLinearImpulse(new Vector2(0,4f), b2body.getWorldCenter(), true);
+        setBounds(getX(),getY(),16/PPM,32/PPM);
+        b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
     }
 
     public void fire(){

@@ -37,15 +37,23 @@ public class NewMoon extends Boss0Attack{
         for (int i = 0;i<3;i++){
             frames.add(new TextureRegion(atlas.findRegion("bossAttack1-1"),newMoonWidth*i,0, newMoonWidth, newMoonHeight));
         }
-        boss0AttackAnimation = new Animation(0.1f, frames);
+        boss0AttackAnimation = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
         defineBoss0Attack();
-        setRegion(boss0AttackAnimation.getKeyFrame(0));
-        setBounds(boss.b2body.getPosition().x, boss.b2body.getPosition().y, 30 / PPM, 30 / PPM);
+
         velocity.set(player.b2body.getPosition().x-boss.b2body.getPosition().x,player.b2body.getPosition().y-boss.b2body.getPosition().y);
         velocity.setLength(4.f);
         b2body.setLinearVelocity(velocity);
-
+        if (velocity.x>0){
+            setRegion(boss0AttackAnimation.getKeyFrame(0));
+        }
+        else {
+            b2body.setTransform(boss.b2body.getPosition().x, boss.b2body.getPosition().y+24/PPM,3.14f);
+            for (int i = 0; i<3;i++ )
+            boss0AttackAnimation.getKeyFrame(0.1f*i).flip(true,false);
+            setRegion(boss0AttackAnimation.getKeyFrame(0));
+        }
+        setBounds(boss.b2body.getPosition().x, boss.b2body.getPosition().y , 30 / PPM, 30 / PPM);
     }
 
     @Override
@@ -80,7 +88,7 @@ public class NewMoon extends Boss0Attack{
             vertices[i+1] = (polygon.getY() + vertices[i+1]) /PPM;
         }
 
-        polygonShape.set(vertices);
+        polygonShape.set(vertices,0,vertices.length);
         return polygonShape;
     }
 
@@ -89,7 +97,10 @@ public class NewMoon extends Boss0Attack{
         if (destroyed) return;
         stateTime += dt;
         setRegion( boss0AttackAnimation.getKeyFrame(stateTime,true));
-        setCenter(b2body.getPosition().x +12/PPM, b2body.getPosition().y+12/PPM );
+        if (b2body.getLinearVelocity().x > 0)
+            setCenter(b2body.getPosition().x +12/PPM, b2body.getPosition().y+12/PPM );
+        else
+            setCenter(b2body.getPosition().x - 12/PPM , b2body.getPosition().y- 12/PPM);
         b2body.setLinearVelocity(velocity);
         if((stateTime > 3 || toDestroy) ) {
             world.destroyBody(b2body);
