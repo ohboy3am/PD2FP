@@ -45,7 +45,7 @@ public class StartConversation implements Screen {
         music = SoundManager.getInstance().bgmInConv;
         music.setLooping(true);
         music.play();
-        music.setVolume(0.5f);
+        music.setVolume(0.3f);
 
     }
 

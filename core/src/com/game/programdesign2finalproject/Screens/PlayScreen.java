@@ -73,7 +73,7 @@ public class PlayScreen implements Screen {
     private boolean generatingBoss = false;
     public boolean IsPaused = false;
     private boolean PlayBossMusic = false;
-
+    private float GameClearCoundDown = 0;
 
 
     public PlayScreen(ProgramDesign2FinalProject game){
@@ -226,8 +226,17 @@ public class PlayScreen implements Screen {
 
         handleSpawningItems();
 
-        if (PlayBossMusic)
-        boss0.update(dt);
+        if (PlayBossMusic) {
+            boss0.update(dt);
+            if(boss0.bossIsDead == true) {
+                GameClearCoundDown += dt;
+                easeOut();
+                if(GameClearCoundDown >= 3) {
+                    bossMusic.stop();
+                    game.setScreen(new GameClearScreen(game));
+                }
+            }
+        }
 
         hud.update(dt);
 
@@ -251,7 +260,7 @@ public class PlayScreen implements Screen {
                 music.pause();
                 SoundManager.getInstance().soundStopTime.setVolume(SoundManager.getInstance().soundStopTime.play(),0.5f);
             }else {
-                music.play();
+                if(!generatingBoss) music.play();
                 IsPaused = false;
             }
         }
@@ -332,6 +341,9 @@ public class PlayScreen implements Screen {
     }
     public void BossGenerate() {
         generatingBoss = true;
+    }
+    public void easeOut() {
+        bossMusic.setVolume(0.1f*(4-GameClearCoundDown)/5);
     }
 
     @Override
