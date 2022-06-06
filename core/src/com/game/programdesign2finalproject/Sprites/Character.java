@@ -76,7 +76,7 @@ public class Character extends Sprite {
         jumpTime = 0;
         fireTime = 0;
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        hp = 6;
+        hp = 1;
 
         int characterHeight = 32;
         int characterWidth = 16;
@@ -129,6 +129,9 @@ public class Character extends Sprite {
 
     public void transport(){
         b2body.setTransform(bossRoomPosition,0);
+
+        if (hp<6)
+            hp = 6;
     }
 
     public void update(float dt){
@@ -153,7 +156,7 @@ public class Character extends Sprite {
         }
         //56是地圖邊界
         if(b2body.getPosition().x > 2 && fightBoss == false) {
-            transport();
+            screen.goToBoss();
             fightBoss = true;
             screen.BossGenerate();
 
@@ -271,12 +274,12 @@ public class Character extends Sprite {
 
     public void hit(){
         SoundManager.getInstance().soundStomp.setVolume(SoundManager.getInstance().soundStomp.play(),0.5f);
-        b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+        b2body.setLinearVelocity(b2body.getLinearVelocity().x,4f);
         if (characterIsBig&&hitTime > 0.5){
             characterIsBig = false;
             timeToRedefineCharacter = true;
             setBounds(getX(),getY(),16/PPM,32/PPM);
-            SoundManager.getInstance().soundPowerDown.setVolume(SoundManager.getInstance().soundPowerDown.play(),0.5f);;
+            SoundManager.getInstance().soundPowerDown.setVolume(SoundManager.getInstance().soundPowerDown.play(),0.5f);
             hitTime = 0;
         }
         else if (hitTime > 0.5){

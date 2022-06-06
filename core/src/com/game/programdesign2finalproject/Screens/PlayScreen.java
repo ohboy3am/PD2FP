@@ -346,6 +346,7 @@ public class PlayScreen implements Screen {
         if (player != null) {
             player.transport();
         }
+
     }
 
     public boolean gameOver(){

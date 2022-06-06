@@ -1,9 +1,7 @@
 package com.game.programdesign2finalproject.Scenes;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -46,8 +44,9 @@ public class CharacterInformation implements Disposable {
     private int hpWidth = 360;
     private int hpHeight = 36;
     private int hpWidthC = hpWidth;
+    private int healthbarPositionX = 45;
+    private int healthbarPositionY = 5;
 
-    private int hit = 1;
     private float regDoge = 0;
     BitmapFont font;
 
@@ -90,14 +89,14 @@ public class CharacterInformation implements Disposable {
         // doge头像
         tHead = new Texture(Gdx.files.internal("bahamuthead.png"));
         spriteDoge = new Sprite(new TextureRegion(tHead, 0, 0, 244, 242));
-        spriteDoge.setBounds(20, 20, 200, 200);
+        spriteDoge.setBounds(20, 20, 100, 100);
 
         //把彩条图转为可截取的TextureRegion，默认为从右向左截取；
         region = new TextureRegion(textureFu, 0, 0, hpWidth, hpHeight);
 
         // sprite有更强的图形控制，为了把彩条变红色
         sprite = new Sprite(region);
-        sprite.setBounds(80, 20, 2000, hpHeight);
+        sprite.setBounds(healthbarPositionX, healthbarPositionY, 360*1.5f, 18);
 
         //字体
         font = new BitmapFont();
@@ -145,6 +144,7 @@ public class CharacterInformation implements Disposable {
     }
 
     public void draw(PlayScreen screen) {
+        batch.setProjectionMatrix(this.stage.getCamera().combined);
         batch.begin();
         font.draw(batch, " Life : " + (int) playerHP , 260, 800);
         if (!screen.isBossExsit()){
@@ -154,20 +154,20 @@ public class CharacterInformation implements Disposable {
 
 
         // textureEp 空血条不需要动
-        batch.draw(textureEp, 80, 20, 360*5, 36);
+        batch.draw(textureEp, healthbarPositionX, healthbarPositionY, 360*1.5f, 18);
 
         //绘制红条  = 动画减血
         sprite.setColor(1, 0, 0, 0.4f);
-        sprite.setSize(hpWidth*5, 36);
+        sprite.setSize(hpWidth*1.5f, 18);
         sprite.setRegionWidth(hpWidth);
         sprite.draw(batch);
 
         // 绘制彩色条 = 瞬间减血
         region.setRegionWidth(hpWidthC);
-        batch.draw(region, 80, 20, hpWidthC*5, 36);
+        batch.draw(region, healthbarPositionX, healthbarPositionY, hpWidthC*1.5f, 18);
 
         // 画静态头像
-        batch.draw(tHead, 20, 20, 200, 200);
+        batch.draw(tHead, 10, 10, 100, 100);
         // 通过修改alpha值达到动画效果
         spriteDoge.setColor(1, 0, 0, regDoge);
         // 画动画头像
