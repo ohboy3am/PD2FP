@@ -31,6 +31,7 @@ public class SoundManager {
     public Sound[] soundShout = new Sound[4];
     public Sound soundDragonDie;
     public Sound soundNewMoon;
+    public Sound soundSpirit;
 
 
     private static SoundManager singleInstance = null;
@@ -59,6 +60,7 @@ public class SoundManager {
         soundShout[3] =  Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_SHOUT04));
         soundDragonDie = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_DRAGONDIE));
         soundNewMoon = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_NEWMOON));
+        soundSpirit = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_SPIRIT));
 
 
 
