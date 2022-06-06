@@ -1,5 +1,7 @@
 package com.game.programdesign2finalproject.Sounds;
 
+import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.SOUND_PATH_DRAGON;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -22,6 +24,7 @@ public class SoundManager {
     public Sound soundWryyy;
     public Sound soundCharacterDie;
     public Sound soundStopTime;
+    public Sound soundDragonYell;
 
     private static SoundManager singleInstance = null;
 
@@ -38,6 +41,7 @@ public class SoundManager {
         soundWryyy = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_WRYYY));
         soundCharacterDie = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_CHARACTERDIE));
         soundStopTime = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_TheWorld));
+        soundDragonYell = Gdx.audio.newSound(Gdx.files.internal(SOUND_PATH_DRAGON));
     }
 
     public static SoundManager getInstance(){

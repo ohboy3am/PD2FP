@@ -77,17 +77,17 @@ public class StartConversation implements Screen {
     //Conversation Start; dots verified.
     String sentence0 = "";
     String sentence1 = "I'm an ordinary freshman in NCKU_CSIE.";
-    String sentence2 = "I live a stable life. Such trival things as coding, writing exercises,\n having lunch with friends consist a day of mine.";
+    String sentence2 = "I live a stable life. Such trivial things as coding, writing exercises,\n having lunch with friends consist a day of mine.";
     String sentence3 = "However, a dream makes my after life much more exciting (not wet dream).";
     String sentence4 = "In the dream, an adorable pretty girl talked with me.";
     String sentence5 = "After made a brief self introduction, she appeared depressed.";
-    String sentence6 = "She was the princess of the D.R.M. Kindom in Isekai,\n as well as the most powerful magician in the kindom.";
-    String sentence7 = "Dangerous and broken, her kindom was invaded by the demon corps.";
-    String sentence8 = "Under such critical circumstance that was going to be out of control,\n she spent planty of energy casting a rare spell.";
-    String sentence9 = "The consequence of the spell was that she could summon a hero to save the kindom.";
+    String sentence6 = "She was the princess of the D.R.M. Kingdom in Isekai,\n as well as the most powerful magician in the kingdom.";
+    String sentence7 = "Dangerous and broken, her kingdom was invaded by the demon corps.";
+    String sentence8 = "Under such critical circumstance that was going to be out of control,\n she spent plenty of energy casting a rare spell.";
+    String sentence9 = "The consequence of the spell was that she could summon a hero to save the kingdom.";
     String sentence10 = "I was the chosen person.";
     String sentence11 = "She asked me if I wanted to respond the spell.";
-    String sentence12 = "I felt bored with college daily life,\n so I immediately promised her to help saving her kindom without any consideration.";
+    String sentence12 = "I felt bored with college daily life,\n so I immediately promised her to help saving her kingdom without any consideration.";
     String sentence13 = "However, the princess was highly fatigue and left little magic power\n due to defence against the demon corps.";
     String sentence14 = "She, therefore, failed to complete the whole process of spell casting.";
     String sentence15 = "Namely, she was disable to transport me to her world directly.";
