@@ -3,7 +3,9 @@ package com.game.programdesign2finalproject.Sprites;
 import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.PPM;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -15,16 +17,22 @@ import com.badlogic.gdx.utils.Array;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
 import com.game.programdesign2finalproject.Sounds.SoundManager;
+import com.game.programdesign2finalproject.Sprites.BossAttacks.Boss0Attack;
 import com.game.programdesign2finalproject.Sprites.BossAttacks.NewMoon;
+import com.game.programdesign2finalproject.Sprites.BossAttacks.TrackingBomb;
 
 public class Boss0 extends Boss{
 
     public enum State{ATTACK1, ATTACK2, MOVING1, MOVING2, DEAD}
-    private TextureRegion bossStand;
+    private TextureAtlas atlas;
+    private Animation<TextureRegion> bossFly;
     private  Character player;
     private float stateTime;
     private float firstAttackTime;
-    private Array<NewMoon> newMoons;
+    private float secondAttackTime;
+    private Array<Boss0Attack> attacks;
+    private boolean runningRight;
+    private boolean phase2;
 
     public Boss0(PlayScreen screen, float x, float y, Character player){
         super(screen, x, y, player);
@@ -32,42 +40,49 @@ public class Boss0 extends Boss{
         this.screen = screen;
         this.world = screen.getWorld();
         firstAttackTime = 0;
-        newMoons = new Array<NewMoon>();
+        secondAttackTime = 0;
+        stateTime = 0;
+        attacks = new Array<Boss0Attack>();
         Array<TextureRegion> frames = new Array<TextureRegion>();
         hp = 20;
+        runningRight = false;
 
-        int dioHeight = 80;
-        int dioWidth = 60;
-        bossStand= new TextureRegion( new Texture("dio.png"));
-        setBounds(1,1, dioWidth / PPM, dioHeight / PPM);
+        int bossWidth = 180;
+        int bossHeight = 160;
+
+        atlas = new TextureAtlas("bahamut_flying.pack");
+
+        for (int i = 0;i<4;i++){
+            frames.add(new TextureRegion(atlas.findRegion("VVkF3FI-0"),bossWidth*i,0, bossWidth, bossHeight));
+        }
+        bossFly = new Animation(0.1f, frames);
+        frames.clear();
+        setBounds(1,1, bossWidth / PPM, bossHeight / PPM);
         setCenter(b2body.getPosition().x,b2body.getPosition().y+12/PPM);
-        setRegion(bossStand);
+        setRegion( bossFly.getKeyFrame(0,true));
 
     }
 
     public void firstAttack(){
 
-
-        if (firstAttackTime > 1){
-                newMoons.add(new NewMoon(screen, this,player));
-                firstAttackTime = 0;
-            }
-
-
-
+            attacks.add(new NewMoon(screen, this,player));
+            firstAttackTime = 0;
 
     }
 
     public void secondAttack(){
-
+        if (secondAttackTime > 1){
+            attacks.add(new TrackingBomb(screen, this,player));
+            secondAttackTime = 0;
+        }
     }
 
     public void draw(Batch batch){
         if (destroyed)return;
         super.draw(batch);
-        for(NewMoon moon : newMoons){
-            if (moon.isDestroyed()) continue;
-            moon.draw(batch);
+        for(Boss0Attack attack : attacks){
+            if (attack.isDestroyed()) continue;
+            attack.draw(batch);
         }
 
     }
@@ -82,7 +97,7 @@ public class Boss0 extends Boss{
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(6 / PPM);
+        shape.setRadius(30 / PPM);
         fdef.filter.categoryBits = ProgramDesign2FinalProject.BOSS_BIT;
         fdef.filter.maskBits = ProgramDesign2FinalProject.CHARACTER_BIT|
         ProgramDesign2FinalProject.FIREBALL_BIT;
@@ -90,8 +105,6 @@ public class Boss0 extends Boss{
 
         fdef.shape = shape;
         fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData(this);
-        shape.setPosition(new Vector2(0,-14/ PPM));
         b2body.createFixture(fdef).setUserData(this);
 
         shape.dispose();
@@ -118,26 +131,50 @@ public class Boss0 extends Boss{
     public void update(float dt) {
         super.update(dt);
         if (destroyed)return;
+        stateTime += dt;
         firstAttackTime += dt;
+        secondAttackTime +=dt;
         velocity.set(player.b2body.getPosition().x-b2body.getPosition().x,player.b2body.getPosition().y-b2body.getPosition().y);
         b2body.setLinearVelocity(velocity);
-        setCenter(b2body.getPosition().x , b2body.getPosition().y+12/PPM);
+
 
         if (firstAttackTime > 1){
             firstAttack();
         }
 
-        Array<NewMoon> newMoonFound = new Array<NewMoon>();
-        for(NewMoon moon : newMoons) {
-            if(moon.isDestroyed()){
-                newMoonFound.add(moon);
+        if (hp<10 && !phase2){
+            SoundManager.getInstance().soundWryyy.setVolume(SoundManager.getInstance().soundWryyy.play(),0.5f);
+            hp += 5;
+            phase2 = true;
+        }
+
+        if (secondAttackTime > 5 && phase2){
+            secondAttack();
+        }
+
+        if((b2body.getLinearVelocity().x < 0 || !runningRight) && !bossFly.getKeyFrame(stateTime,true).isFlipX()) {
+            bossFly.getKeyFrame(stateTime,true).flip(true, false);
+            runningRight = false;
+        }
+        else if((b2body.getLinearVelocity().x > 0 || runningRight) && bossFly.getKeyFrame(stateTime,true).isFlipX()){
+            bossFly.getKeyFrame(stateTime,true).flip(true,false);
+            runningRight = true;
+        }
+
+        setRegion( bossFly.getKeyFrame(stateTime,true));
+        setCenter(b2body.getPosition().x , b2body.getPosition().y+12/PPM);
+
+        Array<Boss0Attack> newAttackFound = new Array<Boss0Attack>();
+        for(Boss0Attack attack : attacks) {
+            if(attack.isDestroyed()){
+                newAttackFound.add(attack);
                 continue;
             }
-            if (!moon.isDestroyed())
-                moon.update(dt);
+            if (!attack.isDestroyed())
+                attack.update(dt);
 
         }
-        newMoons.removeAll(newMoonFound,true);
+        attacks.removeAll(newAttackFound,true);
 
         if (hp<=0){
             die();

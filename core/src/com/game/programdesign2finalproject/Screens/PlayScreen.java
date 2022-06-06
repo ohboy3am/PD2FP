@@ -41,7 +41,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class PlayScreen implements Screen {
     //遊戲的reference
     private ProgramDesign2FinalProject game;
-    private TextureAtlas atlas;
     public OrthographicCamera gamecam;
     public Viewport gamePort;
     private Hud hud;
@@ -78,7 +77,6 @@ public class PlayScreen implements Screen {
 
 
     public PlayScreen(ProgramDesign2FinalProject game){
-        atlas = new TextureAtlas("NEW_Character_and_Enemies.pack");
         this.game = game;
         //遊戲中的視角
         gamecam = new OrthographicCamera();
@@ -149,9 +147,6 @@ public class PlayScreen implements Screen {
 
     }
 
-    public TextureAtlas getAtlas(){
-        return atlas;
-    }
 
     @Override
     public void show() {

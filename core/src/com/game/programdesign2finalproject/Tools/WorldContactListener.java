@@ -9,6 +9,9 @@ import com.game.programdesign2finalproject.Sounds.SoundManager;
 import com.game.programdesign2finalproject.Sprites.Attacks.FireBall;
 import com.game.programdesign2finalproject.Sprites.Boss;
 import com.game.programdesign2finalproject.Sprites.Boss0;
+import com.game.programdesign2finalproject.Sprites.BossAttacks.Boss0Attack;
+import com.game.programdesign2finalproject.Sprites.BossAttacks.NewMoon;
+import com.game.programdesign2finalproject.Sprites.BossAttacks.TrackingBomb;
 import com.game.programdesign2finalproject.Sprites.Items.Item;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
 import com.game.programdesign2finalproject.Sprites.Character;
@@ -125,10 +128,28 @@ public class WorldContactListener implements ContactListener {
 
             //主角被boss打到
             case ProgramDesign2FinalProject.BOSS_ATTACK_BIT | ProgramDesign2FinalProject.CHARACTER_BIT:
-                if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.CHARACTER_BIT)
+                if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.CHARACTER_BIT){
                     ((Character)fixA.getUserData()).hit();
-                else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.CHARACTER_BIT)
-                    ((Character)fixB.getUserData()).hit();
+                    if (fixA.getUserData() instanceof TrackingBomb)
+                        ((Character)fixA.getUserData()).hit();
+                    ((Boss0Attack)fixB.getUserData()).destroy();
+                }
+
+                else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.CHARACTER_BIT) {
+                    ((Character) fixB.getUserData()).hit();
+                    if (fixB.getUserData() instanceof TrackingBomb)
+                        ((Character)fixB.getUserData()).hit();
+                    ((Boss0Attack) fixA.getUserData()).destroy();
+                }
+                break;
+
+            case ProgramDesign2FinalProject.BOSS_ATTACK_BIT | ProgramDesign2FinalProject.FIREBALL_BIT:
+                if(fixA.getFilterData().categoryBits == ProgramDesign2FinalProject.BOSS_ATTACK_BIT)
+                    if (fixA.getUserData() instanceof NewMoon)
+                    ((Boss0Attack)fixA.getUserData()).destroy();
+                else if(fixB.getFilterData().categoryBits == ProgramDesign2FinalProject.BOSS_ATTACK_BIT)
+                    if (fixB.getUserData() instanceof NewMoon)
+                    ((Boss0Attack)fixB.getUserData()).destroy();
                 break;
             default:
                 break;

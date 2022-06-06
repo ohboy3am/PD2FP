@@ -16,7 +16,6 @@ public abstract class Boss0Attack extends Sprite {
     protected PlayScreen screen;
     protected World world;
     protected Array<TextureRegion> frames;
-    protected Animation<TextureRegion> boss0AttackAnimation;
     protected Boss0 boss;
     protected Character player;
     protected Vector2 velocity;
@@ -48,8 +47,7 @@ public abstract class Boss0Attack extends Sprite {
         if(!toDestroy) return;
         if (destroyed) return;
 
-        world.destroyBody(b2body);
-        destroyed = true;
+        destroy();
 
     }
 
