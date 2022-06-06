@@ -93,10 +93,10 @@ public class TrackingBomb extends Boss0Attack{
         else {
             setRegion( boss0AttackAnimation.getKeyFrame(stateTime,true));
             velocity.set(player.b2body.getPosition().x-b2body.getPosition().x,player.b2body.getPosition().y-b2body.getPosition().y);
-            velocity.setLength(2.f);
+            velocity.setLength(1.5f);
         }
         b2body.setLinearVelocity(velocity);
-        if((stateTime > 5 || toDestroy) ) {
+        if((stateTime > 4 || toDestroy) ) {
             stateTime = 0;
             explode = true;
         }

@@ -32,6 +32,11 @@ public class Boss0 extends Boss{
     private float secondAttackTime;
     private Array<Boss0Attack> attacks;
     private boolean runningRight;
+
+    public boolean isPhase2() {
+        return phase2;
+    }
+
     private boolean phase2;
     public boolean bossIsDead = false;
 
@@ -150,8 +155,6 @@ public class Boss0 extends Boss{
 
         if (firstAttackTime > 1.5){
             firstAttack();
-            if (phase2)
-                firstAttack();
         }
 
         if (hp<10 && !phase2){

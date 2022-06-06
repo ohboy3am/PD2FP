@@ -43,7 +43,13 @@ public class NewMoon extends Boss0Attack{
         defineBoss0Attack();
 
         velocity.set(player.b2body.getPosition().x-boss.b2body.getPosition().x,player.b2body.getPosition().y-boss.b2body.getPosition().y);
-        velocity.setLength(4.f);
+
+        if (!boss.isPhase2()){
+            velocity.setLength(4.f);
+        }
+        else {
+            velocity.setLength(8.f);
+        }
         b2body.setLinearVelocity(velocity);
         if (velocity.x>0){
             setRegion(boss0AttackAnimation.getKeyFrame(0));
