@@ -146,7 +146,7 @@ public class CharacterInformation implements Disposable {
     public void draw(PlayScreen screen) {
         batch.setProjectionMatrix(this.stage.getCamera().combined);
         batch.begin();
-        font.draw(batch, " Life : " + (int) playerHP , 260, 800);
+        font.draw(batch, " Life : " + (int) playerHP , 80, 250);
         if (!screen.isBossExsit()){
             batch.end();
             return;
@@ -174,8 +174,8 @@ public class CharacterInformation implements Disposable {
         spriteDoge.draw(batch);
 
         // 数字血量
-        font.draw(batch, (int) bossHP*100 + " / 2000", 150, 80);
-        font.draw(batch, "HP", 40, 80);
+        font.draw(batch, (int) bossHP*100 + " / 2000", 150, 40);
+        font.draw(batch, "HP", 80, 40);
 
         batch.end();
 
