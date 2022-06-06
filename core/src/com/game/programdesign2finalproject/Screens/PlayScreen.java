@@ -23,7 +23,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.programdesign2finalproject.Scenes.Dialog;
 
 import com.game.programdesign2finalproject.Sprites.Boss0;
-import com.game.programdesign2finalproject.Sprites.Dio;
 import com.game.programdesign2finalproject.Sprites.Goomba;
 import com.game.programdesign2finalproject.Sprites.Items.Item;
 import com.game.programdesign2finalproject.Sprites.Items.ItemDef;
@@ -42,9 +41,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class PlayScreen implements Screen {
     //遊戲的reference
     private ProgramDesign2FinalProject game;
-    private TextureAtlas atlas;
-    private OrthographicCamera gamecam;
-    private Viewport gamePort;
+    public OrthographicCamera gamecam;
+    public Viewport gamePort;
     private Hud hud;
     public Dialog dialog;
 
@@ -60,18 +58,25 @@ public class PlayScreen implements Screen {
 
     //sprites
     private Character player;
-    private Dio dio;
     private Boss0 boss0;
 
     private Music music;
+    private Music bossMusic;
 
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
-    private boolean IsPaused = false;
+
+    public boolean isGeneratingBoss() {
+        return generatingBoss;
+    }
+
+    private boolean generatingBoss = false;
+    public boolean IsPaused = false;
+    private boolean PlayBossMusic = false;
+    private float GameClearCoundDown = 0;
+
 
     public PlayScreen(ProgramDesign2FinalProject game){
-
-        atlas = new TextureAtlas("NEW_Character_and_Enemies.pack");
         this.game = game;
         //遊戲中的視角
         gamecam = new OrthographicCamera();
@@ -84,6 +89,7 @@ public class PlayScreen implements Screen {
         //加載地圖以及設定如何繪製地圖
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("map1-1.tmx");
+
         renderer = new OrthogonalTiledMapRenderer(map,1 / PPM);
 
         //初始化gamecam
@@ -100,8 +106,7 @@ public class PlayScreen implements Screen {
 
         //初始化角色
         player = new Character(this);
-        dio = new Dio(this);
-        boss0 = new Boss0(this,4,0, player);
+
 
         world.setContactListener(new WorldContactListener());
 
@@ -110,12 +115,17 @@ public class PlayScreen implements Screen {
         music.setLooping(true);
         music.play();
         music.setVolume(0.1f);
+        bossMusic = SoundManager.getInstance().soundBoss;
+        bossMusic.setLooping(true);
 
 
         items = new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
 
 
+    }
+    public OrthographicCamera getGamecam() {
+        return gamecam;
     }
 
     public void spawnItem(ItemDef idef){
@@ -137,9 +147,6 @@ public class PlayScreen implements Screen {
 
     }
 
-    public TextureAtlas getAtlas(){
-        return atlas;
-    }
 
     @Override
     public void show() {
@@ -178,28 +185,31 @@ public class PlayScreen implements Screen {
 
         player.update(dt);
 
-        //Array<Enemy> enemyFound = new Array<Enemy>();
-        //for (Enemy enemy : creator.getGoombas()){
-//
-        //    if (enemy instanceof Goomba){
-         //       if (enemy.isVanished()) {
-          //          enemyFound.add(enemy);
-        //           continue;
-          //      }
-          //  }
-
-          //      enemy.update(dt);
-
-          //      if (enemy.isDestroyed()) continue;
-
-               // if (enemy.getX() < player.getX() + 300 / PPM)
-                 //   enemy.b2body.setActive(true);
+        Array<Enemy> enemyFound = new Array<Enemy>();
+        for (Enemy enemy : creator.getGoombas()){
 
 
-            //300個像素內敵人醒來
+            if (enemy instanceof Goomba){
+                if (enemy.isVanished()) {
+                    enemyFound.add(enemy);
+                   continue;
+                }
+            }
 
-        //}
-        //creator.getGoombas().removeAll(enemyFound, true);
+                enemy.update(dt);
+
+                if (enemy.isDestroyed()) continue;
+
+                if (enemy.getX() < player.getX() + 300 / PPM)
+                    enemy.b2body.setActive(true);
+
+                if (enemy.getX() < player.getX() + 300 / PPM)
+                    enemy.b2body.setActive(true);
+
+        //300個像素內敵人醒來
+
+        }
+        creator.getGoombas().removeAll(enemyFound, true);
 
         Array<Item> itemFound = new Array<Item>();
         for (Item item :items){
@@ -216,7 +226,17 @@ public class PlayScreen implements Screen {
 
         handleSpawningItems();
 
-        boss0.update(dt);
+        if (PlayBossMusic) {
+            boss0.update(dt);
+            if(boss0.bossIsDead == true) {
+                GameClearCoundDown += dt;
+                easeOut();
+                if(GameClearCoundDown >= 3) {
+                    bossMusic.stop();
+                    game.setScreen(new GameClearScreen(game));
+                }
+            }
+        }
 
         hud.update(dt);
 
@@ -237,8 +257,10 @@ public class PlayScreen implements Screen {
         if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             if(IsPaused == false) {
                 IsPaused = true;
-                SoundManager.getInstance().soundStopTime.play();
+                music.pause();
+                SoundManager.getInstance().soundStopTime.setVolume(SoundManager.getInstance().soundStopTime.play(),0.5f);
             }else {
+                if(!generatingBoss) music.play();
                 IsPaused = false;
             }
         }
@@ -247,7 +269,6 @@ public class PlayScreen implements Screen {
         //清理螢幕
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         //繪製地圖
         renderer.render();
         //畫出debug線
@@ -256,35 +277,55 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         player.draw(game.batch);
-        //for (Enemy enemy : creator.getGoombas()){
-        //    if (enemy.isDestroyed()) continue;
-        //    enemy.draw(game.batch);
-        //}
-        //for (Item item :items){
-        //    if (item.isDestroyed()) continue;
-        //    item.draw(game.batch);
-        //}
+        for (Enemy enemy : creator.getGoombas()){
+            if (enemy.isDestroyed()) continue;
+            enemy.draw(game.batch);
+        }
+        for (Item item :items){
+            if (item.isDestroyed()) continue;
+            item.draw(game.batch);
+        }
 
-        dio.draw(game.batch);
-        boss0.draw(game.batch);
+
+        if(generatingBoss && !PlayBossMusic) {
+
+            music.stop();
+            PlayBossMusic = true;
+            bossMusic.play();
+            bossMusic.setVolume(0.1f);
+            boss0 = new Boss0(this,4,0, player);
+            hud.worldTimer = 180;
+
+        }
+
+        if (generatingBoss) {
+            boss0.draw(game.batch);
+        }
 
         game.batch.end();
 
         //畫出Hud camera看到的東西
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-        dialog.draw();
+        dialog.draw(this);
         if (gameOver()){
-            game.setScreen(new GameOverScreen(game));
+            music.stop();
+            bossMusic.stop();
+            game.setScreen(new GameOverScreen(game,generatingBoss));
             dispose();
+        }
+    }
+
+    public void goToBoss(){
+        if (player != null) {
+            player.transport();
         }
     }
 
     public boolean gameOver(){
         if (player.currentState == Character.State.DEAD && player.getStateTimer() > 3){
             return true;
-        }
-        else return false;
+        }else return false;
     }
     @Override
     public void resize(int width, int height) {
@@ -297,6 +338,12 @@ public class PlayScreen implements Screen {
     }
     public World getWorld(){
         return world;
+    }
+    public void BossGenerate() {
+        generatingBoss = true;
+    }
+    public void easeOut() {
+        bossMusic.setVolume(0.1f*(4-GameClearCoundDown)/5);
     }
 
     @Override
@@ -320,5 +367,9 @@ public class PlayScreen implements Screen {
         renderer.dispose();
         world.dispose();
         b2dr.dispose();
+    }
+
+    public Hud getHud() {
+        return hud;
     }
 }

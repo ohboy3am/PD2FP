@@ -12,9 +12,12 @@ public abstract class Boss extends Sprite {
     protected float stateTime;
     public Body b2body;
     public Vector2 velocity;
-    protected boolean setToDestroy;
+    protected boolean toDestroy;
     protected boolean destroyed;
-
+    protected int hp;
+    public int getHp() {
+        return hp;
+    }
 
     protected boolean vanished;
 
@@ -25,13 +28,23 @@ public abstract class Boss extends Sprite {
         setPosition(x, y);
         defineBoss();
         velocity = new Vector2(-1,0);
-        setToDestroy = false;
+        toDestroy = false;
         destroyed = false;
         //b2body.setActive(false);
     }
 
     protected abstract void defineBoss();
-    public abstract  void update(float dt);
+    public abstract void hit();
+    public void update(float dt){
+        if(!toDestroy) return;
+        if (destroyed) return;
+
+        world.destroyBody(b2body);
+        destroyed = true;
+
+
+
+    }
 
     public void reverseVelocity(boolean x, boolean y){
         if (x)

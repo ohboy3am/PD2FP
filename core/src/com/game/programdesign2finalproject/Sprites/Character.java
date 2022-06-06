@@ -53,8 +53,15 @@ public class Character extends Sprite {
     private PlayScreen screen;
     public int jumpTime;
     private float fireTime;
-
+    private boolean fightBoss = false;
     private Array<FireBall> fireBalls;
+    private Vector2 bossRoomPosition= new Vector2(61,1);
+
+
+    private int hp;
+    public int getHp() {
+        return hp;
+    }
 
 
     public Character(PlayScreen screen){
@@ -69,6 +76,7 @@ public class Character extends Sprite {
         jumpTime = 0;
         fireTime = 0;
         Array<TextureRegion> frames = new Array<TextureRegion>();
+        hp = 6;
 
         int characterHeight = 32;
         int characterWidth = 16;
@@ -92,10 +100,8 @@ public class Character extends Sprite {
         bigCharacterRun = new Animation(0.1f, frames);
         frames.clear();
 
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),15 * bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),0,0, bigCharacterWidth, bigCharacterHeight));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),15 * bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),0,0, bigCharacterWidth, bigCharacterHeight));
+        frames.add(new TextureRegion( new Texture("running_animation/1.PNG")));
+        frames.add(new TextureRegion(atlas2.findRegion("02"),  0,0, jotaroWidth, jotaroHeight));
         growCharacter = new Animation(0.2f, frames);
         frames.clear();
 
@@ -111,7 +117,7 @@ public class Character extends Sprite {
         //bigCharacterStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"),  0,0, bigCharacterWidth, bigCharacterHeight);
         bigCharacterStand = new TextureRegion(atlas2.findRegion("02"),  0,0, jotaroWidth, jotaroHeight);
 
-        characterDead = new TextureRegion(screen.getAtlas().findRegion("little_mario"),  96,0, 16, 16);
+        characterDead = new TextureRegion( new Texture("slime.PNG"),32,0,16,16);
 
         defineCharacter();
         setBounds(1,1, characterWidth / PPM, characterHeight / PPM);
@@ -119,6 +125,10 @@ public class Character extends Sprite {
         setRegion(characterStand);
 
         fireBalls = new Array<FireBall>();
+    }
+
+    public void transport(){
+        b2body.setTransform(bossRoomPosition,0);
     }
 
     public void update(float dt){
@@ -138,13 +148,27 @@ public class Character extends Sprite {
         if (timeToRedefineCharacter){
             redefineCharacter();
         }
-
         if (b2body.getPosition().y < -48/PPM && !characterIsDead){
             die();
         }
+        //56是地圖邊界
+        if(b2body.getPosition().x > 56 && fightBoss == false) {
+            transport();
+            fightBoss = true;
+            screen.BossGenerate();
 
+        }
         hitTime += dt;
         fireTime += dt;
+
+        if (hp<=0)
+        {
+            die();
+        }
+
+        if (screen.getHud().isTimeUp() && !isDead()) {
+            die();
+        }
 
         Array<FireBall> fireBallFound = new Array<FireBall>();
         for(FireBall ball : fireBalls) {
@@ -159,6 +183,7 @@ public class Character extends Sprite {
         fireBalls.removeAll(fireBallFound,true);
 
     }
+
 
     public TextureRegion getFrame(float dt){
         currentState = getState();
@@ -180,7 +205,7 @@ public class Character extends Sprite {
                 region = characterIsBig ? (TextureRegion) bigCharacterRun.getKeyFrame(stateTimer,true) : (TextureRegion) characterRun.getKeyFrame(stateTimer,true);
                 break;
             case FALLING:
-                region = (TextureRegion) characterJump;
+                region = characterIsBig ? bigCharacterStand:(TextureRegion) characterJump;
                 break;
             case STANDING:
             default:
@@ -225,6 +250,7 @@ public class Character extends Sprite {
     }
 
     public void grow(){
+        hitTime = 0;
         runGrowAnimation = true;
         characterIsBig = true;
         timeToDefineBigCharacter = true;
@@ -244,28 +270,31 @@ public class Character extends Sprite {
     }
 
     public void hit(){
-        if (characterIsBig){
+        SoundManager.getInstance().soundStomp.setVolume(SoundManager.getInstance().soundStomp.play(),0.5f);
+        if (characterIsBig&&hitTime > 0.5){
             characterIsBig = false;
             timeToRedefineCharacter = true;
             setBounds(getX(),getY(),16/PPM,32/PPM);
-            SoundManager.getInstance().soundPowerDown.play();
+            SoundManager.getInstance().soundPowerDown.setVolume(SoundManager.getInstance().soundPowerDown.play(),0.5f);;
             hitTime = 0;
         }
-        else {
-            if (hitTime > 0.5)
-                die();
+        else if (hitTime > 0.5){
+
+                hp--;
         }
     }
 
     public void die(){
         SoundManager.getInstance().bgm.stop();
-        SoundManager.getInstance().soundCharacterDie.play();
+        SoundManager.getInstance().soundBoss.stop();
+        SoundManager.getInstance().soundCharacterDie.setVolume(SoundManager.getInstance().soundCharacterDie.play(),0.05f);
         characterIsDead = true;
         Filter filter = new Filter();
         filter.maskBits = ProgramDesign2FinalProject.NOTHING_BIT;
         for (Fixture fixture : b2body.getFixtureList())
             fixture.setFilterData(filter);
-        b2body.applyLinearImpulse(new Vector2(0,4f), b2body.getWorldCenter(), true);
+        setBounds(getX(),getY(),16/PPM,32/PPM);
+        b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
     }
 
     public void fire(){
@@ -289,14 +318,7 @@ public class Character extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / PPM);
         fdef.filter.categoryBits = ProgramDesign2FinalProject.CHARACTER_BIT;
-        fdef.filter.maskBits = ProgramDesign2FinalProject.GROUND_BIT |
-                ProgramDesign2FinalProject.COIN_BIT |
-                ProgramDesign2FinalProject.BRICK_BIT|
-                ProgramDesign2FinalProject.ENEMY_BIT|
-                ProgramDesign2FinalProject.OBJECT_BIT|
-                ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
-                ProgramDesign2FinalProject.ITEM_BIT|
-                ProgramDesign2FinalProject.NPC_BIT;
+        fdef.filter.maskBits = mask();
 
 
         fdef.shape = shape;
@@ -328,14 +350,7 @@ public class Character extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / PPM);
         fdef.filter.categoryBits = ProgramDesign2FinalProject.CHARACTER_BIT;
-        fdef.filter.maskBits = ProgramDesign2FinalProject.GROUND_BIT |
-                ProgramDesign2FinalProject.COIN_BIT |
-                ProgramDesign2FinalProject.BRICK_BIT|
-                ProgramDesign2FinalProject.ENEMY_BIT|
-                ProgramDesign2FinalProject.OBJECT_BIT|
-                ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
-                ProgramDesign2FinalProject.ITEM_BIT|
-                ProgramDesign2FinalProject.NPC_BIT;
+        fdef.filter.maskBits = mask();
 
 
         fdef.shape = shape;
@@ -366,14 +381,7 @@ public class Character extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / PPM);
         fdef.filter.categoryBits = ProgramDesign2FinalProject.CHARACTER_BIT;
-        fdef.filter.maskBits = ProgramDesign2FinalProject.GROUND_BIT |
-                ProgramDesign2FinalProject.COIN_BIT |
-                ProgramDesign2FinalProject.BRICK_BIT|
-                ProgramDesign2FinalProject.ENEMY_BIT|
-                ProgramDesign2FinalProject.OBJECT_BIT|
-                ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
-                ProgramDesign2FinalProject.ITEM_BIT|
-                ProgramDesign2FinalProject.NPC_BIT;
+        fdef.filter.maskBits = mask();
 
 
         fdef.shape = shape;
@@ -389,6 +397,7 @@ public class Character extends Sprite {
         fdef.isSensor = true;
 
         b2body.createFixture(fdef).setUserData(this);
+        shape.dispose();
 
 
     }
@@ -401,6 +410,21 @@ public class Character extends Sprite {
             ball.draw(batch);
         }
 
+    }
+
+    public short mask(){
+        return ProgramDesign2FinalProject.GROUND_BIT |
+                ProgramDesign2FinalProject.COIN_BIT |
+                ProgramDesign2FinalProject.BRICK_BIT|
+                ProgramDesign2FinalProject.ENEMY_BIT|
+                ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
+                ProgramDesign2FinalProject.ITEM_BIT|
+                ProgramDesign2FinalProject.BOSS_ATTACK_BIT|
+                ProgramDesign2FinalProject.OBJECT_BIT;
+    }
+
+    public void heal(){
+        hp++;
     }
 
 

@@ -28,17 +28,17 @@ public class Coin extends InteractiveTileObject{
     @Override
     public void onHeadHit(Character character) {
 
-
         if (getCell().getTile().getId() == BLANK_COIN){
-            SoundManager.getInstance().soundBump.play();
+            SoundManager.getInstance().soundBump.setVolume(SoundManager.getInstance().soundBump.play(),0.5f);
         }
         else if(getCell().getTile().getId() == 24+1){
-            SoundManager.getInstance().soundCoin.play();
+            SoundManager.getInstance().soundCoin.setVolume(SoundManager.getInstance().soundCoin.play(),0.5f);
             screen.spawnItem(new ItemDef(new Vector2(body.getPosition().x, body.getPosition().y + 16 /PPM), Mushroom.class));
-            SoundManager.getInstance().soundSpawn.play();
+            SoundManager.getInstance().soundSpawn.setVolume(SoundManager.getInstance().soundSpawn.play(),0.5f);
             getCell().setTile(tileset.getTile(BLANK_COIN));
             Hud.addScore(100);
         }
+
 
 
     }

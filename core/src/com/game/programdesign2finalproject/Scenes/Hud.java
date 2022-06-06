@@ -11,8 +11,8 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
-
-
+import com.game.programdesign2finalproject.Sprites.Boss;
+import com.game.programdesign2finalproject.Sprites.Boss0;
 
 
 public class Hud implements Disposable {
@@ -22,9 +22,11 @@ public class Hud implements Disposable {
     public Viewport viewport;
 
     //紀錄分數跟時間的變數
-    private Integer worldTimer;
+    public Integer worldTimer;
     private float   timeCount;
     private static Integer score;
+
+    private boolean timeUp; // true when the world timer reaches 0
 
     //Scene2D 的 部件
     private Label countdownLabel;
@@ -60,6 +62,7 @@ public class Hud implements Disposable {
         table.add(scoreLabel).expandX();
         table.add(levelLabel).expandX();
         table.add(countdownLabel).expandX();
+        table.row();
 
         stage.addActor(table);
 
@@ -68,8 +71,12 @@ public class Hud implements Disposable {
     public void update(float dt){
         timeCount += dt;
         if(timeCount >= 1){
-            worldTimer--;
-            countdownLabel.setText(String.format("%03d",worldTimer));
+            if (worldTimer > 0) {
+                worldTimer--;
+            } else {
+                timeUp = true;
+            }
+            countdownLabel.setText(String.format("%03d", worldTimer));
             timeCount = 0;
         }
     }
@@ -83,4 +90,7 @@ public class Hud implements Disposable {
     public void dispose() {
         stage.dispose();
     }
+
+    public boolean isTimeUp() { return timeUp; }
+
 }

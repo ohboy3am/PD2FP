@@ -1,14 +1,12 @@
 package com.game.programdesign2finalproject;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.game.programdesign2finalproject.Screens.Menu;
 import com.game.programdesign2finalproject.Screens.PlayScreen;
+
 
 public class ProgramDesign2FinalProject extends Game {
 	public static final int V_WIDTH = 600;
@@ -28,11 +26,15 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final short ITEM_BIT = 256;
 	public static final short CHARACTER_HEAD_BIT = 512	;
 	public static final short FIREBALL_BIT = 1024;
-	public static final short NPC_BIT = 2048;
+	public static final short BOSS_BIT = 2048;
+	public static final short BOSS_ATTACK_BIT = 4096;
+
+
 
 	public static final String MUSIC_PATH = "Jolly - Bulikirály.mp3";
 	public static final String MUSIC_PATH_1 = "Chopin_Sonata_Doppio_movimento.mp3";
-	public static final String MUSIC_PATH_2 = "puyo.mp3";
+	public static final String MUSIC_PATH_2 = "Victory_Screech.mp3";
+	public static final String MUSIC_PATH_SEPHIROTH = "angel.ogg";
 	public static final String SOUND_PATH_COIN = "audio/sounds/coin.wav";
 	public static final String SOUND_PATH_BRICK = "audio/sounds/breakblock.wav";
 	public static final String SOUND_PATH_BUMP = "audio/sounds/bump.wav";
@@ -41,7 +43,7 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final String SOUND_PATH_STOMP = "audio/sounds/stomp.wav";
 	public static final String SOUND_PATH_POWERDOWN = "audio/sounds/powerdown.wav";
 	public static final String SOUND_PATH_WRYYY = "audio/sounds/wryyy.wav";
-	public static final String SOUND_PATH_CHARACTERDIE = "audio/sounds/mariodie.wav";
+	public static final String SOUND_PATH_CHARACTERDIE = "audio/sounds/wasted.wav";
 	public static final String SOUND_PATH_TheWorld = "audio/sounds/TheWorld.wav";
 	public static final String SOUND_PATH_DRAGON = "dragonYell.wav";
 

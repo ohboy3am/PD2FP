@@ -45,7 +45,7 @@ public class StartConversation implements Screen {
         music = SoundManager.getInstance().bgmInConv;
         music.setLooping(true);
         music.play();
-        music.setVolume(0.1f);
+        music.setVolume(0.3f);
 
     }
 
@@ -61,7 +61,7 @@ public class StartConversation implements Screen {
 
         batch.begin();
         batch.draw(whitebox, 0, 0,600,120);
-        batch.draw(mainCharacter, 30, 90,200,200);
+        batch.draw(mainCharacter, 40, 100,200,200);
         batch.end();
         stage.draw();
         if(Gdx.input.justTouched()) {
@@ -103,7 +103,6 @@ public class StartConversation implements Screen {
     public  void tableApply(String sentence, int padBottom){
         table.removeActor(myStoryTalk);
         myStoryTalk = new Label(sentence, new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-
         table.add(myStoryTalk).expandX().padBottom(padBottom);
         table.add(myStoryTalk).expandX();
         stage.addActor(table);

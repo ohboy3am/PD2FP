@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="2" height="2" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="22">
+ <layer id="1" name="圖塊層 1" width="2" height="2">
+  <data encoding="csv">
+0,0,
+0,0
+</data>
+ </layer>
+ <objectgroup id="3" name="NewMoon">
+  <object id="19" x="6" y="3">
+   <polygon points="3.25,0.5 8.5,1.5 14.75,6 19.5,13.5 16.75,21 3.5,25"/>
+  </object>
+ </objectgroup>
+</map>

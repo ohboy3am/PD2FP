@@ -17,7 +17,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Menu implements Screen {
     private ProgramDesign2FinalProject game;
-    int i=0;
     public Texture background;
     public Texture black;
     private SpriteBatch batch;

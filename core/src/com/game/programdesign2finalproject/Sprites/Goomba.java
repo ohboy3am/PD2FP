@@ -3,6 +3,7 @@ package com.game.programdesign2finalproject.Sprites;
 import static com.game.programdesign2finalproject.ProgramDesign2FinalProject.PPM;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,9 +29,8 @@ public class Goomba extends Enemy{
         frames = new Array<TextureRegion>();
 
 
-        for (int i = 0; i<2;i++){
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("goomba"),i * goombaWidth,0,goombaWidth,goombaHeight));
-        }
+        for (int i = 0;i<2;i++)
+        frames.add(new TextureRegion( new Texture("slime.PNG"),goombaWidth*i,0,16,16));
         walkAnimation = new Animation(0.4f, frames);
         stateTime = 0;
         setBounds(getX(), getY(), goombaWidth / PPM, goombaHeight / PPM);
@@ -76,7 +76,6 @@ public class Goomba extends Enemy{
         fdef.filter.maskBits = ProgramDesign2FinalProject.GROUND_BIT |
                 ProgramDesign2FinalProject.COIN_BIT |
                 ProgramDesign2FinalProject.BRICK_BIT|
-                ProgramDesign2FinalProject.OBJECT_BIT|
                 ProgramDesign2FinalProject.ENEMY_BIT|
                 ProgramDesign2FinalProject.CHARACTER_BIT|
                 ProgramDesign2FinalProject.FIREBALL_BIT;
@@ -102,7 +101,7 @@ public class Goomba extends Enemy{
 
     public void draw(Batch batch){
         if (destroyed && stateTime < 1){
-            setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba"), goombaWidth * 2, 0, goombaWidth, goombaHeight+1));
+            setRegion(new TextureRegion( new Texture("slime.PNG"),32,0,16,16));
             super.draw(batch);
         }
         if(!destroyed ){
