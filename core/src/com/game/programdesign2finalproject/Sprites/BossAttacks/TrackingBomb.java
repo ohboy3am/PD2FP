@@ -96,7 +96,7 @@ public class TrackingBomb extends Boss0Attack{
             velocity.setLength(1.5f);
         }
         b2body.setLinearVelocity(velocity);
-        if((stateTime > 4 || toDestroy) ) {
+        if((stateTime > 3 || toDestroy) ) {
             stateTime = 0;
             explode = true;
         }

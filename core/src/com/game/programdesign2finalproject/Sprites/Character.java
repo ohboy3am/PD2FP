@@ -130,7 +130,7 @@ public class Character extends Sprite {
     public void transport(){
         b2body.setTransform(bossRoomPosition,0);
 
-        if (hp<6)
+
             hp = 6;
     }
 
@@ -155,7 +155,7 @@ public class Character extends Sprite {
             die();
         }
         //56是地圖邊界
-        if(b2body.getPosition().x > 56 && fightBoss == false) {
+        if(b2body.getPosition().x > 2 && fightBoss == false) {
             transport();
             fightBoss = true;
             screen.BossGenerate();
