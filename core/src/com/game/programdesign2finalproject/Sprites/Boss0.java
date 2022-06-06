@@ -45,7 +45,7 @@ public class Boss0 extends Boss{
         stateTime = 0;
         attacks = new Array<Boss0Attack>();
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        hp = 1;
+        hp = 20;
         runningRight = false;
 
         int bossWidth = 180;
@@ -137,8 +137,15 @@ public class Boss0 extends Boss{
         stateTime += dt;
         firstAttackTime += (dt+(Math.random()/60));
         secondAttackTime +=(dt+(Math.random()/60));
-        velocity.set(player.b2body.getPosition().x-b2body.getPosition().x,player.b2body.getPosition().y-b2body.getPosition().y);
-        b2body.setLinearVelocity(velocity);
+
+        if (!player.isDead()){
+            velocity.set(player.b2body.getPosition().x-b2body.getPosition().x,player.b2body.getPosition().y-b2body.getPosition().y);
+            b2body.setLinearVelocity(velocity);
+        }
+        else {
+            b2body.setLinearVelocity(0,0);
+        }
+
 
 
         if (firstAttackTime > 1.5){
