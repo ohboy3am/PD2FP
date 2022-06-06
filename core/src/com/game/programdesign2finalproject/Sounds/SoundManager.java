@@ -12,6 +12,7 @@ public class SoundManager {
     public Music bgm;
     public Music bgmInConv;
     public Music soundBoss;
+    public Music Victory;
     public Sound soundCoin;
     public Sound soundBrick;
     public Sound soundBump;
@@ -30,6 +31,7 @@ public class SoundManager {
         bgm = Gdx.audio.newMusic(Gdx.files.internal(ProgramDesign2FinalProject.MUSIC_PATH));
         bgmInConv = Gdx.audio.newMusic(Gdx.files.internal(ProgramDesign2FinalProject.MUSIC_PATH_1));
         soundBoss = Gdx.audio.newMusic(Gdx.files.internal(ProgramDesign2FinalProject.MUSIC_PATH_SEPHIROTH));
+        Victory = Gdx.audio.newMusic(Gdx.files.internal(ProgramDesign2FinalProject.MUSIC_PATH_2));
         soundCoin = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_COIN));
         soundBrick = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_BRICK));
         soundBump = Gdx.audio.newSound(Gdx.files.internal(ProgramDesign2FinalProject.SOUND_PATH_BUMP));

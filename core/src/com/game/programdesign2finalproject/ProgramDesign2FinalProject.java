@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.game.programdesign2finalproject.Screens.Menu;
+import com.game.programdesign2finalproject.Screens.PlayScreen;
 
 
 public class ProgramDesign2FinalProject extends Game {
@@ -32,7 +33,7 @@ public class ProgramDesign2FinalProject extends Game {
 
 	public static final String MUSIC_PATH = "Jolly - Bulikirály.mp3";
 	public static final String MUSIC_PATH_1 = "Chopin_Sonata_Doppio_movimento.mp3";
-	public static final String MUSIC_PATH_2 = "puyo.mp3";
+	public static final String MUSIC_PATH_2 = "Victory_Screech.mp3";
 	public static final String MUSIC_PATH_SEPHIROTH = "angel.ogg";
 	public static final String SOUND_PATH_COIN = "audio/sounds/coin.wav";
 	public static final String SOUND_PATH_BRICK = "audio/sounds/breakblock.wav";

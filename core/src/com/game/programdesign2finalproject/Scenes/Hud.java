@@ -11,8 +11,8 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
-
-
+import com.game.programdesign2finalproject.Sprites.Boss;
+import com.game.programdesign2finalproject.Sprites.Boss0;
 
 
 public class Hud implements Disposable {
@@ -62,6 +62,7 @@ public class Hud implements Disposable {
         table.add(scoreLabel).expandX();
         table.add(levelLabel).expandX();
         table.add(countdownLabel).expandX();
+        table.row();
 
         stage.addActor(table);
 

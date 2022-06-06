@@ -30,14 +30,14 @@ public class Brick extends InteractiveTileObject{
     @Override
     public void onHeadHit(Character character) {
         if(!character.isBig()){
-            SoundManager.getInstance().soundBump.play();
+            SoundManager.getInstance().soundBump.setVolume(SoundManager.getInstance().soundBump.play(),0.5f);
             return;
         }
         //screen.dialog.setDialog(true);
         setCategoryFilter(ProgramDesign2FinalProject.DESTROYED_BIT);
         getCell().setTile(null);
         Hud.addScore(200);
-        SoundManager.getInstance().soundBrick.play();
+        SoundManager.getInstance().soundBrick.setVolume(SoundManager.getInstance().soundBrick.play(),0.5f);;
     }
 
 }

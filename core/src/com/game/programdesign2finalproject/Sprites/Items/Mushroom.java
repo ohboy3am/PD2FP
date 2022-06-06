@@ -50,7 +50,7 @@ public class Mushroom extends Item {
         character.heal();
         if (!character.isBig())
         character.grow();
-        SoundManager.getInstance().soundPowerUp.play();
+        SoundManager.getInstance().soundPowerUp.setVolume(SoundManager.getInstance().soundPowerUp.play(),0.5f);
         Hud.addScore(100);
         destroy();
     }

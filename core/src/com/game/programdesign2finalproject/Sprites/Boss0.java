@@ -33,6 +33,7 @@ public class Boss0 extends Boss{
     private Array<Boss0Attack> attacks;
     private boolean runningRight;
     private boolean phase2;
+    public boolean bossIsDead = false;
 
     public Boss0(PlayScreen screen, float x, float y, Character player){
         super(screen, x, y, player);
@@ -118,7 +119,7 @@ public class Boss0 extends Boss{
 
 
     public void die(){
-        SoundManager.getInstance().soundWryyy.setVolume(SoundManager.getInstance().soundWryyy.play(),0.5f);
+        SoundManager.getInstance().soundWryyy.setVolume(SoundManager.getInstance().soundWryyy.play(),0.1f);
         toDestroy = true;
         Filter filter = new Filter();
         filter.maskBits = ProgramDesign2FinalProject.NOTHING_BIT;
@@ -143,7 +144,7 @@ public class Boss0 extends Boss{
         }
 
         if (hp<10 && !phase2){
-            SoundManager.getInstance().soundWryyy.setVolume(SoundManager.getInstance().soundWryyy.play(),0.5f);
+            SoundManager.getInstance().soundWryyy.setVolume(SoundManager.getInstance().soundWryyy.play(),0.1f);
             hp += 5;
             phase2 = true;
         }
@@ -177,6 +178,7 @@ public class Boss0 extends Boss{
         attacks.removeAll(newAttackFound,true);
 
         if (hp<=0){
+            bossIsDead = true;
             die();
         }
     }

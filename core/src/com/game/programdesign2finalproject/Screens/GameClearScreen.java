@@ -3,6 +3,7 @@ package com.game.programdesign2finalproject.Screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,11 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.programdesign2finalproject.ProgramDesign2FinalProject;
+import com.game.programdesign2finalproject.Sounds.SoundManager;
 
 public class GameClearScreen implements Screen{
     private Viewport viewport;
     private Stage stage;
     private Game game;
+    private Music music;
     public GameClearScreen(ProgramDesign2FinalProject game) {
         this.game = game;
         viewport = new FitViewport(ProgramDesign2FinalProject.V_WIDTH, ProgramDesign2FinalProject.V_HEIGHT, new OrthographicCamera());
@@ -35,6 +38,10 @@ public class GameClearScreen implements Screen{
         table.row();
 
         stage.addActor(table);
+        music = SoundManager.getInstance().Victory;
+        music.setLooping(true);
+        music.play();
+        music.setVolume(0.2f);
     }
 
     @Override
