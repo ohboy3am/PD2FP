@@ -42,6 +42,8 @@ public abstract class Boss extends Sprite {
         world.destroyBody(b2body);
         destroyed = true;
 
+
+
     }
 
     public void reverseVelocity(boolean x, boolean y){

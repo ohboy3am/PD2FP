@@ -100,10 +100,8 @@ public class Character extends Sprite {
         bigCharacterRun = new Animation(0.1f, frames);
         frames.clear();
 
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),15 * bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),0,0, bigCharacterWidth, bigCharacterHeight));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),15 * bigCharacterWidth,0, bigCharacterWidth, bigCharacterHeight));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"),0,0, bigCharacterWidth, bigCharacterHeight));
+        frames.add(new TextureRegion( new Texture("running_animation/1.PNG")));
+        frames.add(new TextureRegion(atlas2.findRegion("02"),  0,0, jotaroWidth, jotaroHeight));
         growCharacter = new Animation(0.2f, frames);
         frames.clear();
 
@@ -119,7 +117,7 @@ public class Character extends Sprite {
         //bigCharacterStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"),  0,0, bigCharacterWidth, bigCharacterHeight);
         bigCharacterStand = new TextureRegion(atlas2.findRegion("02"),  0,0, jotaroWidth, jotaroHeight);
 
-        characterDead = new TextureRegion(screen.getAtlas().findRegion("little_mario"),  96,0, 16, 16);
+        characterDead = new TextureRegion( new Texture("slime.PNG"),32,0,16,16);
 
         defineCharacter();
         setBounds(1,1, characterWidth / PPM, characterHeight / PPM);
@@ -168,6 +166,10 @@ public class Character extends Sprite {
             die();
         }
 
+        if (screen.getHud().isTimeUp() && !isDead()) {
+            die();
+        }
+
         Array<FireBall> fireBallFound = new Array<FireBall>();
         for(FireBall ball : fireBalls) {
             if(ball.isDestroyed()){
@@ -203,7 +205,7 @@ public class Character extends Sprite {
                 region = characterIsBig ? (TextureRegion) bigCharacterRun.getKeyFrame(stateTimer,true) : (TextureRegion) characterRun.getKeyFrame(stateTimer,true);
                 break;
             case FALLING:
-                region = (TextureRegion) characterJump;
+                region = characterIsBig ? bigCharacterStand:(TextureRegion) characterJump;
                 break;
             case STANDING:
             default:
@@ -248,6 +250,7 @@ public class Character extends Sprite {
     }
 
     public void grow(){
+        hitTime = 0;
         runGrowAnimation = true;
         characterIsBig = true;
         timeToDefineBigCharacter = true;
@@ -268,28 +271,30 @@ public class Character extends Sprite {
 
     public void hit(){
         SoundManager.getInstance().soundStomp.play();
-        if (characterIsBig){
+        if (characterIsBig&&hitTime > 0.5){
             characterIsBig = false;
             timeToRedefineCharacter = true;
             setBounds(getX(),getY(),16/PPM,32/PPM);
             SoundManager.getInstance().soundPowerDown.play();
             hitTime = 0;
         }
-        else {
-            if (hitTime > 0.5)
+        else if (hitTime > 0.5){
+
                 hp--;
         }
     }
 
     public void die(){
         SoundManager.getInstance().bgm.stop();
+        SoundManager.getInstance().soundBoss.stop();
         SoundManager.getInstance().soundCharacterDie.setVolume(SoundManager.getInstance().soundCharacterDie.play(),0.2f);
         characterIsDead = true;
         Filter filter = new Filter();
         filter.maskBits = ProgramDesign2FinalProject.NOTHING_BIT;
         for (Fixture fixture : b2body.getFixtureList())
             fixture.setFilterData(filter);
-        b2body.applyLinearImpulse(new Vector2(0,4f), b2body.getWorldCenter(), true);
+        setBounds(getX(),getY(),16/PPM,32/PPM);
+        b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
     }
 
     public void fire(){
@@ -414,7 +419,12 @@ public class Character extends Sprite {
                 ProgramDesign2FinalProject.ENEMY_BIT|
                 ProgramDesign2FinalProject.ENEMY_HEAD_BIT|
                 ProgramDesign2FinalProject.ITEM_BIT|
-                ProgramDesign2FinalProject.BOSS_ATTACK_BIT;
+                ProgramDesign2FinalProject.BOSS_ATTACK_BIT|
+                ProgramDesign2FinalProject.OBJECT_BIT;
+    }
+
+    public void heal(){
+        hp++;
     }
 
 

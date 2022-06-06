@@ -1,0 +1,33 @@
+
+bahamut_flying.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+VVkF3FI-0
+  rotate: false
+  xy: 0, 0
+  size: 180, 160
+  orig: 180, 160
+  offset: 0, 0
+  index: -1
+VVkF3FI-1
+  rotate: false
+  xy: 180, 0
+  size: 180, 160
+  orig: 180, 160
+  offset: 0, 0
+  index: -1
+VVkF3FI-2
+  rotate: false
+  xy: 360, 0
+  size: 180, 160
+  orig: 180, 160
+  offset: 0, 0
+  index: -1
+VVkF3FI-3
+  rotate: false
+  xy: 540, 0
+  size: 180, 160
+  orig: 180, 160
+  offset: 0, 0
+  index: -1

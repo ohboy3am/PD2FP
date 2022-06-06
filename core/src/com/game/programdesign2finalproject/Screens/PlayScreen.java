@@ -41,7 +41,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class PlayScreen implements Screen {
     //遊戲的reference
     private ProgramDesign2FinalProject game;
-    private TextureAtlas atlas;
     public OrthographicCamera gamecam;
     public Viewport gamePort;
     private Hud hud;
@@ -78,7 +77,6 @@ public class PlayScreen implements Screen {
 
 
     public PlayScreen(ProgramDesign2FinalProject game){
-        atlas = new TextureAtlas("NEW_Character_and_Enemies.pack");
         this.game = game;
         //遊戲中的視角
         gamecam = new OrthographicCamera();
@@ -149,9 +147,6 @@ public class PlayScreen implements Screen {
 
     }
 
-    public TextureAtlas getAtlas(){
-        return atlas;
-    }
 
     @Override
     public void show() {
@@ -285,13 +280,12 @@ public class PlayScreen implements Screen {
 
         if(generatingBoss && !PlayBossMusic) {
 
-             if(PlayBossMusic == false) {
-                 music.stop();
-                PlayBossMusic = true;
-                bossMusic.play();
-                bossMusic.setVolume(0.1f);
-                boss0 = new Boss0(this,4,0, player);
-            }
+            music.stop();
+            PlayBossMusic = true;
+            bossMusic.play();
+            bossMusic.setVolume(0.1f);
+            boss0 = new Boss0(this,4,0, player);
+            hud.worldTimer = 180;
 
         }
 
@@ -361,5 +355,9 @@ public class PlayScreen implements Screen {
         renderer.dispose();
         world.dispose();
         b2dr.dispose();
+    }
+
+    public Hud getHud() {
+        return hud;
     }
 }
