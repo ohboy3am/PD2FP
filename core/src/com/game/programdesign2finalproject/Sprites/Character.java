@@ -154,7 +154,7 @@ public class Character extends Sprite {
             die();
         }
         //56是地圖邊界
-        if(b2body.getPosition().x > 2 && fightBoss == false) {
+        if(b2body.getPosition().x > 56 && fightBoss == false && !characterIsDead) {
             transport();
             fightBoss = true;
             screen.BossGenerate();
