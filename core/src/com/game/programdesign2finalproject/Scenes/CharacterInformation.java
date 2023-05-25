@@ -62,21 +62,6 @@ public class CharacterInformation implements Disposable {
         viewport = new FitViewport(ProgramDesign2FinalProject.V_WIDTH, ProgramDesign2FinalProject.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
 
-        Table table = new Table();
-        table.top();
-        table.setFillParent(true);
-
-
-        playerHPLabel = new Label(String.format("PLAYER LIFE : %02d",playerHP), new Label.LabelStyle(new BitmapFont(), Color.GREEN));
-
-
-
-        table.row();
-        table.add(scoreLabel).expandX();
-
-        table.row();
-
-        stage.addActor(table);
 
         // 载图
         textureFu = new Texture(Gdx.files.internal("healthbar.png"));
@@ -106,7 +91,6 @@ public class CharacterInformation implements Disposable {
 
     public void update(float dt){
         playerHP = screen.getPlayer().getHp();
-        playerHPLabel.setText(String.format("PLAYER LIFE : %02d",playerHP));
 
         if (!screen.isBossExsit())return;
 
@@ -146,6 +130,9 @@ public class CharacterInformation implements Disposable {
     public void draw(PlayScreen screen) {
         batch.setProjectionMatrix(this.stage.getCamera().combined);
         batch.begin();
+        font.setColor(0, 1, 0, 1);
+        if (playerHP<2)
+        font.setColor(1, 0, 0, 1);
         font.draw(batch, " Life : " + (int) playerHP , 80, 250);
         if (!screen.isBossExsit()){
             batch.end();
@@ -174,7 +161,8 @@ public class CharacterInformation implements Disposable {
         spriteDoge.draw(batch);
 
         // 数字血量
-        font.draw(batch, (int) bossHP*100 + " / 2000", 110, 40);
+        font.setColor(1, 0, 0, 1);
+        font.draw(batch, (int) (hpWidth*2000f/360f) + " / 2000", 110, 40);
         font.draw(batch, "HP", 80, 40);
 
         batch.end();

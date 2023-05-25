@@ -54,7 +54,7 @@ public class ProgramDesign2FinalProject extends Game {
 	public static final String SOUND_PATH_SHOUT04 = "shout04.wav";
 	public static final String SOUND_PATH_DRAGONDIE = "dragondie.wav";
 	public static final String SOUND_PATH_NEWMOON = "newmoon.wav";
-	public static final String SOUND_PATH_SPIRIT = "spirit.wav";
+	public static final String SOUND_PATH_SPIRIT = "Die sound.mp3";
 	public SpriteBatch batch;
 
 	

@@ -30,6 +30,8 @@ public class Boss0 extends Boss{
     private float stateTime;
     private float firstAttackTime;
     private float secondAttackTime;
+    private float firstLimit = 1;
+    private float secondLimit = 5;
     private Array<Boss0Attack> attacks;
     private boolean runningRight;
 
@@ -141,8 +143,8 @@ public class Boss0 extends Boss{
         super.update(dt);
         if (destroyed)return;
         stateTime += dt;
-        firstAttackTime += (dt+(Math.random()/60));
-        secondAttackTime +=(dt+(Math.random()/60));
+        firstAttackTime += dt;
+        secondAttackTime +=dt;
 
         if (!player.isDead()){
             velocity.set(player.b2body.getPosition().x-b2body.getPosition().x,player.b2body.getPosition().y-b2body.getPosition().y);
@@ -154,8 +156,9 @@ public class Boss0 extends Boss{
 
 
 
-        if (firstAttackTime > 1.5){
+        if (firstAttackTime > firstLimit){
             firstAttack();
+            firstLimit = (float)(Math.random()*2);
         }
 
         if (hp<10 && !phase2){
@@ -164,12 +167,13 @@ public class Boss0 extends Boss{
             phase2 = true;
         }
 
-        if (!b2body.isActive() && stateTime > 2){
+        if (!b2body.isActive() && stateTime > 1.5f){
             b2body.setActive(true);
         }
 
-        if (secondAttackTime > 7.5 && phase2){
+        if ((secondAttackTime > secondLimit) && phase2){
             secondAttack();
+            secondLimit = 3+(float)(Math.random()*4);
             b2body.setActive(false);
             stateTime = 0;
         }

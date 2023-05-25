@@ -57,7 +57,6 @@ public class Character extends Sprite {
     private Array<FireBall> fireBalls;
     private Vector2 bossRoomPosition= new Vector2(61,1);
 
-
     private int hp;
     public int getHp() {
         return hp;
@@ -155,7 +154,7 @@ public class Character extends Sprite {
             die();
         }
         //56是地圖邊界
-        if(b2body.getPosition().x > 56 && fightBoss == false) {
+        if(b2body.getPosition().x > 2 && fightBoss == false) {
             transport();
             fightBoss = true;
             screen.BossGenerate();
@@ -216,15 +215,30 @@ public class Character extends Sprite {
                 break;
         }
 
-
-        if((b2body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {
-            region.flip(true, false);
-            runningRight = false;
-        }
-        else if((b2body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()){
+        if(!characterIsBig){
+            if((b2body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {
+                region.flip(true, false);
+                runningRight = false;
+            }
+            else if((b2body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()){
                 region.flip(true,false);
                 runningRight = true;
+            }
         }
+
+        else if (characterIsBig){
+            if((b2body.getLinearVelocity().x > 0 || !runningRight) && !region.isFlipX()) {
+                region.flip(true, false);
+                runningRight = false;
+            }
+            else if((b2body.getLinearVelocity().x < 0 || runningRight) && region.isFlipX()){
+                region.flip(true,false);
+                runningRight = true;
+            }
+        }
+
+
+
 
             if (currentState == previousState){
                 stateTimer += dt;
@@ -252,6 +266,8 @@ public class Character extends Sprite {
             return State.STANDING;
     }
 
+
+
     public void grow(){
         hitTime = 0;
         runGrowAnimation = true;
@@ -273,7 +289,7 @@ public class Character extends Sprite {
     }
 
     public void hit(){
-        SoundManager.getInstance().soundStomp.setVolume(SoundManager.getInstance().soundShout[(int)(Math.random()*4)].play(),0.3f);
+        SoundManager.getInstance().soundStomp.setVolume(SoundManager.getInstance().soundShout[(int)(Math.random()*4)].play(),0.1f);
         b2body.setLinearVelocity(b2body.getLinearVelocity().x,4f);
         if (characterIsBig&&hitTime > 0.5){
             characterIsBig = false;
