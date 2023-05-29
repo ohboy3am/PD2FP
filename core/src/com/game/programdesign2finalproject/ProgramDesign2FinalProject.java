@@ -31,7 +31,7 @@ public class ProgramDesign2FinalProject extends Game {
 
 
 
-	public static final String MUSIC_PATH = "audio/music/mario_music.mp3";
+	public static final String MUSIC_PATH = "audio/music/mario_music_minor.mp3";
 	public static final String MUSIC_PATH_1 = "Chopin_Sonata_Doppio_movimento.mp3";
 	public static final String MUSIC_PATH_2 = "Victory_Screech.mp3";
 	public static final String MUSIC_PATH_SEPHIROTH = "angel.ogg";
